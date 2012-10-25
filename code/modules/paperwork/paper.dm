@@ -153,7 +153,8 @@
 
 
 /obj/item/weapon/paper/proc/parsepencode(var/t, var/obj/item/weapon/pen/P, mob/user as mob, var/iscrayon = 0)
-	t = copytext(sanitize(t),1,MAX_MESSAGE_LEN)
+//	t = copytext(sanitize(t),1,MAX_MESSAGE_LEN)
+	t = sanitize_easy(t)
 
 	t = dd_replacetext(t, "\[center\]", "<center>")
 	t = dd_replacetext(t, "\[/center\]", "</center>")
