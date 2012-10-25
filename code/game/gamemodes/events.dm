@@ -5,9 +5,9 @@
 	//and also to stop spawn copying variables from the game ticker
 	spawn(3000)
 		while(1)
-//			if(prob(50))//Every 120 seconds and prob 50 2-4 weak spacedusts will hit the station
-//				spawn(1)
-//					dust_swarm("weak")
+			/*if(prob(50))//Every 120 seconds and prob 50 2-4 weak spacedusts will hit the station
+				spawn(1)
+					dust_swarm("weak")*/
 			if (!event)
 				//CARN: checks to see if random events are enabled.
 				if(config.allow_random_events && prob(eventchance))
@@ -83,8 +83,8 @@
 			prison_break()
 		if(9)
 			carp_migration()
-		if(10)
-			immovablerod()
+		/*if(10)
+			immovablerod()*/
 		if(11)
 			lightsout(1,2)
 		if(12)
