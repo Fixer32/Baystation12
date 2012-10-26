@@ -10,13 +10,12 @@ var/global/list/space_surprises = list(		/obj/item/clothing/mask/facehugger				=
 											/obj/item/weapon/pickaxe/plasmacutter			=2,
 											/obj/structure/closet/syndicate/resources		=2,
 											/obj/item/weapon/melee/energy/sword/pirate		=1,
-											/obj/mecha/working/ripley/mining				=1,
-											/obj/machinery/artifact					=4
+											/obj/mecha/working/ripley/mining				=1
 											)
 
 var/global/list/spawned_surprises = list()
 
-var/global/max_secret_rooms = 12
+var/global/max_secret_rooms = 6
 
 proc/spawn_room(var/atom/start_loc,var/x_size,var/y_size,var/wall,var/floor , var/clean = 0 , var/name)
 	var/list/room_turfs = list("walls"=list(),"floors"=list())
@@ -148,12 +147,9 @@ proc/make_mining_asteroid_secret(var/size = 5)
 			var/surprise = null
 			valid = 0
 			while(!valid)
-				if(spawned_surprises.len)
-					surprise = pickweight(space_surprises)
-				else
-					surprise = /obj/machinery/artifact
+				surprise = pickweight(space_surprises)
 				if(surprise in spawned_surprises)
-					if(prob(20) || istype(surprise,/obj/machinery/artifact))
+					if(prob(20))
 						valid++
 					else
 						continue
