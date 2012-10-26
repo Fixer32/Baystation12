@@ -1098,11 +1098,11 @@ steam.start() -- spawns the effect
 		if(holder)
 			var/dmglevel = 4
 
-			if (round(amount/12) > 0)
+			if (round(amount/8) > 0)
 				dmglevel = 1
-			else if (round(amount/6) > 0)
+			else if (round(amount/4) > 0)
 				dmglevel = 2
-			else if (round(amount/3) > 0)
+			else if (round(amount/2) > 0)
 				dmglevel = 3
 
 			if(dmglevel<4) holder.ex_act(dmglevel)
