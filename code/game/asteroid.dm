@@ -10,7 +10,8 @@ var/global/list/space_surprises = list(		/obj/item/clothing/mask/facehugger				=
 											/obj/item/weapon/pickaxe/plasmacutter			=2,
 											/obj/structure/closet/syndicate/resources		=2,
 											/obj/item/weapon/melee/energy/sword/pirate		=1,
-											/obj/mecha/working/ripley/mining				=1
+											/obj/mecha/working/ripley/mining				=1,
+											/obj/machinery/artifact					=4
 											)
 
 var/global/list/spawned_surprises = list()
