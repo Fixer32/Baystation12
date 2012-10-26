@@ -11,7 +11,7 @@ var/global/list/space_surprises = list(		/obj/item/clothing/mask/facehugger				=
 											/obj/structure/closet/syndicate/resources		=2,
 											/obj/item/weapon/melee/energy/sword/pirate		=1,
 											/obj/mecha/working/ripley/mining				=1,
-											/obj/machinery/artifact					=3
+											/obj/machinery/artifact					=4
 											)
 
 var/global/list/spawned_surprises = list()
@@ -148,9 +148,12 @@ proc/make_mining_asteroid_secret(var/size = 5)
 			var/surprise = null
 			valid = 0
 			while(!valid)
-				surprise = pickweight(space_surprises)
+				if(spawned_surprises.len)
+					surprise = pickweight(space_surprises)
+				else
+					surprise = /obj/machinery/artifact
 				if(surprise in spawned_surprises)
-					if(prob(20))
+					if(prob(20) || istype(surprise,/obj/machinery/artifact))
 						valid++
 					else
 						continue
