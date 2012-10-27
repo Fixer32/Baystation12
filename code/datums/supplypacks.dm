@@ -53,19 +53,6 @@
 	containertype = /obj/structure/closet/crate/freezer
 	containername = "Food crate"
 
-/datum/supply_packs/food_eggs
-	name = "Eggs crate"
-	contains = list(/obj/item/weapon/reagent_containers/food/drinks/flour,
-					/obj/item/weapon/storage/fancy/egg_box,
-					/obj/item/weapon/storage/fancy/egg_box,
-					/obj/item/weapon/storage/fancy/egg_box,
-					/obj/item/weapon/storage/fancy/egg_box,
-					/obj/item/weapon/reagent_containers/food/drinks/flour,
-					/obj/item/weapon/reagent_containers/food/drinks/flour)
-	cost = 40
-	containertype = /obj/structure/closet/crate/freezer
-	containername = "Eggs crate"
-
 /datum/supply_packs/monkey
 	name = "Monkey crate"
 	contains = list (/obj/item/weapon/storage/monkeycube_box)

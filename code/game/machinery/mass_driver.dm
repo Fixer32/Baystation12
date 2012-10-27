@@ -34,3 +34,6 @@
 					O.throw_at(target, drive_range * power, power)
 		flick("mass_driver1", src)
 		return
+
+	Bumped(var/atom/movable/AM)
+		AM.Move(src.loc)
