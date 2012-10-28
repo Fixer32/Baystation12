@@ -114,7 +114,7 @@
 		if(detonator)
 			usr << "With attached [detonator.name]"
 
-	activate()
+	proc/activate()
 		if(active) return
 		if(detonator)
 			if(!isigniter(detonator.a_left))
