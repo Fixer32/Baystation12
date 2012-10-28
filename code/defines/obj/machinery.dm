@@ -220,6 +220,7 @@
 	desc = "A remote control switch for a mass driver."
 	var/id = null
 	var/active = 0
+	var/AutoDump = 0
 	anchored = 1.0
 	use_power = 1
 	idle_power_usage = 2

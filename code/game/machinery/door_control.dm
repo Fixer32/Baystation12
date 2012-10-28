@@ -113,13 +113,18 @@
 	return src.attack_hand(user)
 
 /obj/machinery/driver_button/attack_hand(mob/user as mob)
+	add_fingerprint(user)
 
-	src.add_fingerprint(usr)
+	processDrive(0)
+
+
+/obj/machinery/driver_button/proc/processDrive(var/auto as num)
+	if(auto && !AutoDump) return
+	
 	if(stat & (NOPOWER|BROKEN))
 		return
 	if(active)
 		return
-	add_fingerprint(user)
 
 	use_power(5)
 
@@ -132,7 +137,7 @@
 				M.open()
 				return
 
-	sleep(20)
+	sleep(50)
 
 	for(var/obj/machinery/mass_driver/M in world)
 		if(M.id == src.id)
@@ -149,4 +154,24 @@
 	icon_state = "launcherbtt"
 	active = 0
 
+	if(AutoDump)
+		spawn(600)
+			processDrive(1)
+
 	return
+
+/obj/machinery/driver_button/verb/ToggleAuto()
+	set name = "Set Auto Activate"
+	set category = "Object"
+	set src in oview(1)
+
+	if(!usr.canmove || usr.stat || usr.restrained())
+		return
+
+	if(ishuman(usr))
+		AutoDump=!AutoDump
+		if(AutoDump)
+			usr << "\blue Auto-dump mode activated."
+		else
+			usr << "\blue Auto-dump mode deactivated."
+		src.attack_hand(usr)
