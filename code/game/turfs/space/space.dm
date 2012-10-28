@@ -94,6 +94,10 @@
 			if(!move_to_z)
 				return
 
+			if(z == 6 && !isliving(A))
+				del(A)
+				return
+
 			A.z = move_to_z
 
 			if(src.x <= TRANSITIONEDGE)
