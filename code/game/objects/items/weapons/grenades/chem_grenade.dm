@@ -52,7 +52,7 @@
 			if(istype(det.a_left,det.a_right.type) || (!isigniter(det.a_left) && !isigniter(det.a_right)))
 				user << "\red Assembly must contain one igniter."
 				return
-			if(!det.secured)	
+			if(!det.secured)
 				user << "\red Assembly must be secured with screwdriver."
 				return
 			path = 1
@@ -114,7 +114,7 @@
 		if(detonator)
 			usr << "With attached [detonator.name]"
 
-	proc/activate()
+	activate()
 		if(active) return
 		if(detonator)
 			if(!isigniter(detonator.a_left))
