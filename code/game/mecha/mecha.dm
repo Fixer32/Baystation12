@@ -1242,7 +1242,7 @@
 						function ticker() {
 						    setInterval(function(){
 						        window.location='byond://?src=\ref[src]&update_content=1';
-						    }, 1000);
+						    }, 2000);
 						}
 
 						window.onload = function() {
