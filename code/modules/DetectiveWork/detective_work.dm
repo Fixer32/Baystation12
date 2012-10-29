@@ -1,5 +1,4 @@
 //CONTAINS: Suit fibers and Detective's Scanning Computer
-
 atom/var/list/suit_fibers
 
 atom/proc/add_fibers(mob/living/carbon/human/M)

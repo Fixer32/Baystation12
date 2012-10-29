@@ -3,6 +3,7 @@ obj/item/clothing/shoes/var
 	track_blood = 0
 	mob/living/carbon/human/track_blood_mob
 	track_blood_type*/
+
 mob/var
 	bloody_hands = 0
 	mob/living/carbon/human/bloody_hands_mob
