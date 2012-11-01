@@ -87,9 +87,6 @@ atom/movable/proc/check_airflow_movable(n)
 
 	if(!istype(src,/obj/item) && n < vsc.airflow_dense_pressure) return 0
 
-	for(var/obj/machinery/mass_driver/MD in range(1, src.loc))
-		if(istype(MD)) return 0
-
 	return 1
 
 mob/check_airflow_movable(n)
@@ -107,9 +104,6 @@ mob/living/silicon/check_airflow_movable()
 obj/item/check_airflow_movable(n)
 	. = ..()
 	
-	for(var/obj/machinery/mass_driver/MD in range(1, src.loc))
-		if(istype(MD)) return 0
-
 	switch(w_class)
 		if(2)
 			if(n < vsc.airflow_lightest_pressure) return 0

@@ -34,3 +34,16 @@
 					O.throw_at(target, drive_range * power, power)
 		flick("mass_driver1", src)
 		return
+
+	New() //set the turf below the flaps to block air
+		var/turf/T = get_turf(loc)
+		if(T)
+			T.blocks_air = 1
+		..()
+
+	Del() //lazy hack to set the turf to allow air to pass if it's a simulated floor
+		var/turf/T = get_turf(loc)
+		if(T)
+			if(istype(T, /turf/simulated/floor))
+				T.blocks_air = 0
+		..()

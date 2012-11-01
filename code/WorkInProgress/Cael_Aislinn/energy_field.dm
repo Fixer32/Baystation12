@@ -48,5 +48,5 @@
 	//Inputs: The moving atom (optional), target turf, "height" and air group
 	//Outputs: Boolean if can pass.
 
-	//return (!density || !height || air_group)
-	return density
+	return (!density || !height || air_group)
+//	return density

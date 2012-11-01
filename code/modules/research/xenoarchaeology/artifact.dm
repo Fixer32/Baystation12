@@ -205,6 +205,7 @@
 			if(4)
 				display_msg = "vibrates!"
 	else
+		my_effect.HaltEffect()
 		switch(rand(2))
 			if(0)
 				display_msg = "grows dull!"
