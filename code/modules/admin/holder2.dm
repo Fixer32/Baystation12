@@ -2617,14 +2617,14 @@ var/list/admin_datums = list()
 		src.admincaster_signature = adminscrub(input(usr, "Provide your desired signature", "Network Identity Handler", ""))
 		src.access_news_network()
 
-	if(href_list["vsc"])
-		if ((src.rank in list( "Moderator", "Temporary Admin", "Admin Candidate", "Trial Admin", "Badmin", "Game Admin", "Game Master" )))
-			if(href_list["vsc"] == "airflow")
-				vsc.ChangeSettingsDialog(usr,vsc.settings)
-			if(href_list["vsc"] == "plasma")
-				vsc.ChangeSettingsDialog(usr,vsc.plc.settings)
-			if(href_list["vsc"] == "default")
-				vsc.SetDefault(usr)
+//	if(href_list["vsc"])
+//		if ((src.rank in list( "Moderator", "Temporary Admin", "Admin Candidate", "Trial Admin", "Badmin", "Game Admin", "Game Master" )))
+//			if(href_list["vsc"] == "airflow")
+//				vsc.ChangeSettingsDialog(usr,vsc.settings)
+//			if(href_list["vsc"] == "plasma")
+//				vsc.ChangeSettingsDialog(usr,vsc.plc.settings)
+//			if(href_list["vsc"] == "default")
+//				vsc.SetDefault(usr)
 
 	// player info stuff
 

@@ -226,7 +226,7 @@
 		if(nodamage)
 			return
 
-		if(!breath || (breath.total_moles == 0))
+		if(!breath || (breath.total_moles() == 0))
 			adjustOxyLoss(7)
 
 			oxygen_alert = max(oxygen_alert, 1)

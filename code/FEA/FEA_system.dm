@@ -84,6 +84,9 @@ var/global/datum/controller/air_system/air_master
 datum
 	controller
 		air_system
+			var/failed_ticks = 0 //How many ticks have runtimed?
+			var/tick_progress = 0
+
 			//Geoemetry lists
 			var/list/datum/air_group/air_groups = list()
 			var/list/turf/simulated/active_singletons = list()
@@ -255,6 +258,9 @@ datum
 
 				return null
 */
+			proc/tick()
+				return process()
+
 			process()
 				if(kill_air)
 					return 1

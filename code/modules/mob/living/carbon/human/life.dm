@@ -538,7 +538,7 @@
 		if(nodamage || REBREATHER in augmentations)
 			return
 
-		if(!breath || (breath.total_moles == 0) || suiciding)
+		if(!breath || (breath.total_moles() == 0) || suiciding)
 			if(reagents.has_reagent("inaprovaline"))
 				return
 			if(suiciding)

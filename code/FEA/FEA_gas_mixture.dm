@@ -59,6 +59,29 @@ What are the archived variables for?
 	var/tmp/graphic_archived
 	var/tmp/fuel_burnt = 0
 
+	proc/update_values()
+
+	proc/adjust(o2 = 0, co2 = 0, n2 = 0, tx = 0, list/datum/gas/traces = list())
+		//Purpose: Adjusting the gases within a airmix
+		//Called by: Nothing, yet!
+		//Inputs: The values of the gases to adjust
+		//Outputs: null
+
+		oxygen = max(0, oxygen + o2)
+		carbon_dioxide = max(0, carbon_dioxide + co2)
+		nitrogen = max(0, nitrogen + n2)
+		toxins = max(0, toxins + tx)
+
+		//handle trace gasses
+		for(var/datum/gas/G in traces)
+			var/datum/gas/T = locate(G.type) in trace_gases
+			if(T)
+				T.moles = max(G.moles + T.moles, 0)
+			else if(G.moles > 0)
+				trace_gases |= G
+		update_values()
+		return
+
 	//PV=nRT - related procedures
 	proc/heat_capacity()
 		var/heat_capacity = HEAT_CAPACITY_CALCULATION(oxygen,carbon_dioxide,nitrogen,toxins)

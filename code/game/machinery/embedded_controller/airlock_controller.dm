@@ -340,7 +340,7 @@ obj/machinery/embedded_controller/radio/airlock_controller
 <B>Control Pump: </B> [pump_status]<BR>"}
 
 		if(program && program.state == AIRLOCK_STATE_CLOSED)
-			output += {"<A href='?src=\ref[src];command=cycle_both'>Force Both Airlocks</A><br>
+			output += {"<A href='?src=\ref[src];command=force_both'>Force Both Airlocks</A><br>
 	<A href='?src=\ref[src];command=force_interior'>Force Inner Airlock</A><br>
 	<A href='?src=\ref[src];command=force_exterior'>Force Outer Airlock</A>"}
 

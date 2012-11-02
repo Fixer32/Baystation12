@@ -170,7 +170,7 @@
 		if(nodamage)
 			return
 
-		if(!breath || (breath.total_moles == 0))
+		if(!breath || (breath.total_moles() == 0))
 			//Aliens breathe in vaccuum
 			return 0
 

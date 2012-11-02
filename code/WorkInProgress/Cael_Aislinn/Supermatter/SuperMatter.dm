@@ -74,7 +74,7 @@
 		var/datum/gas_mixture/env = L.return_air()
 
 		//Remove gas from surrounding area
-		var/datum/gas_mixture/removed = env.remove(gasefficency * env.total_moles)
+		var/datum/gas_mixture/removed = env.remove(gasefficency * env.total_moles())
 
 		if (!removed)
 			return 1
@@ -99,13 +99,13 @@
 		damage_archived = damage
 		damage = max( damage + ( (removed.temperature - 800) / 150 ) , 0 )
 
-		if(!removed.total_moles)
+		if(!removed.total_moles())
 			damage += max((power-1600)/10,0)
 			power = max(power,1600)
 			return 1
 
-		var/nitrogen_mod = abs((removed.nitrogen / removed.total_moles)) * NITROGEN_RETARDATION_FACTOR
-		var/oxygen = max(min(removed.oxygen / removed.total_moles - nitrogen_mod, 1), 0)
+		var/nitrogen_mod = abs((removed.nitrogen / removed.total_moles())) * NITROGEN_RETARDATION_FACTOR
+		var/oxygen = max(min(removed.oxygen / removed.total_moles() - nitrogen_mod, 1), 0)
 
 		var/temp_factor = 0
 		if(oxygen > 0.8)
@@ -138,16 +138,16 @@
 		var/other_energy = device_energy * (1- (OXYGEN_RELEASE_MODIFIER + PLASMA_RELEASE_MODIFIER))
 
 		//Put as much plasma out as is permitted.
-		if( plasma_energy > removed.total_moles * PLASMA_CONVERSION_FACTOR * MAX_PLASMA_RELATIVE_INCREASE / gasefficency)
-			removed.toxins += (MAX_PLASMA_RELATIVE_INCREASE * removed.total_moles / gasefficency)
-			other_energy += plasma_energy - (removed.total_moles * PLASMA_CONVERSION_FACTOR * MAX_PLASMA_RELATIVE_INCREASE / gasefficency)
+		if( plasma_energy > removed.total_moles() * PLASMA_CONVERSION_FACTOR * MAX_PLASMA_RELATIVE_INCREASE / gasefficency)
+			removed.toxins += (MAX_PLASMA_RELATIVE_INCREASE * removed.total_moles() / gasefficency)
+			other_energy += plasma_energy - (removed.total_moles() * PLASMA_CONVERSION_FACTOR * MAX_PLASMA_RELATIVE_INCREASE / gasefficency)
 		else
 			removed.toxins += plasma_energy/PLASMA_CONVERSION_FACTOR
 
 		//Put as much plasma out as is permitted.
-		if( oxygen_energy > removed.total_moles * OXYGEN_CONVERSION_FACTOR * MAX_OXYGEN_RELATIVE_INCREASE / gasefficency)
-			removed.oxygen += (MAX_OXYGEN_RELATIVE_INCREASE * removed.total_moles / gasefficency)
-			other_energy += oxygen_energy - (removed.total_moles * OXYGEN_CONVERSION_FACTOR * MAX_OXYGEN_RELATIVE_INCREASE / gasefficency)
+		if( oxygen_energy > removed.total_moles() * OXYGEN_CONVERSION_FACTOR * MAX_OXYGEN_RELATIVE_INCREASE / gasefficency)
+			removed.oxygen += (MAX_OXYGEN_RELATIVE_INCREASE * removed.total_moles() / gasefficency)
+			other_energy += oxygen_energy - (removed.total_moles() * OXYGEN_CONVERSION_FACTOR * MAX_OXYGEN_RELATIVE_INCREASE / gasefficency)
 		else
 			removed.oxygen += oxygen_energy/OXYGEN_CONVERSION_FACTOR
 
