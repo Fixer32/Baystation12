@@ -446,15 +446,12 @@
 			if (istype(grenades[1], /obj/item/weapon/chem_grenade))
 				var/obj/item/weapon/chem_grenade/F = grenades[1]
 				grenades -= F
+				F.activate(user)
 				F.loc = user.loc
 				F.throw_at(target, 30, 2)
 				message_admins("[key_name_admin(user)] fired a chemistry grenade from a grenade launcher ([src.name]).")
 				log_game("[key_name_admin(user)] used a chemistry grenade ([src.name]).")
-				F.state = 1
-				F.icon_state = initial(icon_state)+"_armed"
 				playsound(user.loc, 'armbomb.ogg', 75, 1, -3)
-				spawn(15)
-					F.explode()
 			else if (istype(grenades[1], /obj/item/weapon/flashbang))
 				var/obj/item/weapon/flashbang/F = grenades[1]
 				grenades -= F
@@ -464,7 +461,7 @@
 				F.icon_state = "flashbang1"
 				playsound(user.loc, 'armbomb.ogg', 75, 1, -3)
 				spawn(15)
-					F.prime()
+					F.explode()
 			else if (istype(grenades[1], /obj/item/weapon/smokebomb))
 				var/obj/item/weapon/smokebomb/F = grenades[1]
 				grenades -= F
@@ -473,7 +470,7 @@
 				F.icon_state = "flashbang1"
 				playsound(user.loc, 'armbomb.ogg', 75, 1, -3)
 				spawn(15)
-					F.prime()
+					F.explode()
 			else if (istype(grenades[1], /obj/item/weapon/mustardbomb))
 				var/obj/item/weapon/mustardbomb/F = grenades[1]
 				grenades -= F
@@ -482,7 +479,7 @@
 				F.icon_state = "flashbang1"
 				playsound(user.loc, 'armbomb.ogg', 75, 1, -3)
 				spawn(15)
-					F.prime()
+					F.explode()
 			else if (istype(grenades[1], /obj/item/weapon/empgrenade))
 				var/obj/item/weapon/empgrenade/F = grenades[1]
 				grenades -= F
@@ -492,7 +489,7 @@
 				F.icon_state = "empar"
 				playsound(user.loc, 'armbomb.ogg', 75, 1, -3)
 				spawn(15)
-					F.prime()
+					F.explode()
 			if (locate (/obj/structure/table, src.loc) || locate (/obj/item/weapon/storage, src.loc))
 				return
 			else

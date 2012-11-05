@@ -320,7 +320,7 @@
 		projectiles--
 		log_message("Fired from [src.name], targeting [target].")
 		spawn(det_time)
-			F.prime()
+			F.explode()
 		do_after_cooldown()
 		return
 
