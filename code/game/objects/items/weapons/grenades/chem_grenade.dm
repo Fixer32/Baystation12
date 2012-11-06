@@ -23,20 +23,16 @@
 		R.my_atom = src
 
 	attack_self(mob/user as mob)
-		if(!stage || stage==1)
-			if(detonator)
-				detonator.detached()
-				usr.put_in_hands(detonator)
-				detonator=null
-				stage=0
-				icon_state = initial(icon_state)
-			else if(beakers.len)
-				for(var/obj/B in beakers)
-					if(istype(B))
-						beakers -= B
-						user.put_in_hands(B)
-			name = "unsecured grenade with [beakers.len] containers[detonator?" and detonator":""]"
-		if(stage > 1 && !active && clown_check(user))
+		if(stage!=2)
+			user.machine = src
+			var/dat = {"<B> Grenade properties: </B>
+			<BR> <B> Beaker one:</B> [beakers[1]] [beakers[1] ? "<A href='?src=\ref[src];beakerone=1'>Remove</A>" : ""]
+			<BR> <B> Beaker two:</B> [beakers[2]] [beakers[2] ? "<A href='?src=\ref[src];beakertwo=1'>Remove</A>" : ""]
+			<BR> <B> Control attachment:</B> [detonator ? "<A href='?src=\ref[src];device=1'>[detonator]</A>" : "None"] [detonator ? "<A href='?src=\ref[src];rem_device=1'>Remove</A>" : ""]"}
+
+			user << browse(dat, "window=grenade;size=600x300")
+			onclose(user, "grenade")
+		else if(stage == 2 && !active && clown_check(user))
 			user << "<span class='warning'>You prime \the [name]!</span>"
 
 			log_attack("<font color='red'>[user.name] ([user.ckey]) primed \a [src].</font>")
@@ -230,6 +226,40 @@
 		usr << desc
 		if(detonator)
 			usr << "With attached [detonator.name]"
+
+	Topic(href, href_list)
+		..()
+		if (usr.stat || usr.restrained())
+			return
+		if (stage==2) return
+		if (src.loc == usr)
+			var/changed = 0
+			if(href_list["beakerone"])
+				if(beakers.len < 1)
+					return
+				var/obj/b1 = beakers[1]
+				b1.loc = get_turf(src)
+				beakers.Remove(b1)
+				changed=1
+			if(href_list["beakertwo"])
+				if(beakers.len < 2)
+					return
+				var/obj/b2 = beakers[2]
+				b2.loc = get_turf(src)
+				beakers.Remove(b2)
+				changed=1
+			if(href_list["rem_device"])
+				detonator.loc = get_turf(src)
+				detonator = null
+				changed=1
+			if(href_list["device"])
+				detonator.attack_self(usr)
+			src.attack_self(usr)
+			src.add_fingerprint(usr)
+
+			if(changed)
+				name = "unsecured grenade with [beakers.len] containers[detonator?" and detonator":""]"
+			return
 
 	activate(mob/user as mob)
 		if(active) return
