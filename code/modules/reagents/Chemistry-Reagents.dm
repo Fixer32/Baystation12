@@ -719,6 +719,12 @@ datum
 						I.desc = "Looks like this was \an [O] some time ago."
 						for(var/mob/M in viewers(5, O))
 							M << "\red \the [O] melts."
+						for(var/obj/O2 in O.contents)
+							O2.loc = O.loc
+							if(ismob(O2))
+								reaction_mob(O2, TOUCH, volume)
+							if(isobj(O2))
+								reaction_obj(O2, volume)
 						del(O)
 
 		pacid
@@ -797,6 +803,12 @@ datum
 						I.desc = "Looks like this was \an [O] some time ago."
 						for(var/mob/M in viewers(5, O))
 							M << "\red \the [O] melts."
+						for(var/obj/O2 in O.contents)
+							O2.loc = O.loc
+							if(ismob(O2))
+								reaction_mob(O2, TOUCH, volume)
+							if(isobj(O2))
+								reaction_obj(O2, volume)
 						del(O)
 
 		glycerol
