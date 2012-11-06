@@ -254,11 +254,11 @@
 				changed=1
 			if(href_list["device"])
 				detonator.attack_self(usr)
-			src.attack_self(usr)
 			src.add_fingerprint(usr)
 
 			if(changed)
 				name = "unsecured grenade with [beakers.len] containers[detonator?" and detonator":""]"
+				src.attack_self(usr)
 			return
 
 	activate(mob/user as mob)
