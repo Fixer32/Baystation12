@@ -397,13 +397,17 @@ datum
 
 				for(var/A in reagent_list)
 					var/datum/reagent/R = A
-					if (R.id == reagent)
-						R.volume -= amount
-						update_total()
-						if(!safety)//So it does not handle reactions when it need not to
-							handle_reactions()
-						my_atom.on_reagent_change()
-						return 0
+					var/datum/compare = chemical_reagents_list[reagent]
+					if(istype(R,compare))
+						var/amt = max(0,min(R.volume,amount))
+						R.volume -= amt
+						amount -= amt
+						if(amount<=0)
+							update_total()
+							if(!safety)//So it does not handle reactions when it need not to
+								handle_reactions()
+							my_atom.on_reagent_change()
+							return 0
 
 				return 1
 
@@ -411,7 +415,8 @@ datum
 
 				for(var/A in reagent_list)
 					var/datum/reagent/R = A
-					if (R.id == reagent)
+					var/datum/compare = chemical_reagents_list[reagent]
+					if(istype(R,compare))
 						if(!amount) return R
 						else
 							if(R.volume >= amount) return R
@@ -420,12 +425,14 @@ datum
 				return 0
 
 			get_reagent_amount(var/reagent)
+				var/amnt = 0
 				for(var/A in reagent_list)
 					var/datum/reagent/R = A
-					if (R.id == reagent)
-						return R.volume
+					var/datum/compare = chemical_reagents_list[reagent]
+					if(istype(R,compare))
+						amnt += R.volume
 
-				return 0
+				return amnt
 
 			get_reagents()
 				var/res = ""
