@@ -108,7 +108,6 @@ turf
 		var/tmp/temperature_archived //USED ONLY FOR SOLIDS
 		var/tmp/being_superconductive = 0
 
-
 		proc
 			process_cell()
 			update_air_properties()
@@ -135,7 +134,6 @@ turf
 						overlays.Add(plmaster)
 					if("sleeping_agent")
 						overlays.Add(slmaster)
-
 
 
 		New()
