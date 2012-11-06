@@ -198,7 +198,7 @@ datum
 				update_total()
 
 			handle_reactions()
-				if(!isliving(my_atom) && (my_atom.flags & NOREACT)) return //Yup, no reactions here. No siree.
+				if(my_atom.flags & NOREACT) return //Yup, no reactions here. No siree.
 
 				var/reaction_occured = 0
 				do
