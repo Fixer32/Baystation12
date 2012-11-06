@@ -5,7 +5,7 @@
 	origin_tech = "materials=2;combat=1"
 	var/banglet = 0
 
-	prime()
+	explode()
 		..()
 		for(var/obj/structure/closet/L in view(get_turf(src), null))
 			if(locate(/mob/living/carbon/, L))
@@ -105,7 +105,7 @@
 	icon = 'icons/obj/grenade.dmi'
 	icon_state = "clusterbang"
 
-/obj/item/weapon/grenade/flashbang/clusterbang/prime()
+/obj/item/weapon/grenade/flashbang/clusterbang/explode()
 	var/numspawned = rand(4,8)
 	var/again = 0
 	for(var/more = numspawned,more > 0,more--)
@@ -141,10 +141,10 @@
 	walk_away(src,temploc,stepdist)//I must go, my people need me
 	var/dettime = rand(15,60)
 	spawn(dettime)
-		prime()
+		explode()
 	..()
 
-/obj/item/weapon/grenade/flashbang/clusterbang/segment/prime()
+/obj/item/weapon/grenade/flashbang/clusterbang/segment/explode()
 	var/numspawned = rand(4,8)
 	for(var/more = numspawned,more > 0,more--)
 		if(prob(35))
@@ -168,5 +168,5 @@
 		walk_away(src,temploc,stepdist)
 		var/dettime = rand(15,60)
 		spawn(dettime)
-		prime()
+		explode()
 	..()

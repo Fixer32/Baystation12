@@ -17,7 +17,7 @@
 
 		if(holder && istype(holder.loc,/obj/item/weapon/grenade/chem_grenade))
 			var/obj/item/weapon/grenade/chem_grenade/grenade = holder.loc
-			grenade.prime()
+			grenade.explode()
 		else
 			var/turf/location = get_turf(loc)
 			if(location)

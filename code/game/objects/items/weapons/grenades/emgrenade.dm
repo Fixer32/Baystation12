@@ -4,7 +4,7 @@
 	item_state = "emp"
 	origin_tech = "materials=2;magnets=3"
 
-	prime()
+	explode()
 		..()
 		if(empulse(src, 10, 20))
 			del(src)

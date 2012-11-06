@@ -13,27 +13,26 @@
 	var/list/allowed_containers = list(/obj/item/weapon/reagent_containers/glass/beaker, /obj/item/weapon/reagent_containers/glass/bottle)
 	var/affected_area = 3
 
+	var/obj/item/weapon/circuitboard/circuit = null
+	var/motion = 0
+	var/direct = "SOUTH"
+
 	New()
 		var/datum/reagents/R = new/datum/reagents(1000)
 		reagents = R
 		R.my_atom = src
 
 	attack_self(mob/user as mob)
-		if(!stage || stage==1)
-			if(detonator)
-//				detonator.loc=src.loc
-				detonator.detached()
-				usr.put_in_hands(detonator)
-				detonator=null
-				stage=0
-				icon_state = initial(icon_state)
-			else if(beakers.len)
-				for(var/obj/B in beakers)
-					if(istype(B))
-						beakers -= B
-						user.put_in_hands(B)
-			name = "unsecured grenade with [beakers.len] containers[detonator?" and detonator":""]"
-		if(stage > 1 && !active && clown_check(user))
+		if(stage!=2)
+			user.machine = src
+			var/dat = {"<B> Grenade properties: </B>
+			<BR> <B> Beaker one:</B> [beakers[1]] [beakers[1] ? "<A href='?src=\ref[src];beakerone=1'>Remove</A>" : ""]
+			<BR> <B> Beaker two:</B> [beakers[2]] [beakers[2] ? "<A href='?src=\ref[src];beakertwo=1'>Remove</A>" : ""]
+			<BR> <B> Control attachment:</B> [detonator ? "<A href='?src=\ref[src];device=1'>[detonator]</A>" : "None"] [detonator ? "<A href='?src=\ref[src];rem_device=1'>Remove</A>" : ""]"}
+
+			user << browse(dat, "window=grenade;size=600x300")
+			onclose(user, "grenade")
+		else if(stage == 2 && !active && clown_check(user))
 			user << "<span class='warning'>You prime \the [name]!</span>"
 
 			log_attack("<font color='red'>[user.name] ([user.ckey]) primed \a [src].</font>")
@@ -47,7 +46,6 @@
 				C.throw_mode_on()
 
 	attackby(obj/item/weapon/W as obj, mob/user as mob)
-
 		if(istype(W,/obj/item/device/assembly_holder) && (!stage || stage==1) && path != 2)
 			var/obj/item/device/assembly_holder/det = W
 			if(istype(det.a_left,det.a_right.type) || (!isigniter(det.a_left) && !isigniter(det.a_right)))
@@ -81,7 +79,7 @@
 			else if(stage == 2)
 				if(active && prob(95))
 					user << "\red You trigger the assembly!"
-					prime()
+					explode()
 					return
 				else
 					user << "\blue You unlock the assembly."
@@ -105,12 +103,163 @@
 					name = "unsecured grenade with [beakers.len] containers[detonator?" and detonator":""]"
 				else
 					user << "\red \the [W] is empty."
+		if(path != 1)
+			if(!istype(src.loc,/turf))
+				user << "\red You need to put the canister on the ground to do that!"
+			else
+				switch(state)
+					if(0)
+						if(istype(W, /obj/item/weapon/wrench))
+							playsound(src.loc, 'Ratchet.ogg', 50, 1)
+							if(do_after(user, 20))
+								user << "\blue You wrench the canister in place."
+								src.name = "Camera Assembly"
+								src.anchored = 1
+								src.state = 1
+								path = 2
+					if(1)
+						if(istype(W, /obj/item/weapon/wrench))
+							playsound(src.loc, 'Ratchet.ogg', 50, 1)
+							if(do_after(user, 20))
+								user << "\blue You unfasten the canister."
+								src.name = "Grenade Casing"
+								src.anchored = 0
+								src.state = 0
+								path = 0
+						if(istype(W, /obj/item/device/multitool))
+							playsound(src.loc, 'Deconstruct.ogg', 50, 1)
+							user << "\blue You place the electronics inside the canister."
+							src.circuit = W
+							user.drop_item()
+							W.loc = src
+						if(istype(W, /obj/item/weapon/screwdriver) && circuit)
+							playsound(src.loc, 'Screwdriver.ogg', 50, 1)
+							user << "\blue You screw the circuitry into place."
+							src.state = 2
+						if(istype(W, /obj/item/weapon/crowbar) && circuit)
+							playsound(src.loc, 'Crowbar.ogg', 50, 1)
+							user << "\blue You remove the circuitry."
+							src.state = 1
+							circuit.loc = src.loc
+							src.circuit = null
+					if(2)
+						if(istype(W, /obj/item/weapon/screwdriver) && circuit)
+							playsound(src.loc, 'Screwdriver.ogg', 50, 1)
+							user << "\blue You unfasten the circuitry."
+							src.state = 1
+						if(istype(W, /obj/item/weapon/cable_coil))
+							if(W:amount >= 1)
+								playsound(src.loc, 'Deconstruct.ogg', 50, 1)
+								if(do_after(user, 20))
+									W:amount -= 1
+									if(!W:amount) del(W)
+									user << "\blue You add cabling to the canister."
+									src.state = 3
+					if(3)
+						if(istype(W, /obj/item/weapon/wirecutters))
+							playsound(src.loc, 'wirecutter.ogg', 50, 1)
+							user << "\blue You remove the cabling."
+							src.state = 2
+							var/obj/item/weapon/cable_coil/A = new /obj/item/weapon/cable_coil( src.loc )
+							A.amount = 1
+						if(issignaler(W))
+							playsound(src.loc, 'Deconstruct.ogg', 50, 1)
+							user << "\blue You attach the wireless signaller unit to the circutry."
+							user.drop_item()
+							W.loc = src
+							src.state = 4
+					if(4)
+						if(istype(W, /obj/item/weapon/crowbar) && !motion)
+							playsound(src.loc, 'Crowbar.ogg', 50, 1)
+							user << "\blue You remove the remote signalling device."
+							src.state = 3
+							var/obj/item/device/assembly/signaler/S = locate() in src
+							if(S)
+								S.loc = src.loc
+							else
+								new /obj/item/device/assembly/signaler( src.loc, 1 )
+						if(isprox(W) && motion == 0)
+							playsound(src.loc, 'Deconstruct.ogg', 50, 1)
+							user << "\blue You attach the proximity sensor."
+							user.drop_item()
+							W.loc = src
+							motion = 1
+						if(istype(W, /obj/item/weapon/crowbar) && motion)
+							playsound(src.loc, 'Crowbar.ogg', 50, 1)
+							user << "\blue You remove the proximity sensor."
+							var/obj/item/device/assembly/prox_sensor/S = locate() in src
+							if(S)
+								S.loc = src.loc
+							else
+								new /obj/item/device/assembly/prox_sensor( src.loc, 1 )
+							motion = 0
+						if(istype(W, /obj/item/stack/sheet/glass))
+							if(W:amount >= 1)
+								playsound(src.loc, 'Deconstruct.ogg', 50, 1)
+								if(do_after(user, 20))
+									if(W)
+										W:use(1)
+										user << "\blue You put in the glass lens."
+										src.state = 5
+					if(5)
+						if(istype(W, /obj/item/weapon/crowbar))
+							playsound(src.loc, 'Crowbar.ogg', 50, 1)
+							user << "\blue You remove the glass lens."
+							src.state = 4
+							new /obj/item/stack/sheet/glass( src.loc, 2 )
+						if(istype(W, /obj/item/weapon/screwdriver))
+							playsound(src.loc, 'Screwdriver.ogg', 50, 1)
+							user << "\blue You connect the lense."
+							var/B
+							if(motion == 1)
+								B = new /obj/machinery/camera/motion( src.loc )
+							else
+								B = new /obj/machinery/camera( src.loc )
+							B:network = "SS13"
+							B:network = input(usr, "Which network would you like to connect this camera to?", "Set Network", "SS13")
+							direct = input(user, "Direction?", "Assembling Camera", null) in list( "NORTH", "EAST", "SOUTH", "WEST" )
+							B:dir = text2dir(direct)
+							del(src)
 
 	examine()
 		set src in usr
 		usr << desc
 		if(detonator)
 			usr << "With attached [detonator.name]"
+
+	Topic(href, href_list)
+		..()
+		if (usr.stat || usr.restrained())
+			return
+		if (stage==2) return
+		if (src.loc == usr)
+			var/changed = 0
+			if(href_list["beakerone"])
+				if(beakers.len < 1)
+					return
+				var/obj/b1 = beakers[1]
+				b1.loc = get_turf(src)
+				beakers.Remove(b1)
+				changed=1
+			if(href_list["beakertwo"])
+				if(beakers.len < 2)
+					return
+				var/obj/b2 = beakers[2]
+				b2.loc = get_turf(src)
+				beakers.Remove(b2)
+				changed=1
+			if(href_list["rem_device"])
+				detonator.loc = get_turf(src)
+				detonator = null
+				changed=1
+			if(href_list["device"])
+				detonator.attack_self(usr)
+			src.attack_self(usr)
+			src.add_fingerprint(usr)
+
+			if(changed)
+				name = "unsecured grenade with [beakers.len] containers[detonator?" and detonator":""]"
+			return
 
 	activate(mob/user as mob)
 		if(active) return
@@ -136,7 +285,7 @@
 		if(active)
 			icon_state = initial(icon_state) + (primed?"_primed":"_active")
 
-	prime()
+	explode()
 		if(!stage || stage<2) return
 
 		//if(prob(reliability))
