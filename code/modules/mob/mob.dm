@@ -119,7 +119,7 @@
 /mob/proc/Life()
 //	if(organStructure)
 //		organStructure.ProcessOrgans()
-	if(prob(5))
+	if(reagents && prob(5))
 		reagents.remove_any(1)
 	return
 
