@@ -319,8 +319,7 @@
 		F.throw_at(target, missile_range, missile_speed)
 		projectiles--
 		log_message("Fired from [src.name], targeting [target].")
-		spawn(det_time)
-			F.prime()
+		F.activate(usr)
 		do_after_cooldown()
 		return
 
