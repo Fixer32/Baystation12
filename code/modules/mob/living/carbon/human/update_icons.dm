@@ -245,6 +245,11 @@ proc/get_damage_icon_part(damage_state, body_part)
 		lying_icon = new /icon('icons/mob/human.dmi', "torso_[g]_l")
 		individual_limbs = 1
 
+	var/datum/organ/external/head = get_organ("head")
+	var/has_head = 0
+	if(head && !(head.status & ORGAN_DESTROYED))
+		has_head = 1
+
 	//remove destroyed limbs from base icon (if individual_limbs -> we do not have them already)
 	if(!individual_limbs)
 		for(var/datum/organ/external/part in organs)
@@ -261,8 +266,7 @@ proc/get_damage_icon_part(damage_state, body_part)
 	// Draw head and groin if we are assembling standart body from parts - they are not interchangeable for
 	// robotic limbs and are uncutoffable parts of limbless standard body
 	else
-		var/datum/organ/external/head = get_organ("head")
-		if(head && !(head.status & ORGAN_DESTROYED))
+		if(has_head)
 			stand_icon.Blend(new /icon('icons/mob/human.dmi', "head_[g]_s"), ICON_OVERLAY)
 			lying_icon.Blend(new /icon('icons/mob/human.dmi', "head_[g]_l"), ICON_OVERLAY)
 
@@ -310,8 +314,7 @@ proc/get_damage_icon_part(damage_state, body_part)
 			stand_icon.Blend(rgb(-s_tone,  -s_tone,  -s_tone), ICON_SUBTRACT)
 			lying_icon.Blend(rgb(-s_tone,  -s_tone,  -s_tone), ICON_SUBTRACT)
 
-	var/datum/organ/external/head = get_organ("head")
-	if(head && !(head.status & ORGAN_DESTROYED))
+	if(has_head)
 		//Eyes
 		if(!skeleton)
 			var/icon/eyes_s = new/icon('icons/mob/human_face.dmi', "eyes_s")
@@ -387,6 +390,11 @@ proc/get_damage_icon_part(damage_state, body_part)
 	var/fat
 	if(FAT in mutations)
 		fat = "fat"
+
+	if(stat == DEAD)
+		if(update_icons)
+			update_icons()
+		return
 
 	var/image/lying		= image("icon" = 'icons/effects/genetics.dmi')
 	var/image/standing	= image("icon" = 'icons/effects/genetics.dmi')

@@ -311,26 +311,29 @@ Code:
 					menu += "\red No connection<BR>"
 				else
 					var/list/L = list()
-					for(var/obj/machinery/power/terminal/term in powmonitor.powernet.nodes)
-						if(istype(term.master, /obj/machinery/power/apc))
-							var/obj/machinery/power/apc/A = term.master
-							L += A
+					if(powmonitor.powernet)
+						for(var/obj/machinery/power/terminal/term in powmonitor.powernet.nodes)
+							if(istype(term.master, /obj/machinery/power/apc))
+								var/obj/machinery/power/apc/A = term.master
+								L += A
+						
+						menu += "<PRE>Total power: [powmonitor.powernet.avail] W<BR>Total load:  [num2text(powmonitor.powernet.viewload,10)] W<BR>"
 
-					menu += "<PRE>Total power: [powmonitor.powernet.avail] W<BR>Total load:  [num2text(powmonitor.powernet.viewload,10)] W<BR>"
+						menu += "<FONT SIZE=-1>"
 
-					menu += "<FONT SIZE=-1>"
+						if(L.len > 0)
+							menu += "Area                           Eqp./Lgt./Env.  Load   Cell<HR>"
 
-					if(L.len > 0)
-						menu += "Area                           Eqp./Lgt./Env.  Load   Cell<HR>"
+							var/list/S = list(" Off","AOff","  On", " AOn")
+							var/list/chg = list("N","C","F")
 
-						var/list/S = list(" Off","AOff","  On", " AOn")
-						var/list/chg = list("N","C","F")
+							for(var/obj/machinery/power/apc/A in L)
+								menu += copytext(add_tspace(A.area.name, 30), 1, 30)
+								menu += " [S[A.equipment+1]] [S[A.lighting+1]] [S[A.environ+1]] [add_lspace(A.lastused_total, 6)]  [A.cell ? "[add_lspace(round(A.cell.percent()), 3)]% [chg[A.charging+1]]" : "  N/C"]<BR>"
 
-						for(var/obj/machinery/power/apc/A in L)
-							menu += copytext(add_tspace(A.area.name, 30), 1, 30)
-							menu += " [S[A.equipment+1]] [S[A.lighting+1]] [S[A.environ+1]] [add_lspace(A.lastused_total, 6)]  [A.cell ? "[add_lspace(round(A.cell.percent()), 3)]% [chg[A.charging+1]]" : "  N/C"]<BR>"
-
-					menu += "</FONT></PRE>"
+						menu += "</FONT></PRE>"
+					else
+						menu += "System malfunction."
 
 			if (44) //medical records //This thing only displays a single screen so it's hard to really get the sub-menu stuff working.
 				menu = "<h4><img src=pda_medical.png> Medical Record List</h4>"

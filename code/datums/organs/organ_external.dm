@@ -6,6 +6,7 @@
 	var/icon_name = null
 	var/body_part = null
 
+	var/dropped = 0
 	var/damage_state = "00"
 	var/brute_dam = 0
 	var/burn_dam = 0
@@ -60,8 +61,7 @@
 			var/nux = brute * rand(10,15)
 			if(config.limbs_can_break && brute_dam >= max_damage * config.organ_health_multiplier)
 				if(prob(5 * brute))
-					status |= ORGAN_DESTROYED
-					droplimb()
+					droplimb(1)
 					return
 
 			else if(prob(nux))
@@ -72,8 +72,7 @@
 		else if(brute > 20)
 			if(config.limbs_can_break && brute_dam >= max_damage * config.organ_health_multiplier)
 				if(prob(5 * brute))
-					status |= ORGAN_DESTROYED
-					droplimb()
+					droplimb(1)
 					return
 
 		// If the limbs can break, make sure we don't exceed the maximum damage a limb can take before breaking
@@ -295,9 +294,11 @@
 				O.amputated=amputated
 
 	proc/droplimb(var/override = 0,var/no_explode = 0)
+		if(dropped) return
 		if(override)
 			status |= ORGAN_DESTROYED
 		if(status & ORGAN_DESTROYED)
+			dropped = 1
 			if(status & ORGAN_SPLINTED)
 				status &= ~ORGAN_SPLINTED
 			if(implant)

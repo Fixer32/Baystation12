@@ -27,19 +27,12 @@
 		del(src)
 		return
 
-/*
 	attack_self(mob/user as mob)
 		if(!istype(focus,/obj/item))	return
-		if(!check_path())	return//No clear path
+//		if(!check_path())	return//No clear path
 
-		user.put_in_hands(focus)
-		add_fingerprint(user)
-		user.update_inv_l_hand(0)
-		user.update_inv_r_hand()
-		spawn(0)
-			del(src)
+		focus.attack_hand(user)
 		return
-*/
 
 	afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag)//TODO: go over this
 		if(!target || !user)	return

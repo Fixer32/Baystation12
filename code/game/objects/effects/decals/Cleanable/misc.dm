@@ -93,6 +93,7 @@
 	icon_state = "vomit_1"
 	random_icon_states = list("vomit_1", "vomit_2", "vomit_3", "vomit_4")
 	var/list/viruses = list()
+	slipChance = 40
 
 	Del()
 		for(var/datum/disease/D in viruses)
@@ -107,6 +108,7 @@
 	layer = 2
 	icon = 'icons/effects/tomatodecal.dmi'
 	random_icon_states = list("tomato_floor1", "tomato_floor2", "tomato_floor3")
+	slipChance = 40
 
 /obj/effect/decal/cleanable/egg_smudge
 	name = "smashed egg"
@@ -116,6 +118,7 @@
 	layer = 2
 	icon = 'icons/effects/tomatodecal.dmi'
 	random_icon_states = list("smashed_egg1", "smashed_egg2", "smashed_egg3")
+	slipChance = 40
 
 /obj/effect/decal/cleanable/pie_smudge //honk
 	name = "smashed pie"
@@ -125,3 +128,4 @@
 	layer = 2
 	icon = 'icons/effects/tomatodecal.dmi'
 	random_icon_states = list("smashed_pie")
+	slipChance = 40

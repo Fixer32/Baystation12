@@ -5,6 +5,7 @@ obj/effect/decal/cleanable/liquid_fuel
 	layer = TURF_LAYER+0.2
 	anchored = 1
 	var/amount = 1 //Basically moles.
+	slipChance = 75
 
 	New(newLoc,amt=1)
 		src.amount = amt

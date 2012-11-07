@@ -424,6 +424,7 @@
 	if(src.client)
 		src.client.screen -= item
 
+	if(!item) return //Grab processing has a chance of returning null - check again
 	item.loc = src.loc
 
 	if(istype(item, /obj/item))

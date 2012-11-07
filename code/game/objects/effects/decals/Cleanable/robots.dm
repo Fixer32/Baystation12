@@ -10,6 +10,7 @@
 	icon = 'icons/mob/robots.dmi'
 	icon_state = "gib1"
 	random_icon_states = list("gib1", "gib2", "gib3", "gib4", "gib5", "gib6", "gib7")
+	slipChance = 1
 
 /obj/effect/decal/cleanable/robot_debris/proc/streak(var/list/directions)
 	spawn (0)
@@ -47,6 +48,7 @@
 	icon_state = "floor1"
 	var/viruses = list()
 	random_icon_states = list("floor1", "floor2", "floor3", "floor4", "floor5", "floor6", "floor7")
+	slipChance = 65
 
 	Del()
 		for(var/datum/disease/D in viruses)

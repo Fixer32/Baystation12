@@ -1,4 +1,5 @@
 /obj/effect/decal/cleanable
+	var/slipChance = 0
 	var/list/random_icon_states = list()
 
 /obj/effect/decal/cleanable/New()

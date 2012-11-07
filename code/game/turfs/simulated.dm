@@ -68,4 +68,29 @@
 					playsound(src.loc, 'sound/misc/slip.ogg', 50, 1, -3)
 					M.Weaken(10)
 
+		for(var/obj/effect/decal/cleanable/dirt in src.contents)
+			if(istype(dirt) && dirt.slipChance>0 && prob(dirt.slipChance))
+				if(istype(M, /mob/living/carbon/human)) // Added check since monkeys don't have shoes
+					if ((M.m_intent == "run") && !(istype(M:shoes, /obj/item/clothing/shoes) && M:shoes.flags&NOSLIP))
+						M.stop_pulling()
+						step(M, M.dir)
+						M << "\blue You slipped on [dirt]!"
+						playsound(src.loc, 'sound/misc/slip.ogg', 50, 1, -3)
+						M.Stun(8)
+						M.Weaken(5)
+					else
+						M.inertia_dir = 0
+						return
+				else if(!istype(M, /mob/living/carbon/metroid))
+					if (M.m_intent == "run")
+						M.stop_pulling()
+						step(M, M.dir)
+						M << "\blue You slipped on [dirt]!"
+						playsound(src.loc, 'sound/misc/slip.ogg', 50, 1, -3)
+						M.Stun(8)
+						M.Weaken(5)
+					else
+						M.inertia_dir = 0
+						return
+
 	..()

@@ -11,6 +11,7 @@
 	var/list/viruses = list()
 	blood_DNA = list()
 	var/datum/disease2/disease/virus2 = null
+	slipChance = 5
 
 /obj/effect/decal/cleanable/blood/Del()
 	for(var/datum/disease/D in viruses)
@@ -28,6 +29,7 @@
 					del(B)
 
 /obj/effect/decal/cleanable/blood/splatter
+	slipChance = 25
 	random_icon_states = list("gibbl1", "gibbl2", "gibbl3", "gibbl4", "gibbl5")
 
 /obj/effect/decal/cleanable/blood/tracks
@@ -35,6 +37,7 @@
 	desc = "They look like tracks left by wheels."
 	gender = PLURAL
 	random_icon_states = null
+	slipChance = 25
 
 /obj/effect/decal/cleanable/blood/gibs
 	name = "gibs"
@@ -46,6 +49,7 @@
 	icon = 'icons/effects/blood.dmi'
 	icon_state = "gibbl5"
 	random_icon_states = list("gib1", "gib2", "gib3", "gib4", "gib5", "gib6")
+	slipChance = 35
 
 /obj/effect/decal/cleanable/blood/gibs/up
 	random_icon_states = list("gib1", "gib2", "gib3", "gib4", "gib5", "gib6","gibup1","gibup1","gibup1")
@@ -87,3 +91,4 @@
 	icon_state = "mucus"
 	random_icon_states = list("mucus")
 	var/datum/disease2/disease/virus2 = null
+	slipChance = 35

@@ -309,6 +309,7 @@
 			return
 
 		playsound(src.loc, 'sound/effects/bamf.ogg', 50, 1)
+		unacidable = 1
 
 		for(var/obj/item/weapon/reagent_containers/glass/G in beakers)
 			G.reagents.trans_to(src, G.reagents.total_volume)

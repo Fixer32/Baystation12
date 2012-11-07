@@ -97,3 +97,6 @@
 		mo.show_message(rendered, 2)
 		*/
 	return
+
+/obj/proc/attack(mob/living/M as mob, mob/living/user as mob, def_zone)
+	return
