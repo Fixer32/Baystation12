@@ -13,6 +13,7 @@
 	var/last_throw = 0
 	var/obj/focus = null
 	var/mob/living/host = null
+	var/last_loc
 
 
 	dropped(mob/user as mob)
@@ -57,6 +58,7 @@
 			focus_object(target, user)
 			return
 		var/focusturf = get_turf(focus)
+		last_loc = focus.loc
 		if(get_dist(focusturf, target) <= 1 && !istype(target, /turf))
 			target.attackby(focus, user, user:get_organ_target())
 
@@ -70,6 +72,7 @@
 	proc/focus_object(var/obj/target, var/mob/living/user)
 		if(!istype(target,/obj))	return//Cant throw non objects atm might let it do mobs later
 		if(target.anchored)
+			last_loc = target.loc
 			target.attack_hand(user) // you can use shit now!
 			return//No throwing anchored things
 		if(!isturf(target.loc))

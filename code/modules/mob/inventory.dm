@@ -29,6 +29,17 @@
 		if(client)	client.screen |= W
 		update_inv_l_hand()
 		return 1
+	else if(istype(l_hand,/obj/item/tk_grab))
+		var/obj/item/tk_grab/grab = l_hand
+		if(grab.last_loc)
+			W.loc = grab.last_loc
+		else
+			l_hand = W
+			W.loc=src
+			W.equipped(src,slot_l_hand)
+			if(client)	client.screen |= W
+			del(grab)
+			update_inv_l_hand()
 	return 0
 
 //Puts the item into your r_hand if possible and calls all necessary triggers/updates. returns 1 on success.
@@ -44,6 +55,17 @@
 		if(client)	client.screen |= W
 		update_inv_r_hand()
 		return 1
+	else if(istype(r_hand,/obj/item/tk_grab))
+		var/obj/item/tk_grab/grab = r_hand
+		if(!grab.last_loc)
+			W.loc = grab.last_loc
+		else
+			r_hand = W
+			W.loc=src
+			W.equipped(src,slot_r_hand)
+			if(client)	client.screen |= W
+			del(grab)
+			update_inv_r_hand()
 	return 0
 
 //Puts the item into our active hand if possible. returns 1 on success.
