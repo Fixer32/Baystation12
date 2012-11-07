@@ -155,7 +155,7 @@
 	active = 0
 
 	if(AutoDump)
-		spawn(600)
+		spawn(6000)
 			processDrive(1)
 
 	return
