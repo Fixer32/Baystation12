@@ -299,6 +299,9 @@
 			status |= ORGAN_DESTROYED
 		if(status & ORGAN_DESTROYED)
 			dropped = 1
+			if(body_part == UPPER_TORSO)
+				return
+
 			if(status & ORGAN_SPLINTED)
 				status &= ~ORGAN_SPLINTED
 			if(implant)
@@ -313,8 +316,8 @@
 
 			var/obj/item/weapon/organ/H
 			switch(body_part)
-	//			if(UPPER_TORSO)				just no.
-	//				owner.gib()
+				if(UPPER_TORSO)
+					owner.gib()
 				if(LOWER_TORSO)
 					owner << "\red You are now sterile."
 				if(HEAD)
@@ -577,7 +580,7 @@
 ****************************************************/
 
 obj/item/weapon/organ
-	icon = 'human.dmi'
+	icon = 'icons/mob/human.dmi'
 
 obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 	..(loc)

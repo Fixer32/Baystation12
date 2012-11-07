@@ -28,10 +28,13 @@
 		return
 
 	attack_self(mob/user as mob)
-		if(!istype(focus,/obj/item))	return
+		if(!focus) return
+//		if(!istype(focus,/obj/item))	return
 //		if(!check_path())	return//No clear path
 
-		focus.attack_hand(user)
+		if(istype(focus,/obj/item))
+			var/obj/item/I = focus
+			I.attack_self(user)
 		return
 
 	afterattack(atom/target as mob|obj|turf|area, mob/living/user as mob|obj, flag)//TODO: go over this
@@ -53,7 +56,10 @@
 		var/focusturf = get_turf(focus)
 		last_loc = focus.loc
 		if(get_dist(focusturf, target) <= 1 && !istype(target, /turf))
-			target.attackby(focus, user, user:get_organ_target())
+			if(focus == target)
+				focus.attack_hand(user)
+			else
+				target.attackby(focus, user, user:get_organ_target())
 
 		else if(get_dist(focusturf, target) <= 16)
 			apply_focus_overlay()
