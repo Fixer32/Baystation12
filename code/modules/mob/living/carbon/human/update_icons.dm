@@ -310,21 +310,16 @@ proc/get_damage_icon_part(damage_state, body_part)
 			stand_icon.Blend(rgb(-s_tone,  -s_tone,  -s_tone), ICON_SUBTRACT)
 			lying_icon.Blend(rgb(-s_tone,  -s_tone,  -s_tone), ICON_SUBTRACT)
 
-	//Eyes
-	if(!skeleton)
-		var/icon/eyes_s = new/icon('icons/mob/human_face.dmi', "eyes_s")
-		var/icon/eyes_l = new/icon('icons/mob/human_face.dmi', "eyes_l")
-		eyes_s.Blend(rgb(r_eyes, g_eyes, b_eyes), ICON_ADD)
-		eyes_l.Blend(rgb(r_eyes, g_eyes, b_eyes), ICON_ADD)
-		stand_icon.Blend(eyes_s, ICON_OVERLAY)
-		lying_icon.Blend(eyes_l, ICON_OVERLAY)
-	// Note: These used to be in update_face(), and the fact they're here will make it difficult to create a disembodied head
-	var/icon/eyes_s = new/icon('icons/mob/human_face.dmi', "eyes_s")
-	var/icon/eyes_l = new/icon('icons/mob/human_face.dmi', "eyes_l")
-	eyes_s.Blend(rgb(r_eyes, g_eyes, b_eyes), ICON_ADD)
-	eyes_l.Blend(rgb(r_eyes, g_eyes, b_eyes), ICON_ADD)
-	stand_icon.Blend(eyes_s, ICON_OVERLAY)
-	lying_icon.Blend(eyes_l, ICON_OVERLAY)
+	var/datum/organ/external/head = get_organ("head")
+	if(head && !(head.status & ORGAN_DESTROYED))
+		//Eyes
+		if(!skeleton)
+			var/icon/eyes_s = new/icon('icons/mob/human_face.dmi', "eyes_s")
+			var/icon/eyes_l = new/icon('icons/mob/human_face.dmi', "eyes_l")
+			eyes_s.Blend(rgb(r_eyes, g_eyes, b_eyes), ICON_ADD)
+			eyes_l.Blend(rgb(r_eyes, g_eyes, b_eyes), ICON_ADD)
+			stand_icon.Blend(eyes_s, ICON_OVERLAY)
+			lying_icon.Blend(eyes_l, ICON_OVERLAY)
 
 	//Mouth	(lipstick!)
 	if(lip_style)	//skeletons are allowed to wear lipstick no matter what you think, agouri.
