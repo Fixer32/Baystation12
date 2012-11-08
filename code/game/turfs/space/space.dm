@@ -94,7 +94,7 @@
 			if(!move_to_z)
 				return
 
-			if(z == 6 && !isliving(A))
+			if(z == 6 && !istype(A,/mob))
 				del(A)
 				return
 
