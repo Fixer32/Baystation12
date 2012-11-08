@@ -32,6 +32,7 @@
 //		if(!istype(focus,/obj/item))	return
 //		if(!check_path())	return//No clear path
 
+		last_loc = focus.loc
 		if(istype(focus,/obj/item))
 			var/obj/item/I = focus
 			I.attack_self(user)
