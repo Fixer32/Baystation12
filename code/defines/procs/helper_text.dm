@@ -58,8 +58,30 @@
 //Runs byond's sanitization proc along-side strip_html_simple
 //I believe strip_html_simple() is required to run first to prevent '<' from displaying as '&lt;' that html_encode() would cause
 /proc/adminscrub(var/t,var/limit=MAX_MESSAGE_LEN)
-	return copytext((html_encode(strip_html_simple(t))),1,limit)
+	return copytext(parsepencode(html_encode(sanitize_simple(t,list("\t"=" ","ÿ"="ß")))),1,limit)
 
+/proc/parsepencode(var/t, var/obj/item/weapon/pen/P, mob/user as mob, var/iscrayon = 0)
+	t = sanitize_easy(t)
+
+	t = dd_replacetext(t, "\[center\]", "<center>")
+	t = dd_replacetext(t, "\[/center\]", "</center>")
+	t = dd_replacetext(t, "\[br\]", "<BR>")
+	t = dd_replacetext(t, "\n", "<BR>")
+	t = dd_replacetext(t, "\[b\]", "<B>")
+	t = dd_replacetext(t, "\[/b\]", "</B>")
+	t = dd_replacetext(t, "\[i\]", "<I>")
+	t = dd_replacetext(t, "\[/i\]", "</I>")
+	t = dd_replacetext(t, "\[u\]", "<U>")
+	t = dd_replacetext(t, "\[/u\]", "</U>")
+	t = dd_replacetext(t, "\[large\]", "<font size=\"4\">")
+	t = dd_replacetext(t, "\[/large\]", "</font>")
+	t = dd_replacetext(t, "\[*\]", "<li>")
+	t = dd_replacetext(t, "\[hr\]", "<HR>")
+	t = dd_replacetext(t, "\[small\]", "<font size = \"1\">")
+	t = dd_replacetext(t, "\[/small\]", "</font>")
+	t = dd_replacetext(t, "\[list\]", "<ul>")
+	t = dd_replacetext(t, "\[/list\]", "</ul>")
+	return t
 
 //Returns null if there is any bad text in the string
 /proc/reject_bad_text(var/text, var/max_length=512)
