@@ -353,12 +353,28 @@
 			if((COLD_RESISTANCE in mutations) || (prob(1)))
 				heal_organ_damage(0,1)
 
+		if(mHallucination in mutations)
+			hallucination = 100
+			halloss = 0
+
+		if(mSmallsize in mutations)
+			if(!(pass_flags & PASSTABLE))
+				pass_flags |= PASSTABLE
+		else
+			if(pass_flags & PASSTABLE)
+				pass_flags &= ~PASSTABLE
+
 		// Make nanoregen heal youu, -3 all damage types
-		if(NANOREGEN in augmentations)
+		if((NANOREGEN in augmentations) || (mRegen in mutations))
 			var/healed = 0
-			var/hptoreg = 3
-			if(stat==UNCONSCIOUS) hptoreg=1
+			var/hptoreg = 0
+			if(NANOREGEN in augmentations)
+				hptoreg += 3
+			if(mRegen in mutations)
+				hptoreg += 2
+			if(stat==UNCONSCIOUS) hptoreg/=2
 			if(stat==DEAD) hptoreg=0
+
 			for(var/i=0, i<hptoreg, i++)
 				var/list/damages = new/list()
 				if(getToxLoss())
@@ -403,6 +419,27 @@
 			if(healed)
 				if(prob(5))
 					src << "\blue You feel your wounds mending..."
+
+		if(!(/mob/living/carbon/human/proc/morph in src.verbs))
+			if(mMorph in mutations)
+				src.verbs += /mob/living/carbon/human/proc/morph
+		else
+			if(!(mMorph in mutations))
+				src.verbs -= /mob/living/carbon/human/proc/morph
+
+		if(!(/mob/living/carbon/human/proc/remoteobserve in src.verbs))
+			if(mRemote in mutations)
+				src.verbs += /mob/living/carbon/human/proc/remoteobserve
+		else
+			if(!(mRemote in mutations))
+				src.verbs -= /mob/living/carbon/human/proc/remoteobserve
+
+		if(!(/mob/living/carbon/human/proc/remotesay in src.verbs))
+			if(mRemotetalk in mutations)
+				src.verbs += /mob/living/carbon/human/proc/remotesay
+		else
+			if(!(mRemotetalk in mutations))
+				src.verbs -= /mob/living/carbon/human/proc/remotesay
 
 		if ((HULK in mutations) && health <= 25)
 			mutations.Remove(HULK)
@@ -535,7 +572,7 @@
 
 
 	proc/handle_breath(datum/gas_mixture/breath)
-		if(nodamage || REBREATHER in augmentations)
+		if(nodamage || (REBREATHER in augmentations) || (mNobreath in mutations))
 			return
 
 		if(!breath || (breath.total_moles() == 0) || suiciding)

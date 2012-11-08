@@ -34,8 +34,28 @@ var/FIREBLOCK = 0
 var/XRAYBLOCK = 0
 var/CLUMSYBLOCK = 0
 var/FAKEBLOCK = 0
+var/COUGHBLOCK = 0
+var/GLASSESBLOCK = 0
+var/EPILEPSYBLOCK = 0
+var/TWITCHBLOCK = 0
+var/NERVOUSBLOCK = 0
+var/MONKEYBLOCK = 27
+
 var/BLOCKADD = 0
 var/DIFFMUT = 0
+
+var/HEADACHEBLOCK = 0
+var/NOBREATHBLOCK = 0
+var/REMOTEVIEWBLOCK = 0
+var/REGENERATEBLOCK = 0
+var/INCREASERUNBLOCK = 0
+var/REMOTETALKBLOCK = 0
+var/MORPHBLOCK = 0
+var/BLENDBLOCK = 0
+var/HALLUCINATIONBLOCK = 0
+var/NOPRINTSBLOCK = 0
+var/SHOCKIMMUNITYBLOCK = 0
+var/SMALLSIZEBLOCK = 0
 
 var/skipupdate = 0
 	///////////////
@@ -48,12 +68,12 @@ var/blobevent = 0
 var/diary = null
 var/diaryofmeanpeople = null
 var/href_logfile = null
-var/station_name = "NSV Exodus"
-var/game_version = "Baystation12"
+var/station_name = "AMRS Replica"
+var/game_version = "Minestation12"
 
 var/datum/air_tunnel/air_tunnel1/SS13_airtunnel = null
 var/going = 1.0
-var/master_mode = "extended"//"extended"
+var/master_mode = "secret"//"extended"
 var/secret_force_mode = "secret" // if this is anything but "secret", the secret rotation will forceably choose this mode
 
 var/datum/engine_eject/engine_eject_control = null

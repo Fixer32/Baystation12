@@ -182,42 +182,54 @@
 	desc = "Toss away those glasses!"
 	dnatype = "se"
 	dna = "708"
-	block = 1
+	New()
+		..()
+		block = GLASSESBLOCK
 
 /obj/item/weapon/dnainjector/glassesmut
 	name = "DNA-Injector (Glasses)"
 	desc = "Will make you need dorkish glasses."
 	dnatype = "se"
 	dna = "BD6"
-	block = 1
+	New()
+		..()
+		block = GLASSESBLOCK
 
 /obj/item/weapon/dnainjector/epimut
 	name = "DNA-Injector (Epi.)"
 	desc = "Shake shake shake the room!"
 	dnatype = "se"
 	dna = "FA0"
-	block = 3
+	New()
+		..()
+		block = EPILEPSYBLOCK
 
 /obj/item/weapon/dnainjector/antiepi
 	name = "DNA-Injector (Anti-Epi.)"
 	desc = "Will fix you up from shaking the room."
 	dnatype = "se"
 	dna = "708"
-	block = 3
+	New()
+		..()
+		block = EPILEPSYBLOCK
 ////////////////////////////////////
 /obj/item/weapon/dnainjector/anticough
 	name = "DNA-Injector (Anti-Cough)"
 	desc = "Will stop that awful noise."
 	dnatype = "se"
 	dna = "708"
-	block = 5
+	New()
+		..()
+		block = COUGHBLOCK
 
 /obj/item/weapon/dnainjector/coughmut
 	name = "DNA-Injector (Cough)"
 	desc = "Will bring forth a sound of horror from your throat."
 	dnatype = "se"
 	dna = "BD6"
-	block = 5
+	New()
+		..()
+		block = COUGHBLOCK
 
 /obj/item/weapon/dnainjector/clumsymut
 	name = "DNA-Injector (Clumsy)"
@@ -244,28 +256,36 @@
 	desc = "Will cure tourrets."
 	dnatype = "se"
 	dna = "708"
-	block = 7
+	New()
+		..()
+		block = TWITCHBLOCK
 
 /obj/item/weapon/dnainjector/tourmut
 	name = "DNA-Injector (Tour.)"
 	desc = "Gives you a nasty case off tourrets."
 	dnatype = "se"
 	dna = "BD6"
-	block = 7
+	New()
+		..()
+		block = TWITCHBLOCK
 
 /obj/item/weapon/dnainjector/stuttmut
 	name = "DNA-Injector (Stutt.)"
 	desc = "Makes you s-s-stuttterrr"
 	dnatype = "se"
 	dna = "FA0"
-	block = 9
+	New()
+		..()
+		block = NERVOUSBLOCK
 
 /obj/item/weapon/dnainjector/antistutt
 	name = "DNA-Injector (Anti-Stutt.)"
 	desc = "Fixes that speaking impairment."
 	dnatype = "se"
 	dna = "708"
-	block = 9
+	New()
+		..()
+		block = NERVOUSBLOCK
 
 /obj/item/weapon/dnainjector/antifire
 	name = "DNA-Injector (Anti-Fire)"
@@ -352,11 +372,231 @@
 	desc = "Will make you a flea bag."
 	dnatype = "se"
 	dna = "FA0"
-	block = 14
+	New()
+		..()
+		block = MONKEYBLOCK
 
 /obj/item/weapon/dnainjector/m2h
 	name = "DNA-Injector (Monkey > Human)"
 	desc = "Will make you...less hairy."
 	dnatype = "se"
 	dna = "708"
-	block = 14
+	New()
+		..()
+		block = MONKEYBLOCK
+
+/obj/item/weapon/dnainjector/headache
+	name = "DNA-Injector (Headache)"
+	desc = "Will make your head ache"
+	dnatype = "se"
+	dna = "FA0"
+	New()
+		..()
+		block = HEADACHEBLOCK
+
+/obj/item/weapon/dnainjector/headache
+	name = "DNA-Injector (No Headache)"
+	desc = "Will make your head not ache"
+	dnatype = "se"
+	dna = "208"
+	New()
+		..()
+		block = HEADACHEBLOCK
+
+/obj/item/weapon/dnainjector/nobreath
+	name = "DNA-Injector (No Breath)"
+	desc = "Will make you no breath"
+	dnatype = "se"
+	dna = "FA0"
+	New()
+		..()
+		block = NOBREATHBLOCK
+
+/obj/item/weapon/dnainjector/breath
+	name = "DNA-Injector (Breath)"
+	desc = "Will make you breath again"
+	dnatype = "se"
+	dna = "208"
+	New()
+		..()
+		block = NOBREATHBLOCK
+
+/obj/item/weapon/dnainjector/remoteview
+	name = "DNA-Injector (Remoteview)"
+	desc = "Will make you see through others' eyes"
+	dnatype = "se"
+	dna = "FA0"
+	New()
+		..()
+		block = REMOTEVIEWBLOCK
+
+/obj/item/weapon/dnainjector/noremoteview
+	name = "DNA-Injector (No Remoteview)"
+	desc = "Will make you not see through others"
+	dnatype = "se"
+	dna = "208"
+	New()
+		..()
+		block = REMOTEVIEWBLOCK
+
+/obj/item/weapon/dnainjector/regen
+	name = "DNA-Injector (Regen)"
+	desc = "Will make you heal over time"
+	dnatype = "se"
+	dna = "FA0"
+	New()
+		..()
+		block = REGENERATEBLOCK
+
+/obj/item/weapon/dnainjector/noregen
+	name = "DNA-Injector (No Regen)"
+	desc = "Will make you not heal over time"
+	dnatype = "se"
+	dna = "208"
+	New()
+		..()
+		block = REGENERATEBLOCK
+
+/obj/item/weapon/dnainjector/run
+	name = "DNA-Injector (Run)"
+	desc = "Will make you never encumber"
+	dnatype = "se"
+	dna = "FA0"
+	New()
+		..()
+		block = INCREASERUNBLOCK
+
+/obj/item/weapon/dnainjector/norun
+	name = "DNA-Injector (No Run)"
+	desc = "Will make you slow down again"
+	dnatype = "se"
+	dna = "208"
+	New()
+		..()
+		block = INCREASERUNBLOCK
+
+/obj/item/weapon/dnainjector/tsay
+	name = "DNA-Injector (Telepathy)"
+	desc = "Will make you talk via thougts"
+	dnatype = "se"
+	dna = "FA0"
+	New()
+		..()
+		block = REMOTETALKBLOCK
+
+/obj/item/weapon/dnainjector/notsay
+	name = "DNA-Injector (No Telepathy)"
+	desc = "Will make you no telepat"
+	dnatype = "se"
+	dna = "208"
+	New()
+		..()
+		block = REMOTETALKBLOCK
+
+/obj/item/weapon/dnainjector/morph
+	name = "DNA-Injector (Morph)"
+	desc = "Will make you able to change faces"
+	dnatype = "se"
+	dna = "FA0"
+	New()
+		..()
+		block = MORPHBLOCK
+
+/obj/item/weapon/dnainjector/nomorph
+	name = "DNA-Injector (No Morph)"
+	desc = "Will make you not able to change faces"
+	dnatype = "se"
+	dna = "208"
+	New()
+		..()
+		block = MORPHBLOCK
+
+/obj/item/weapon/dnainjector/lone
+	name = "DNA-Injector (Lone)"
+	desc = "Will make you alone"
+	dnatype = "se"
+	dna = "FA0"
+	New()
+		..()
+		block = BLENDBLOCK
+
+/obj/item/weapon/dnainjector/nolone
+	name = "DNA-Injector (No Lone)"
+	desc = "Will make you not alone"
+	dnatype = "se"
+	dna = "208"
+	New()
+		..()
+		block = BLENDBLOCK
+
+/obj/item/weapon/dnainjector/hallucination
+	name = "DNA-Injector (Halucinations)"
+	desc = "Will make you high"
+	dnatype = "se"
+	dna = "FA0"
+	New()
+		..()
+		block = HALLUCINATIONBLOCK
+
+/obj/item/weapon/dnainjector/nohallucination
+	name = "DNA-Injector (No Hallucinations)"
+	desc = "Will make you low"
+	dnatype = "se"
+	dna = "208"
+	New()
+		..()
+		block = HALLUCINATIONBLOCK
+
+/obj/item/weapon/dnainjector/noprints
+	name = "DNA-Injector (No fingerprints)"
+	desc = "Will make you leave no fingers"
+	dnatype = "se"
+	dna = "FA0"
+	New()
+		..()
+		block = NOPRINTSBLOCK
+
+/obj/item/weapon/dnainjector/prints
+	name = "DNA-Injector (Fingerprints)"
+	desc = "Will make you leave fingerprints"
+	dnatype = "se"
+	dna = "208"
+	New()
+		..()
+		block = NOPRINTSBLOCK
+
+/obj/item/weapon/dnainjector/shockimm
+	name = "DNA-Injector (Shock Resist)"
+	desc = "Will make you shock resistance"
+	dnatype = "se"
+	dna = "FA0"
+	New()
+		..()
+		block = SHOCKIMMUNITYBLOCK
+
+/obj/item/weapon/dnainjector/noshockimm
+	name = "DNA-Injector (No Shock Resist)"
+	desc = "Will make you no shock resistance"
+	dnatype = "se"
+	dna = "208"
+	New()
+		..()
+		block = SHOCKIMMUNITYBLOCK
+
+/obj/item/weapon/dnainjector/small
+	name = "DNA-Injector (Halfling)"
+	desc = "Will make you halfling"
+	dnatype = "se"
+	dna = "FA0"
+	New()
+		..()
+		block = SMALLSIZEBLOCK
+
+/obj/item/weapon/dnainjector/nosmall
+	name = "DNA-Injector (Fulling)"
+	desc = "Will make you no halfling"
+	dnatype = "se"
+	dna = "208"
+	New()
+		..()
+		block = SMALLSIZEBLOCK
