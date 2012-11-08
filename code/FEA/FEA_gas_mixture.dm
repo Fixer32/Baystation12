@@ -4,6 +4,8 @@ What are the archived variables for?
 	This prevents race conditions that arise based on the order of tile processing.
 */
 
+#define SHARE_PART 4
+
 #define SPECIFIC_HEAT_TOXIN		200
 #define SPECIFIC_HEAT_AIR		20
 #define SPECIFIC_HEAT_CDO		30
@@ -484,10 +486,10 @@ What are the archived variables for?
 
 	check_gas_mixture(datum/gas_mixture/sharer)
 		if(!sharer)	return 0
-		var/delta_oxygen = (oxygen_archived - sharer.oxygen_archived)/5
-		var/delta_carbon_dioxide = (carbon_dioxide_archived - sharer.carbon_dioxide_archived)/5
-		var/delta_nitrogen = (nitrogen_archived - sharer.nitrogen_archived)/5
-		var/delta_toxins = (toxins_archived - sharer.toxins_archived)/5
+		var/delta_oxygen = (oxygen_archived - sharer.oxygen_archived)/SHARE_PART
+		var/delta_carbon_dioxide = (carbon_dioxide_archived - sharer.carbon_dioxide_archived)/SHARE_PART
+		var/delta_nitrogen = (nitrogen_archived - sharer.nitrogen_archived)/SHARE_PART
+		var/delta_toxins = (toxins_archived - sharer.toxins_archived)/SHARE_PART
 
 		var/delta_temperature = (temperature_archived - sharer.temperature_archived)
 
@@ -535,10 +537,10 @@ What are the archived variables for?
 		return 1
 
 	check_turf(turf/model)
-		var/delta_oxygen = (oxygen_archived - model.oxygen)/5
-		var/delta_carbon_dioxide = (carbon_dioxide_archived - model.carbon_dioxide)/5
-		var/delta_nitrogen = (nitrogen_archived - model.nitrogen)/5
-		var/delta_toxins = (toxins_archived - model.toxins)/5
+		var/delta_oxygen = (oxygen_archived - model.oxygen)/SHARE_PART
+		var/delta_carbon_dioxide = (carbon_dioxide_archived - model.carbon_dioxide)/SHARE_PART
+		var/delta_nitrogen = (nitrogen_archived - model.nitrogen)/SHARE_PART
+		var/delta_toxins = (toxins_archived - model.toxins)/SHARE_PART
 
 		var/delta_temperature = (temperature_archived - model.temperature)
 
@@ -559,10 +561,10 @@ What are the archived variables for?
 
 	share(datum/gas_mixture/sharer)
 		if(!sharer)	return 0
-		var/delta_oxygen = QUANTIZE(oxygen_archived - sharer.oxygen_archived)/5
-		var/delta_carbon_dioxide = QUANTIZE(carbon_dioxide_archived - sharer.carbon_dioxide_archived)/5
-		var/delta_nitrogen = QUANTIZE(nitrogen_archived - sharer.nitrogen_archived)/5
-		var/delta_toxins = QUANTIZE(toxins_archived - sharer.toxins_archived)/5
+		var/delta_oxygen = QUANTIZE(oxygen_archived - sharer.oxygen_archived)/SHARE_PART
+		var/delta_carbon_dioxide = QUANTIZE(carbon_dioxide_archived - sharer.carbon_dioxide_archived)/SHARE_PART
+		var/delta_nitrogen = QUANTIZE(nitrogen_archived - sharer.nitrogen_archived)/SHARE_PART
+		var/delta_toxins = QUANTIZE(toxins_archived - sharer.toxins_archived)/SHARE_PART
 
 		var/delta_temperature = (temperature_archived - sharer.temperature_archived)
 
@@ -622,12 +624,12 @@ What are the archived variables for?
 				var/delta = 0
 
 				if(corresponding)
-					delta = QUANTIZE(trace_gas.moles_archived - corresponding.moles_archived)/5
+					delta = QUANTIZE(trace_gas.moles_archived - corresponding.moles_archived)/SHARE_PART
 				else
 					corresponding = new trace_gas.type()
 					sharer.trace_gases += corresponding
 
-					delta = trace_gas.moles_archived/5
+					delta = trace_gas.moles_archived/SHARE_PART
 
 				trace_gas.moles -= delta/group_multiplier
 				corresponding.moles += delta/sharer.group_multiplier
@@ -654,7 +656,7 @@ What are the archived variables for?
 					corresponding = new trace_gas.type()
 					trace_gases += corresponding
 
-					delta = trace_gas.moles_archived/5
+					delta = trace_gas.moles_archived/SHARE_PART
 
 					trace_gas.moles -= delta/sharer.group_multiplier
 					corresponding.moles += delta/group_multiplier
@@ -687,10 +689,10 @@ What are the archived variables for?
 			return 0
 
 	mimic(turf/model, border_multiplier)
-		var/delta_oxygen = QUANTIZE(oxygen_archived - model.oxygen)/5
-		var/delta_carbon_dioxide = QUANTIZE(carbon_dioxide_archived - model.carbon_dioxide)/5
-		var/delta_nitrogen = QUANTIZE(nitrogen_archived - model.nitrogen)/5
-		var/delta_toxins = QUANTIZE(toxins_archived - model.toxins)/5
+		var/delta_oxygen = QUANTIZE(oxygen_archived - model.oxygen)/SHARE_PART
+		var/delta_carbon_dioxide = QUANTIZE(carbon_dioxide_archived - model.carbon_dioxide)/SHARE_PART
+		var/delta_nitrogen = QUANTIZE(nitrogen_archived - model.nitrogen)/SHARE_PART
+		var/delta_toxins = QUANTIZE(toxins_archived - model.toxins)/SHARE_PART
 
 		var/delta_temperature = (temperature_archived - model.temperature)
 
@@ -735,7 +737,7 @@ What are the archived variables for?
 			for(var/datum/gas/trace_gas in trace_gases)
 				var/delta = 0
 
-				delta = trace_gas.moles_archived/5
+				delta = trace_gas.moles_archived/SHARE_PART
 
 				if(border_multiplier)
 					trace_gas.moles -= delta*border_multiplier/group_multiplier
