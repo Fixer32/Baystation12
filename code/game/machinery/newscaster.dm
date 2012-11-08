@@ -468,7 +468,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 			src.updateUsrDialog()
 
 		else if(href_list["set_new_message"])
-			src.msg = strip_html(input(usr, "Write your Feed story", "Network Channel Handler", ""))
+			src.msg = adminscrub(input(usr, "Write your Feed story", "Network Channel Handler", "") as message)
 			while (findtext(src.msg," ") == 1)
 				src.msg = copytext(src.msg,2,lentext(src.msg)+1)
 			src.updateUsrDialog()
@@ -888,7 +888,7 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(news_network.wanted_issue)
 		NEWSPAPER.important_message = news_network.wanted_issue
 	NEWSPAPER.loc = get_turf(src)
-	src.paper_remaining--
+//	src.paper_remaining--
 	return
 
 //Removed for now so these aren't even checked every tick. Left this here in-case Agouri needs it later.
