@@ -200,6 +200,11 @@ var/const/MAX_ACTIVE_TIME = 400
 	icon_state = "[initial(icon_state)]_dead"
 	stat = DEAD
 
+	if(istype(src.loc,/mob))
+		var/mob/M = src.loc
+		M.remove_from_mob(src)
+		src.loc = loc.loc
+
 	for(var/mob/O in viewers(src, null))
 		O.show_message("\red \b[src] curls up into a ball!", 1)
 
