@@ -51,12 +51,21 @@
 			src.updateDialog()
 			return
 
+	var/skip = 1
 	process()
 		if(stat & (NOPOWER|BROKEN))
 			return
 
+		skip++
+		if(skip<5) return
+		skip=1
+
+		src.scan()
 		for(var/obj/item/clothing/under/C in src.tracked)
-			if((C) && (C.has_sensor) && (C.loc) && (C.loc.z == 1) && C.sensor_mode)
+			if(!C)
+				src.tracked.Remove(C)
+				continue
+			if((C.has_sensor) && (C.loc) && (C.loc.z == 1) && C.sensor_mode)
 				if(istype(C.loc, /mob/living/carbon/human))
 					var/mob/living/carbon/human/H = C.loc
 					if(C.last_owner == H)
@@ -81,7 +90,6 @@
 					user << browse(null, "window=powcomp")
 					return
 			user.machine = src
-			src.scan()
 			var/t = "<TT><B>Crew Monitoring</B><HR>"
 			t += "<BR><A href='?src=\ref[src];update=1'>Refresh</A> "
 			t += "<A href='?src=\ref[src];close=1'>Close</A><BR>"
@@ -144,3 +152,4 @@
 
 /obj/item/device/radio/intercom/medical
 	frequency = 1355 //medical chat
+	freerange = 1
