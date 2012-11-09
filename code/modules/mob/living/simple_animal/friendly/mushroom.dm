@@ -9,6 +9,7 @@
 	maxHealth = 5
 	health = 5
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/hugemushroomslice
+	meat_amount = 3
 	response_help  = "pets the"
 	response_disarm = "gently pushes aside the"
 	response_harm   = "whacks the"

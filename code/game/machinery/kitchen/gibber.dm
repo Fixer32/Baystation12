@@ -82,9 +82,14 @@
 	if(src.occupant)
 		user << "\red The gibber is full, empty it first!"
 		return
-	if (!( istype(G, /obj/item/weapon/grab)) || !(istype(G.affecting, /mob/living/carbon/human)))
+	if (!istype(G, /obj/item/weapon/grab) || !(ismonkey(G.affecting) || ishuman(G.affecting) || isalienadult(G.affecting) || isanimal(G.affecting)))
 		user << "\red This item is not suitable for the gibber!"
 		return
+	if(istype(G.affecting,/mob/living/simple_animal))
+		var/mob/living/simple_animal/SA = G.affecting
+		if(!SA.meat_amount || !SA.meat_type)
+			user << "\red This animal has no meat to extract!"
+			return
 	if(G.affecting.abiotic(1))
 		user << "\red Subject may not have abiotic items on."
 		return
@@ -142,17 +147,41 @@
 	var/sourcename = src.occupant.real_name
 	var/sourcejob = src.occupant.job
 	var/sourcenutriment = src.occupant.nutrition / 15
-	var/sourcetotalreagents = src.occupant.reagents.total_volume
-	var/totalslabs = 3
+	var/sourcetotalreagents
+	if(src.occupant.reagents)
+		sourcetotalreagents = src.occupant.reagents.total_volume
+	var/totalslabs = 4
+	if(istype(src.occupant,/mob/living/carbon/human))
+		totalslabs = 8
+	else if(istype(src.occupant,/mob/living/simple_animal))
+		var/mob/living/simple_animal/SA = src.occupant
+		totalslabs = SA.meat_amount
 
-	var/obj/item/weapon/reagent_containers/food/snacks/meat/human/allmeat[totalslabs]
+	var/obj/item/weapon/reagent_containers/food/snacks/meat/allmeat[totalslabs]
 	for (var/i=1 to totalslabs)
-		var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeat = new
-		newmeat.name = sourcename + newmeat.name
-		newmeat.subjectname = sourcename
-		newmeat.subjectjob = sourcejob
+		var/obj/item/weapon/reagent_containers/food/snacks/meat/newmeat
+		if(istype(src.occupant,/mob/living/carbon/human))
+			var/obj/item/weapon/reagent_containers/food/snacks/meat/human/newmeath = new()
+			newmeath.name = sourcename + newmeath.name
+			newmeath.subjectname = sourcename
+			newmeath.subjectjob = sourcejob
+			newmeat = newmeath
+		else if(istype(src.occupant,/mob/living/carbon/monkey))
+			newmeat = new/obj/item/weapon/reagent_containers/food/snacks/meat/monkey()
+			newmeat.name = "[src.occupant.name]-monkey-[newmeat.name]"
+		else if(istype(src.occupant,/mob/living/carbon/alien/humanoid))
+			newmeat = new/obj/item/weapon/reagent_containers/food/snacks/xenomeat()
+		else if(istype(src.occupant,/mob/living/simple_animal))
+			var/mob/living/simple_animal/SA = src.occupant
+			newmeat = new SA.meat_type()
+			newmeat.name = "[SA.name]-[newmeat.name]"
+		else
+			newmeat = new/obj/item/weapon/reagent_containers/food/snacks/meat()
+			newmeat.name = "[src.occupant.name]-[newmeat.name]"
+
 		newmeat.reagents.add_reagent ("nutriment", sourcenutriment / totalslabs) // Thehehe. Fat guys go first
-		src.occupant.reagents.trans_to (newmeat, round (sourcetotalreagents / totalslabs, 1)) // Transfer all the reagents from the
+		if(sourcetotalreagents)
+			src.occupant.reagents.trans_to (newmeat, round (sourcetotalreagents / totalslabs, 1)) // Transfer all the reagents from the
 		allmeat[i] = newmeat
 
 	src.occupant.attack_log += "\[[time_stamp()]\] Was gibbed by <b>[user]/[user.ckey]</b>" //One shall not simply gib a mob unnoticed!

@@ -9,6 +9,7 @@
 	maxHealth = 15
 	health = 15
 	meat_type = /obj/item/weapon/reagent_containers/food/snacks/tomatomeat
+	meat_amount = 4
 	response_help  = "prods the"
 	response_disarm = "pushes aside the"
 	response_harm   = "smacks the"
