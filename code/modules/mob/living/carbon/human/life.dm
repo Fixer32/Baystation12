@@ -1431,7 +1431,10 @@
 			if(machine)
 				if(!machine.check_eye(src))		reset_view(null)
 			else
-				if(!client.adminobs)			reset_view(null)
+				if(!(mRemote in mutations) && !client.adminobs)
+					reset_view(null)
+					if(remoteobserve)
+						remoteobserve = null
 		return 1
 
 	proc/handle_random_events()
