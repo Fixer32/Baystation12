@@ -1,4 +1,4 @@
-/*
+ /*
  * Holds procs designed to help with filtering text
  * Contains groups:
  *			SQL sanitization
@@ -35,10 +35,10 @@
 	return t
 
 /proc/sanitize_easy(var/t)
-	return sanitize_simple(t,list("ÿ"="ß"))
+	return sanitize_simple(t,list("ÿ"="&#255;"))
 
 //Removes a few problematic characters
-/proc/sanitize_simple(var/t,var/list/repl_chars = list("\n"="#","\t"="#","ÿ"="ß"))
+/proc/sanitize_simple(var/t,var/list/repl_chars = list("\n"="#","\t"="#","ÿ"="&#255;"))
 	for(var/char in repl_chars)
 		var/index = findtext(t, char)
 		while(index)
@@ -58,7 +58,7 @@
 //Runs byond's sanitization proc along-side strip_html_simple
 //I believe strip_html_simple() is required to run first to prevent '<' from displaying as '&lt;' that html_encode() would cause
 /proc/adminscrub(var/t,var/limit=MAX_MESSAGE_LEN)
-	return copytext(parsepencode(html_encode(sanitize_simple(t,list("\t"=" ","ÿ"="ß")))),1,limit)
+	return copytext(parsepencode(html_encode(sanitize_simple(t,list("\t"=" ","ÿ"="&#255;")))),1,limit)
 
 /proc/parsepencode(var/t, var/obj/item/weapon/pen/P, mob/user as mob, var/iscrayon = 0)
 	t = sanitize_easy(t)
