@@ -268,12 +268,12 @@
 		else
 			return 0
 
-	if (bnumber == HULKBLOCK || bnumber == TELEBLOCK)
+	if (bnumber == HULKBLOCK || bnumber == TELEBLOCK || bnumber == NOBREATHBLOCK || bnumber == NOPRINTSBLOCK || bnumber == SMALLSIZEBLOCK || bnumber == SHOCKIMMUNITYBLOCK)
 		if (temp2 >= 3500 + BLOCKADD)
 			return 1
 		else
 			return 0
-	if (bnumber == XRAYBLOCK || bnumber == FIREBLOCK)
+	if (bnumber == XRAYBLOCK || bnumber == FIREBLOCK || bnumber == REMOTEVIEWBLOCK || bnumber == REGENERATEBLOCK || bnumber == INCREASERUNBLOCK || bnumber == REMOTETALKBLOCK || bnumber == MORPHBLOCK)
 		if (temp2 >= 3050 + BLOCKADD)
 			return 1
 		else
@@ -395,6 +395,7 @@
 	M.dna.check_integrity()
 
 	M.disabilities = 0
+	var/old_mutations = M.mutations
 	M.mutations = list()
 
 	M.see_in_dark = 2
@@ -402,54 +403,54 @@
 
 
 	if(ismuton(NOBREATHBLOCK,M))
-		if(probinj(45,inj))
+		if(probinj(45,inj) || (mNobreath in old_mutations))
 			M << "\blue You feel no need to breathe."
 			M.mutations.Add(mNobreath)
 	if(ismuton(REMOTEVIEWBLOCK,M))
-		if(probinj(45,inj))
+		if(probinj(45,inj) || (mRemote in old_mutations))
 			M << "\blue Your mind expands"
 			M.mutations.Add(mRemote)
 	if(ismuton(REGENERATEBLOCK,M))
-		if(probinj(45,inj))
+		if(probinj(45,inj) || (mRegen in old_mutations))
 			M << "\blue You feel strange"
 			M.mutations.Add(mRegen)
 	if(ismuton(INCREASERUNBLOCK,M))
-		if(probinj(45,inj))
+		if(probinj(45,inj) || (mRun in old_mutations))
 			M << "\blue You feel quick"
 			M.mutations.Add(mRun)
 	if(ismuton(REMOTETALKBLOCK,M))
-		if(probinj(45,inj))
+		if(probinj(45,inj) || (mRemotetalk in old_mutations))
 			M << "\blue You expand your mind outwards"
 			M.mutations.Add(mRemotetalk)
 	if(ismuton(MORPHBLOCK,M))
-		if(probinj(45,inj))
+		if(probinj(45,inj) || (mMorph in old_mutations))
 			M.mutations.Add(mMorph)
 			M << "\blue Your skin feels strange"
 	if(ismuton(BLENDBLOCK,M))
-		if(probinj(45,inj))
+		if(probinj(45,inj) || (mBlend in old_mutations))
 			M.mutations.Add(mBlend)
 			M << "\blue You feel alone"
 	if(ismuton(HALLUCINATIONBLOCK,M))
-		if(probinj(45,inj))
+		if(probinj(45,inj) || (mHallucination in old_mutations))
 			M.mutations.Add(mHallucination)
 			M << "\blue Your mind says 'Hello'"
 	if(ismuton(NOPRINTSBLOCK,M))
-		if(probinj(45,inj))
+		if(probinj(45,inj) || (mFingerprints in old_mutations))
 			M.mutations.Add(mFingerprints)
 			M << "\blue Your fingers feel numb"
 	if(ismuton(SHOCKIMMUNITYBLOCK,M))
-		if(probinj(45,inj))
+		if(probinj(45,inj) || (mShock in old_mutations))
 			M.mutations.Add(mShock)
 			M << "\blue You feel strange"
 	if(ismuton(SMALLSIZEBLOCK,M))
-		if(probinj(45,inj))
+		if(probinj(45,inj) || (mSmallsize in old_mutations))
 			M << "\blue Your skin feels rubbery"
 			M.mutations.Add(mSmallsize)
 
 
 
 	if (isblockon(getblock(M.dna.struc_enzymes, HULKBLOCK,3),HULKBLOCK))
-		if(probinj(5,inj))
+		if(probinj(5,inj) || (HULK in old_mutations))
 			M << "\blue Your muscles hurt."
 			M.mutations.Add(HULK)
 	if (isblockon(getblock(M.dna.struc_enzymes, HEADACHEBLOCK,3),HEADACHEBLOCK))
@@ -474,7 +475,7 @@
 		M.disabilities |= 8
 		M << "\red You twitch."
 	if (isblockon(getblock(M.dna.struc_enzymes, XRAYBLOCK,3),XRAYBLOCK))
-		if(probinj(30,inj))
+		if(probinj(30,inj) || (XRAY in old_mutations))
 			M << "\blue The walls suddenly disappear."
 			M.sight |= (SEE_MOBS|SEE_OBJS|SEE_TURFS)
 			M.see_in_dark = 8
@@ -484,14 +485,14 @@
 		M.disabilities |= 16
 		M << "\red You feel nervous."
 	if (isblockon(getblock(M.dna.struc_enzymes, FIREBLOCK,3),FIREBLOCK))
-		if(probinj(30,inj))
+		if(probinj(30,inj) || (COLD_RESISTANCE in old_mutations))
 			M << "\blue Your body feels warm."
 			M.mutations.Add(COLD_RESISTANCE)
 	if (isblockon(getblock(M.dna.struc_enzymes, BLINDBLOCK,3),BLINDBLOCK))
 		M.disabilities |= 128
 		M << "\red You can't seem to see anything."
 	if (isblockon(getblock(M.dna.struc_enzymes, TELEBLOCK,3),TELEBLOCK))
-		if(probinj(15,inj))
+		if(probinj(15,inj) || (TK in old_mutations))
 			M << "\blue You feel smarter."
 			M.mutations.Add(TK)
 	if (isblockon(getblock(M.dna.struc_enzymes, DEAFBLOCK,3),DEAFBLOCK))
