@@ -446,6 +446,11 @@
 	if(control_area)
 		for (var/obj/machinery/turret/aTurret in get_area_all_atoms(control_area))
 			aTurret.setState(enabled, lethal)
+		for (var/obj/machinery/turretid/turrId in world)
+			if(turrId.control_area == control_area)
+				turrId.enabled = enabled
+				turrId.lethal = lethal
+				turrId.update_icons()
 	src.update_icons()
 
 /obj/machinery/turretid/proc/update_icons()
