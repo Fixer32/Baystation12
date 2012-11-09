@@ -855,7 +855,7 @@ proc/build_surgery_steps_list()
 		return target_zone == "r_leg"||target_zone=="l_leg"||target_zone=="l_arm"||target_zone=="r_arm"||target_zone == "r_foot"||target_zone=="l_foot"||target_zone=="l_hand"||target_zone=="r_hand"
 
 	proc/is_missing(mob/living/carbon/human/target, target_zone)
-		affected = target.get_organ(target_zone)
+		var/datum/organ/external/affected = target.get_organ(target_zone)
 		if (affected == null)
 			return 0
 		if(affected.status&(ORGAN_DESTROYED|ORGAN_CUT_AWAY)>0) return 1
@@ -926,6 +926,7 @@ proc/build_surgery_steps_list()
 	max_duration = 60
 
 	can_use(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+		var/datum/organ/external/affected = target.get_organ(target_zone)
 		return ..() && is_missing(target, target_zone) && affected.open && (affected.status & ORGAN_BLEEDING)
 
 	begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
