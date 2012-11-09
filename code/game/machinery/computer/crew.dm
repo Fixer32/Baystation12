@@ -51,7 +51,7 @@
 			src.updateDialog()
 			return
 
-	/obj/machinery/computer/aifixer/process()
+	process()
 		if(stat & (NOPOWER|BROKEN))
 			return
 
@@ -62,7 +62,7 @@
 					if(C.last_owner == H)
 						if(C.last_stat != -1 && C.last_stat != H.stat)
 							if(H.stat == 2)
-								var/txt = "Lifesigns of [H.wear_id?H.wear_id.name:"Unknown"] were lost."
+								var/txt = "Lifesigns of [H.wear_id?"[H.wear_id.name]":"Unknown"] were lost."
 								if(C.sensor_mode == 3)
 									var/area/player_area = get_area(H)
 									txt += " Last known position is [player_area.name] ([H.x], [H.y])."
@@ -143,4 +143,4 @@
 		del(a)
 
 /obj/item/device/radio/intercom/medical
-	var/frequency = 1355 //medical chat
+	frequency = 1355 //medical chat
