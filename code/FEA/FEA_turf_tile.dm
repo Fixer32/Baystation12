@@ -12,6 +12,40 @@ atom/movable/proc/experience_pressure_difference(pressure_difference, direction)
 			spawn step(src, direction)
 		return 1
 
+mob/living/pressure_resistance = 90
+mob/living/var/pressure_stun_resistance = 95
+mob/experience_pressure_difference(pressure_difference, direction)
+	return
+mob/living/experience_pressure_difference(pressure_difference, direction)
+	pressure_difference_move(pressure_difference, direction)
+	pressure_difference_stun(pressure_difference, direction)
+
+mob/living/proc/pressure_difference_move(pressure_difference, direction)
+	if(last_forced_movement >= air_master.current_cycle)
+		return 0
+	if(pressure_difference <= pressure_resistance) return
+	if(istype(src, /mob/living/carbon/human))
+		var/mob/living/carbon/human/H = src
+		if(H.buckled) return
+		if(H.shoes)
+			if(H.shoes.type == /obj/item/clothing/shoes/magboots && H.shoes.flags & NOSLIP) return
+	src << "\red You are pushed away by airflow!"
+	last_forced_movement = air_master.current_cycle
+	spawn step(src, direction)
+
+mob/living/proc/pressure_difference_stun(pressure_difference, direction)
+	if(pressure_difference <= pressure_stun_resistance) return
+	if(istype(src, /mob/living/carbon/human))
+		var/mob/living/carbon/human/H = src
+		if(H.buckled) return 0
+		if(H.shoes)
+			if(H.shoes.flags & NOSLIP) return 0
+	if(!(status_flags & CANSTUN) && !(status_flags & CANWEAKEN))
+		src << "\blue You stay upright as the air rushes past you."
+		return 0
+	if(weakened <= 0) src << "\red The sudden rush of air knocks you over!"
+	weakened = max(weakened,rand(1,5))
+
 turf
 	assume_air(datum/gas_mixture/giver) //use this for machines to adjust air
 		del(giver)
@@ -56,6 +90,8 @@ turf
 		high_pressure_movements()
 
 			for(var/atom/movable/in_tile in src)
+				in_tile.experience_pressure_difference(pressure_difference, pressure_direction)
+			for(var/mob/living/in_tile in src)
 				in_tile.experience_pressure_difference(pressure_difference, pressure_direction)
 
 			pressure_difference = 0
