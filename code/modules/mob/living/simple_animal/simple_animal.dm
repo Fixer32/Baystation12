@@ -4,6 +4,9 @@
 	health = 20
 	maxHealth = 20
 
+	pressure_resistance = 40
+	pressure_stun_resistance = 50
+
 	var/icon_living = ""
 	var/icon_dead = ""
 	var/icon_gib = null	//We only try to show a gibbing animation if this exists.
