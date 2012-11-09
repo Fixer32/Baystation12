@@ -51,6 +51,27 @@
 			src.updateDialog()
 			return
 
+	/obj/machinery/computer/aifixer/process()
+		if(stat & (NOPOWER|BROKEN))
+			return
+
+		for(var/obj/item/clothing/under/C in src.tracked)
+			if((C) && (C.has_sensor) && (C.loc) && (C.loc.z == 1) && C.sensor_mode)
+				if(istype(C.loc, /mob/living/carbon/human))
+					var/mob/living/carbon/human/H = C.loc
+					if(C.last_owner == H)
+						if(C.last_stat != -1 && C.last_stat != H.stat)
+							if(H.stat == 2)
+								var/txt = "Lifesigns of [H.wear_id?H.wear_id.name:"Unknown"] were lost."
+								if(C.sensor_mode == 3)
+									var/area/player_area = get_area(H)
+									txt += " Last known position is [player_area.name] ([H.x], [H.y])."
+								Announce(txt)
+					else
+						C.last_owner = H
+
+					C.last_stat = H.stat
+		return
 
 	proc
 		interact(mob/user)
@@ -115,3 +136,11 @@
 					if(!check)
 						src.tracked.Add(C)
 			return 1
+
+	proc/Announce(var/text)
+		var/obj/item/device/radio/intercom/medical/a = new /obj/item/device/radio/intercom/medical(null)
+		a.autosay("\"[text]\"", src.name)
+		del(a)
+
+/obj/item/device/radio/intercom/medical
+	var/frequency = 1355 //medical chat

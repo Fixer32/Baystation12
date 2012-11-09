@@ -144,6 +144,8 @@ BLIND     // can't see anything
 		2 = Report detailed damages
 		3 = Report location
 		*/
+	var/last_stat = -1
+	var/mob/last_owner
 	var/obj/item/clothing/tie/hastie = null
 
 /obj/item/clothing/under/attackby(obj/item/I, mob/user)
