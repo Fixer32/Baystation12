@@ -300,6 +300,9 @@
 		if(status & ORGAN_DESTROYED)
 			dropped = 1
 
+			if(UPPER_TORSO)
+				return
+
 			if(status & ORGAN_SPLINTED)
 				status &= ~ORGAN_SPLINTED
 			if(implant)
