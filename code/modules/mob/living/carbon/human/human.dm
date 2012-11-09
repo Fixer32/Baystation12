@@ -853,7 +853,7 @@
 		g_eyes = hex2num(copytext(new_eyes, 4, 6))
 		b_eyes = hex2num(copytext(new_eyes, 6, 8))
 
-	var/new_tone = input("Please select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", "Character Generation", s_tone)  as text
+	var/new_tone = input("Please select skin tone level: 1-220 (1=albino, 35=caucasian, 150=black, 220='very' black)", "Character Generation", "[35-s_tone]")  as text
 
 	if (!new_tone)
 		new_tone = 35
@@ -870,7 +870,7 @@
 		hairs.Add(H.name) // add hair name to hairs
 		del(H) // delete the hair after it's all done
 
-	var/new_style = input("Please select hair style", "Character Generation")  as null|anything in hairs
+	var/new_style = input("Please select hair style", "Character Generation",h_style)  as null|anything in hairs
 
 	// if new style selected (not cancel)
 	if (new_style)
@@ -885,7 +885,7 @@
 		fhairs.Add(H.name)
 		del(H)
 
-	new_style = input("Please select facial style", "Character Generation")  as null|anything in fhairs
+	new_style = input("Please select facial style", "Character Generation",f_style)  as null|anything in fhairs
 
 	if(new_style)
 		f_style = new_style
