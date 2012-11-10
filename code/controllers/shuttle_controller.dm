@@ -29,7 +29,7 @@ datum/shuttle_controller
 	// if not called before, set the endtime to T+600 seconds
 	// otherwise if outgoing, switch to incoming
 	proc/incall(coeff = 1)
-		if(deny_shuttle && alert == 1) //crew transfer shuttle does not gets recalled by gamemode
+		if(deny_shuttle) //crew transfer shuttle does not gets recalled by gamemode
 			return
 
 		if(endtime)
