@@ -394,7 +394,7 @@
 		..()
 		block = HEADACHEBLOCK
 
-/obj/item/weapon/dnainjector/headache
+/obj/item/weapon/dnainjector/noheadache
 	name = "DNA-Injector (No Headache)"
 	desc = "Will make your head not ache"
 	dnatype = "se"
