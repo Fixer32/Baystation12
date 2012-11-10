@@ -1003,23 +1003,24 @@
 				adjustToxLoss(-1)
 				adjustOxyLoss(-1)
 
-		//The fucking FAT mutation is the dumbest shit ever. It makes the code so difficult to work with
-//		if(FAT in mutations)
-//			if(overeatduration < 100)
-//				src << "\blue You feel fit again!"
-//				mutations.Remove(FAT)
-//				update_mutantrace(0)
-//				update_mutations(0)
-//				update_inv_w_uniform(0)
-//				update_inv_wear_suit()
-//		else
-//			if(overeatduration > 500)
-//				src << "\red You suddenly feel blubbery!"
-//				mutations.Add(FAT)
-//				update_mutantrace(0)
-//				update_mutations(0)
-//				update_inv_w_uniform(0)
-//				update_inv_wear_suit()
+/*		//The fucking FAT mutation is the dumbest shit ever. It makes the code so difficult to work with
+		if(FAT in mutations)
+			if(overeatduration < 100)
+				src << "\blue You feel fit again!"
+				mutations.Remove(FAT)
+				update_mutantrace(0)
+				update_mutations(0)
+				update_inv_w_uniform(0)
+				update_inv_wear_suit()
+		else
+			if(overeatduration > 500)
+				src << "\red You suddenly feel blubbery!"
+				mutations.Add(FAT)
+				update_mutantrace(0)
+				update_mutations(0)
+				update_inv_w_uniform(0)
+				update_inv_wear_suit()
+*/
 
 		// nutrition decrease
 		if (nutrition > 0 && stat != 2)
@@ -1433,31 +1434,13 @@
 			else
 				if(!(mRemote in mutations) && !client.adminobs)
 					reset_view(null)
-					if(remoteobserve)
-						remoteobserve = null
 		return 1
 
 	proc/handle_random_events()
 		// Puke if toxloss is too high
 		if(!stat)
 			if (getToxLoss() >= 45 && nutrition > 20)
-				lastpuke ++
-				if(lastpuke >= 25) // about 25 second delay I guess
-					Stun(5)
-
-					for(var/mob/O in viewers(world.view, src))
-						O.show_message(text("<b>\red [] throws up!</b>", src), 1)
-					playsound(loc, 'sound/effects/splat.ogg', 50, 1)
-
-					var/turf/location = loc
-					if (istype(location, /turf/simulated))
-						location.add_vomit_floor(src, 1)
-
-					nutrition -= 20
-					adjustToxLoss(-3)
-
-					// make it so you can only puke so fast
-					lastpuke = 0
+				vomit()
 
 		//0.1% chance of playing a scary sound to someone who's in complete darkness
 		if(isturf(loc) && rand(1,1000) == 1)

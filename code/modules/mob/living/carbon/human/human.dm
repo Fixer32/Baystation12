@@ -228,18 +228,6 @@
 	if(!blinded)
 		flick("flash", flash)
 
-// /obj/item/clothing/suit/bomb_suit(src)
-// /obj/item/clothing/head/bomb_hood(src)
-
-	if (stat == 2 && client)
-		gib()
-		return
-
-	else if (stat == 2 && !client)
-		gibs(loc, viruses)
-		del(src)
-		return
-
 	var/shielded = 0
 	var/b_loss = null
 	var/f_loss = null
@@ -922,8 +910,6 @@
 	usr.show_message("\blue You project your mind into [target.real_name]: [say]")
 	for(var/mob/dead/observer/G in world)
 		G.show_message("<i>Telepathic message from <b>[src]</b> to <b>[target]</b>: [say]</i>")
-/mob/living/carbon/human
-	var/mob/remoteobserve
 
 /mob/living/carbon/human/proc/remoteobserve()
 	set name = "Remote View"
@@ -931,15 +917,11 @@
 
 	if(!(mRemote in src.mutations))
 		reset_view(0)
-		remoteobserve = null
 		src.verbs -= /mob/living/carbon/human/proc/remoteobserve
-//		src.tkdisable = 0
 		return
 
 	if(client.eye != client.mob)
 		reset_view(0)
-		remoteobserve = null
-//		src.tkdisable = 0
 		return
 
 	var/list/mob/creatures = list()
@@ -954,12 +936,8 @@
 
 	if (target)
 		reset_view(target)
-		remoteobserve = target
-//		src.tkdisable = 1
 	else
 		reset_view(0)
-		remoteobserve = null
-//		src.tkdisable = 0
 
 /mob/living/carbon/human/proc/get_visible_gender()
 	if(wear_suit && wear_suit.flags_inv & HIDEJUMPSUIT && ((head && head.flags_inv & HIDEMASK) || wear_mask))
