@@ -367,6 +367,8 @@
 				else
 					usr.a_intent = "help"
 					usr.hud_used.action_intent.icon_state = "help"
+			else
+				usr.a_intent_change("right")
 		if("help")
 			usr.a_intent = "help"
 			usr.hud_used.action_intent.icon_state = "intent_help"
