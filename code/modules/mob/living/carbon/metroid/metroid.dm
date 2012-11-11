@@ -1,7 +1,7 @@
 /mob/living/carbon/metroid
-	name = "baby roro"
+	name = "baby metroid"
 	icon = 'icons/mob/mob.dmi'
-	icon_state = "baby roro"
+	icon_state = "baby metroid"
 	pass_flags = PASSTABLE
 	voice_message = "skree!"
 	say_message = "hums"
@@ -41,9 +41,9 @@
 	// Metroids pass on genetic data, so all their offspring have the same "Friends",
 
 /mob/living/carbon/metroid/adult
-	name = "adult roro"
+	name = "adult metroid"
 	icon = 'icons/mob/mob.dmi'
-	icon_state = "adult roro"
+	icon_state = "adult metroid"
 
 	health = 200
 	gender = NEUTER
@@ -56,10 +56,10 @@
 	var/datum/reagents/R = new/datum/reagents(100)
 	reagents = R
 	R.my_atom = src
-	if(name == "baby roro")
-		name = text("baby roro ([rand(1, 1000)])")
+	if(name == "baby metroid")
+		name = text("baby metroid ([rand(1, 1000)])")
 	else
-		name = text("adult roro ([rand(1,1000)])")
+		name = text("adult metroid ([rand(1,1000)])")
 	real_name = name
 	spawn (1)
 		regenerate_icons()
@@ -768,10 +768,10 @@ mob/living/carbon/metroid/var/temperature_resistance = T0C+75
 
 // Basically this Metroid Core catalyzes reactions that normally wouldn't happen anywhere
 /obj/item/metroid_core
-	name = "roro core"
-	desc = "A very slimy and tender part of a Rorobeast. Legends claim these to have \"magical powers\"."
+	name = "metroid core"
+	desc = "A very slimy and tender part of a metroidbeast. Legends claim these to have \"magical powers\"."
 	icon = 'icons/obj/surgery.dmi'
-	icon_state = "roro core"
+	icon_state = "metroid core"
 	flags = TABLEPASS
 	force = 1.0
 	w_class = 1.0
@@ -804,10 +804,10 @@ mob/living/carbon/metroid/var/temperature_resistance = T0C+75
 				Flush = 30
 
 /obj/item/weapon/reagent_containers/food/snacks/roro_egg
-	name = "roro egg"
+	name = "metroid egg"
 	desc = "A small, gelatinous egg."
 	icon = 'icons/mob/mob.dmi'
-	icon_state = "roro egg-growing"
+	icon_state = "metroid egg-growing"
 	bitesize = 12
 	origin_tech = "biotech=4"
 	var/grown = 0
@@ -820,7 +820,7 @@ mob/living/carbon/metroid/var/temperature_resistance = T0C+75
 
 	proc/Grow()
 		grown = 1
-		icon_state = "roro egg-grown"
+		icon_state = "metroid egg-grown"
 		processing_objects.Add(src)
 		return
 

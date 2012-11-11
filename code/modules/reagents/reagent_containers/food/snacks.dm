@@ -1151,7 +1151,7 @@
 		bitesize = 5
 
 /obj/item/weapon/reagent_containers/food/snacks/rorosoup
-	name = "Roro soup"
+	name = "metroid soup"
 	desc = "If no water is available, you may substitute tears."
 	icon_state = "rorosoup"
 	New()
@@ -1661,7 +1661,7 @@
 		reagents.add_reagent("cherryjelly", 5)
 
 /obj/item/weapon/reagent_containers/food/snacks/boiledrorocore
-	name = "Boiled Roro Core"
+	name = "Boiled metroid Core"
 	desc = "A boiled red thing."
 	icon_state = "boiledrorocore"
 	New()

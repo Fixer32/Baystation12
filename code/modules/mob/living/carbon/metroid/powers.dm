@@ -1,5 +1,5 @@
 /mob/living/carbon/metroid/verb/Feed()
-	set category = "Roro"
+	set category = "metroid"
 	set desc = "This will let you feed on any valid creature in the surrounding area. This should also be used to halt the feeding process."
 	if(Victim)
 		Feedstop()
@@ -50,9 +50,9 @@
 	var/lastnut = nutrition
 	//if(M.client) M << "\red You legs become paralyzed!"
 	if(istype(src, /mob/living/carbon/metroid/adult))
-		icon_state = "adult roro eat"
+		icon_state = "adult metroid eat"
 	else
-		icon_state = "baby roro eat"
+		icon_state = "baby metroid eat"
 
 	while(Victim && M.health > -70 && stat != 2)
 		// M.canmove = 0
@@ -120,13 +120,13 @@
 
 	if(stat == 2)
 		if(!istype(src, /mob/living/carbon/metroid/adult))
-			icon_state = "baby roro dead"
+			icon_state = "baby metroid dead"
 
 	else
 		if(istype(src, /mob/living/carbon/metroid/adult))
-			icon_state = "adult roro"
+			icon_state = "adult metroid"
 		else
-			icon_state = "baby roro"
+			icon_state = "baby metroid"
 
 	canmove = 1
 	anchored = 0
@@ -164,7 +164,7 @@
 
 
 /mob/living/carbon/metroid/verb/Evolve()
-	set category = "Roro"
+	set category = "metroid"
 	set desc = "This will let you evolve from baby to adult metroid."
 
 	if(stat)
@@ -186,7 +186,7 @@
 		src << "<i>I have already evolved...</i>"
 
 /mob/living/carbon/metroid/verb/Reproduce()
-	set category = "Roro"
+	set category = "metroid"
 	set desc = "This will make you lay an egg. NOTE: This decreases your nutrition."
 
 	if(stat)
@@ -210,6 +210,6 @@
 /mob/living/carbon/metroid/verb/ventcrawl()
 	set name = "Crawl through Vent"
 	set desc = "Enter an air vent and crawl through the pipe system."
-	set category = "Roro"
+	set category = "metroid"
 	if(Victim)	return
 	handle_ventcrawl()

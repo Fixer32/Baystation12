@@ -75,7 +75,7 @@ datum
 				return
 
 		rorojelly
-			name = "Roro Jelly"
+			name = "metroid Jelly"
 			id = "rorojelly"
 			description = "A gooey semi-liquid produced from one of the deadliest lifeforms in existence. SO REAL."
 			reagent_state = LIQUID

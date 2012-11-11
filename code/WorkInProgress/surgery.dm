@@ -830,7 +830,7 @@ proc/build_surgery_steps_list()
 		"\blue You cut out one of [target]'s cores with \the [tool]. [target.cores] cores left.")
 		new/obj/item/metroid_core(target.loc)
 		if(target.cores <= 0)
-			target.icon_state = "baby roro dead-nocore"
+			target.icon_state = "baby metroid dead-nocore"
 
 	fail_step(mob/user, mob/living/carbon/metroid/target, target_zone, obj/item/tool)
 		user.visible_message("\red [user]'s hand slips, failing to cut core out!", \
