@@ -43,7 +43,7 @@
 		var/index = findtext(t, char)
 		while(index)
 			t = copytext(t, 1, index) + repl_chars[char] + copytext(t, index+1)
-			index = findtext(t, char)
+			index = findtext(t, char, index+1)
 	return t
 
 //Runs byond's sanitization proc along-side sanitize_simple
@@ -53,15 +53,21 @@
 //Runs sanitize and strip_html_simple
 //I believe strip_html_simple() is required to run first to prevent '<' from displaying as '&lt;' after sanitize() calls byond's html_encode()
 /proc/strip_html(var/t,var/limit=MAX_MESSAGE_LEN)
-	return copytext((sanitize(strip_html_simple(t))),1,limit)
+	return copytext(sanitize(strip_html_simple(t)),1,limit)
 
 //Runs byond's sanitization proc along-side strip_html_simple
 //I believe strip_html_simple() is required to run first to prevent '<' from displaying as '&lt;' that html_encode() would cause
 /proc/adminscrub(var/t,var/limit=MAX_MESSAGE_LEN)
-	return copytext(parsepencode(html_encode(sanitize_simple(t,list("\t"=" ","ÿ"="&#255;")))),1,limit)
+	return copytext(parsepencode(html_encode_simple(t)),1,limit)
 
-/proc/parsepencode(var/t, var/obj/item/weapon/pen/P, mob/user as mob, var/iscrayon = 0)
-	t = sanitize_easy(t)
+/proc/html_encode_simple(var/t)
+	t = dd_replacetext(t, "&", "&amp;")
+	t = dd_replacetext(t, "<", "&lt;")
+	t = dd_replacetext(t, ">", "&gt;")
+	return t
+	
+/proc/parsepencode(var/t)
+	t = sanitize_simple(t,list("ÿ"="&#1103;","\t"=" ","\n"="<br>"))
 
 	t = dd_replacetext(t, "\[center\]", "<center>")
 	t = dd_replacetext(t, "\[/center\]", "</center>")
