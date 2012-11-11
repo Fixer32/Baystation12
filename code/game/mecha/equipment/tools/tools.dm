@@ -1058,7 +1058,7 @@
 /obj/item/mecha_parts/mecha_equipment/jetpack
 	name = "Jetpack"
 	desc = "Using directed ion bursts and cunning solar wind reflection technique, this device enables controlled space flight."
-	icon_state = "mecha_equip"
+	icon_state = "mecha_jetpack"
 	equip_cooldown = 5
 	energy_drain = 50
 	var/wait = 0
