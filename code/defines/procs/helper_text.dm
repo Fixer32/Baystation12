@@ -35,10 +35,10 @@
 	return t
 
 /proc/sanitize_easy(var/t)
-	return sanitize_simple(t,list("ÿ"="&#255;"))
+	return sanitize_simple(t,list("ÿ"="&#1103;"))
 
 //Removes a few problematic characters
-/proc/sanitize_simple(var/t,var/list/repl_chars = list("\n"="#","\t"="#","ÿ"="&#255;"))
+/proc/sanitize_simple(var/t,var/list/repl_chars = list("\n"="#","\t"="#","ÿ"="&#1103;"))
 	for(var/char in repl_chars)
 		var/index = findtext(t, char)
 		while(index)
