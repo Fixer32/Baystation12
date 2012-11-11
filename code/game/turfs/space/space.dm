@@ -94,8 +94,13 @@
 			if(!move_to_z)
 				return
 
-			if(z == 6 && !istype(A,/mob))
-				del(A)
+			if(z == 6)
+				if(istype(A,/mob))
+					var/mob/M = A
+					if(M.stat==DEAD)
+						del(A)
+				else
+					del(A)
 				return
 
 			A.z = move_to_z
