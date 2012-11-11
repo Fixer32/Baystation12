@@ -86,14 +86,18 @@ obj/machinery/computer/general_air_control
 	var/list/sensor_information = list()
 	var/datum/radio_frequency/radio_connection
 
+	var/checked = 0
+
 	attack_hand(mob/user)
-		user << browse(return_text(),"window=computer")
+		if(..())
+			return
+		user << browse("<div id='data'>[return_text()]</div>[autoupdate()]","window=computer")
 		user.machine = src
 		onclose(user, "computer")
 
 	process()
 		..()
-		src.updateDialog()
+//		src.updateDialog()
 
 	attackby(I as obj, user as mob)
 		if(istype(I, /obj/item/weapon/screwdriver))
@@ -136,6 +140,20 @@ obj/machinery/computer/general_air_control
 
 		sensor_information[id_tag] = signal.data
 
+	proc/autoupdate()
+		var/output = {"<script language='javascript' type='text/javascript'>
+			[js_byjax]
+			function ticker() {
+				setInterval(function(){
+					window.location='byond://?src=\ref[src]&update_content=1';
+				}, 1000);
+			}
+			window.onload = function() {
+				ticker();
+			}
+			</script>"}
+		return output
+
 	proc/return_text()
 		var/sensor_data
 		if(sensors.len)
@@ -145,24 +163,45 @@ obj/machinery/computer/general_air_control
 				var/sensor_part = "<B>[long_name]</B>:<BR>"
 
 				if(data)
-					if(data["pressure"])
-						sensor_part += "   <B>Pressure:</B> [data["pressure"]] kPa<BR>"
-					if(data["temperature"])
-						sensor_part += "   <B>Temperature:</B> [data["temperature"]] K<BR>"
-					if(data["oxygen"]||data["toxins"]||data["nitrogen"]||data["carbon_dioxide"])
-						sensor_part += "   <B>Gas Composition :</B>"
-						if(data["oxygen"])
-							sensor_part += "[data["oxygen"]]% O2; "
-						if(data["nitrogen"])
-							sensor_part += "[data["nitrogen"]]% N; "
-						if(data["carbon_dioxide"])
-							sensor_part += "[data["carbon_dioxide"]]% CO2; "
-						if(data["toxins"])
-							sensor_part += "[data["toxins"]]% TX; "
+					if(data["device"] == "AGP")
+						sensor_part += "   <B>Active:</B> <A href='?src=\ref[src];tag=[id_tag];power=1'>[data["power"]?"on":"off"]</A><BR>"
+						sensor_part += "   <B>Pressure:</B> <A href='?src=\ref[src];tag=[id_tag];pressure=[data["target_output"]]'>[data["target_output"]]</A> kPa<BR>"
+
+						if(radio_connection && checked<2)
+							var/datum/signal/signal = new
+							signal.transmission_method = 1 //radio signal
+							signal.source = src
+							signal.data = list ("status", "tag" = id_tag)
+							signal.data["sigtype"] = "command"
+							radio_connection.post_signal(src, signal, filter = RADIO_ATMOSIA)
+							checked = 1
+					else
+						if(data["pressure"])
+							sensor_part += "   <B>Pressure:</B> [data["pressure"]] kPa<BR>"
+						if(data["temperature"])
+							sensor_part += "   <B>Temperature:</B> [data["temperature"]] K<BR>"
+						if(data["oxygen"]||data["toxins"]||data["nitrogen"]||data["carbon_dioxide"])
+							sensor_part += "   <B>Gas Composition :</B>"
+							if(data["oxygen"])
+								sensor_part += "[data["oxygen"]]% O2; "
+							if(data["nitrogen"])
+								sensor_part += "[data["nitrogen"]]% N; "
+							if(data["carbon_dioxide"])
+								sensor_part += "[data["carbon_dioxide"]]% CO2; "
+							if(data["toxins"])
+								sensor_part += "[data["toxins"]]% TX; "
 					sensor_part += "<HR>"
 
 				else
 					sensor_part = "<FONT color='red'>[long_name] can not be found!</FONT><BR>"
+					if(radio_connection && checked<2)
+						var/datum/signal/signal = new
+						signal.transmission_method = 1 //radio signal
+						signal.source = src
+						signal.data = list ("status", "tag" = id_tag)
+						signal.data["sigtype"] = "command"
+						radio_connection.post_signal(src, signal, filter = RADIO_ATMOSIA)
+						checked = 1
 
 				sensor_data += sensor_part
 
@@ -172,7 +211,49 @@ obj/machinery/computer/general_air_control
 		var/output = {"<B>[name]</B><HR>
 <B>Sensor Data:</B><HR><HR>[sensor_data]"}
 
+		if(checked==1)
+			checked = 2
+			spawn(50)
+				checked=0
+
 		return output
+
+	Topic(href, href_list)
+		if(..())
+			return
+
+		if(href_list["update_content"])
+			send_byjax(usr,"computer.browser","data",return_text())
+			return
+
+		if(!radio_connection)
+			return 0
+
+		spawn(20)
+			src.updateDialog()
+
+		if(href_list["power"])
+			var/datum/signal/signal = new
+			signal.transmission_method = 1 //radio signal
+			signal.source = src
+			signal.data = list ("tag" = href_list["tag"], "power_toggle")
+			signal.data["sigtype"] = "command"
+			radio_connection.post_signal(src, signal, filter = RADIO_ATMOSIA)
+			return
+
+		if(href_list["pressure"])
+			var/new_pressure = input(usr,"Enter new output pressure (0-5000kPa)","Pressure control",href_list["pressure"]) as num
+			new_pressure = max(0, min(5000, new_pressure))
+
+			var/datum/signal/signal = new
+			signal.transmission_method = 1 //radio signal
+			signal.source = src
+			signal.data = list ("tag" = href_list["tag"], "set_output_pressure"=new_pressure)
+			signal.data["sigtype"] = "command"
+			radio_connection.post_signal(src, signal, filter = RADIO_ATMOSIA)
+			return
+
+
 
 	proc
 		set_frequency(new_frequency)
@@ -444,3 +525,24 @@ Rate: [volume_rate] L/sec<BR>"}
 
 
 
+obj/machinery/air_sensor/piped
+	name = "Pipe Mounted Gas Sensor"
+	var/obj/machinery/atmospherics/pipe/target
+
+	New()
+		..()
+		src.target = locate(/obj/machinery/atmospherics/pipe) in loc
+		return 1
+
+	initialize()
+		..()
+		if (!target)
+			src.target = locate(/obj/machinery/atmospherics/pipe) in loc
+
+	return_air()
+		if(target)
+			return target.return_air()
+		else if(loc)
+			return loc.return_air()
+		else
+			return null
