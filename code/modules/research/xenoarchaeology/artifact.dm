@@ -224,7 +224,7 @@
 	else if (my_effect.trigger != "touch" && !src.activated) user << "Nothing happens."
 
 	if (my_effect.effectmode == "contact" && src.activated && src.charged)
-		my_effect.DoEffect(src)
+		my_effect.DoEffect(user)
 		src.charged = 0
 		src.chargetime = src.recharge
 
