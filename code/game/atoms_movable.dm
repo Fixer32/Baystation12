@@ -50,6 +50,7 @@
 			if(A == src) continue
 			if(istype(A,/mob/living))
 				if(A:lying) continue
+				if(A:buckled && A:buckled==src) continue
 				src.throw_impact(A)
 				if(src.throwing == 1)
 					src.throwing = 0
