@@ -81,6 +81,7 @@
 				state = 1
 				icon_state = "wm_0"
 				var/obj/item/weapon/cable_coil/A = new /obj/item/weapon/cable_coil( src.loc )
+				A.add_fingerprint(user)
 				A.amount = 5
 
 		if(3)
@@ -117,6 +118,7 @@
 						new_machine.pixel_x = pixel_x
 						new_machine.pixel_y = pixel_y
 					for(var/obj/O in new_machine.component_parts)
+						O.transfer_fingerprints_to(src)
 						del(O)
 					new_machine.component_parts = list()
 					for(var/obj/O in src)
@@ -130,6 +132,8 @@
 					else
 						circuit.loc = null
 					new_machine.RefreshParts()
+					src.transfer_fingerprints_to(new_machine)
+					new_machine.add_fingerprint(user)
 					del(src)
 
 			if(istype(P, /obj/item/weapon))
@@ -144,6 +148,7 @@
 								CC.amount = camt
 								CC.update_icon()
 								CP.use(camt)
+								add_fingerprint(user)
 								components += CC
 								req_components[I] -= camt
 								update_desc()
@@ -151,6 +156,7 @@
 						user.drop_item()
 						P.loc = src
 						components += P
+						add_fingerprint(user)
 						req_components[I]--
 						update_desc()
 						break

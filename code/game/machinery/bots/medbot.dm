@@ -523,6 +523,8 @@
 		user.l_hand = A
 	A.layer = 20
 	user << "You add the robot arm to the first aid kit"
+	S.transfer_fingerprints_to(A)
+	src.transfer_fingerprints_to(A)
 	del(S)
 	del(src)
 
@@ -534,6 +536,7 @@
 		user << "You add the health sensor to [src]!"
 		src.name = "First aid/robot arm/health analyzer assembly"
 		src.overlays += image('aibots.dmi', "na_scanner")
+		src.add_fingerprint(user)
 		del(W)
 
 	else if((isprox(W)) && (src.build_step == 1))
@@ -543,6 +546,8 @@
 		S.skin = src.skin
 		S.loc = get_turf(src)
 		S.name = src.created_name
+		src.transfer_fingerprints_to(S)
+		W.transfer_fingerprints_to(S)
 		del(W)
 		del(src)
 
@@ -555,4 +560,5 @@
 			return
 
 		src.created_name = t
+		src.add_fingerprint(user)
 

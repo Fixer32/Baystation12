@@ -341,12 +341,14 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 	..()
 	if(istype(W, /obj/item/robot_parts/l_arm) || istype(W, /obj/item/robot_parts/r_arm))
 		user.drop_item()
-		del(W)
 		var/turf/T = get_turf(src.loc)
 		var/obj/machinery/bot/cleanbot/A = new /obj/machinery/bot/cleanbot(T)
 		A.name = src.created_name
 		user << "<span class='notice'>You add the robot arm to the bucket and sensor assembly. Beep boop!</span>"
 		user.drop_from_inventory(src)
+		W.transfer_fingerprints_to(A)
+		src.transfer_fingerprints_to(A)
+		del(W)
 		del(src)
 
 	else if (istype(W, /obj/item/weapon/pen))
@@ -356,3 +358,4 @@ text("<A href='?src=\ref[src];operation=oddbutton'>[src.oddbutton ? "Yes" : "No"
 		if (!in_range(src, usr) && src.loc != usr)
 			return
 		src.created_name = t
+		src.add_fingerprint(user)

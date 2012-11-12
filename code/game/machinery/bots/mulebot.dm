@@ -291,6 +291,7 @@
 		return
 	if ((in_range(src, usr) && istype(src.loc, /turf)) || (istype(usr, /mob/living/silicon)))
 		usr.machine = src
+		src.add_fingerprint(usr)
 
 		switch(href_list["op"])
 			if("lock", "unlock")
@@ -320,7 +321,7 @@
 				if(open && cell && !usr.get_active_hand())
 					cell.updateicon()
 					usr.put_in_active_hand(cell)
-					cell.add_fingerprint(usr)
+//					cell.add_fingerprint(usr)
 					cell = null
 
 					usr.visible_message("\blue [usr] removes the power cell from [src].", "\blue You remove the power cell from [src].")
@@ -333,7 +334,7 @@
 						usr.drop_item()
 						cell = C
 						C.loc = src
-						C.add_fingerprint(usr)
+//						C.add_fingerprint(usr)
 
 						usr.visible_message("\blue [usr] inserts a power cell into [src].", "\blue You insert the power cell into [src].")
 						updateDialog()

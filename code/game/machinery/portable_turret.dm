@@ -717,7 +717,8 @@ Status: []<BR>"},
 			else if(istype(W, /obj/item/weapon/crowbar) && !anchored)
 				playsound(src.loc, 'sound/items/Crowbar.ogg', 75, 1)
 				user << "You dismantle the turret construction."
-				new /obj/item/stack/sheet/metal( loc, 5)
+				var/obj/item/stack/sheet/metal/M = new( loc, 5)
+				src.transfer_fingerprints_to(M)
 				del(src)
 				return
 
@@ -728,6 +729,7 @@ Status: []<BR>"},
 					build_step = 2
 					W:amount -= 2
 					icon_state = "turret_frame2"
+					W.transfer_fingerprints_to(src)
 					if(W:amount <= 0)
 						del(W)
 					return
@@ -759,7 +761,8 @@ Status: []<BR>"},
 					if(!src || !WT.remove_fuel(5, user)) return
 					build_step = 1
 					user << "You remove the turret's interior metal armor."
-					new /obj/item/stack/sheet/metal( loc, 2)
+					var/obj/item/stack/sheet/metal/M = new( loc, 2)
+					src.transfer_fingerprints_to(M)
 					return
 
 
@@ -771,6 +774,7 @@ Status: []<BR>"},
 				gun_charge = E.power_supply.charge // the gun's charge is stored in src.gun_charge
 				user << "\blue You add \the [W] to the turret."
 				build_step = 4
+				W.transfer_fingerprints_to(src)
 				del(W) // delete the gun :(
 				return
 
@@ -784,6 +788,7 @@ Status: []<BR>"},
 			if(isprox(W))
 				build_step = 5
 				user << "\blue You add the prox sensor to the turret."
+				W.transfer_fingerprints_to(src)
 				del(W)
 				return
 
@@ -804,6 +809,7 @@ Status: []<BR>"},
 					user << "\blue You add some metal armor to the exterior frame."
 					build_step = 7
 					W:amount -= 2
+					W.transfer_fingerprints_to(src)
 					if(W:amount <= 0)
 						del(W)
 					return
@@ -829,6 +835,7 @@ Status: []<BR>"},
 
 					// The final step: create a full turret
 					var/obj/machinery/porta_turret/Turret = new/obj/machinery/porta_turret(locate(x,y,z))
+					src.transfer_fingerprints_to(Turret)
 					Turret.name = finish_name
 					Turret.installation = src.installation
 					Turret.gun_charge = src.gun_charge
@@ -842,7 +849,8 @@ Status: []<BR>"},
 			else if(istype(W, /obj/item/weapon/crowbar))
 				playsound(src.loc, 'sound/items/Crowbar.ogg', 75, 1)
 				user << "You pry off the turret's exterior armor."
-				new /obj/item/stack/sheet/metal( loc, 2)
+				var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal( loc, 2)
+				src.transfer_fingerprints_to(M)
 				build_step = 6
 				return
 
@@ -867,6 +875,7 @@ Status: []<BR>"},
 			build_step = 3
 
 			var/obj/item/weapon/gun/energy/Gun = new installation(src.loc)
+			src.transfer_fingerprints_to(Gun)
 			Gun.power_supply.charge=gun_charge
 			Gun.update_icon()
 			installation = null
@@ -875,7 +884,8 @@ Status: []<BR>"},
 
 		if(5)
 			user << "You remove the prox sensor from the turret frame."
-			new/obj/item/device/assembly/prox_sensor(locate(x,y,z))
+			var/obj/item/device/assembly/PS = new/obj/item/device/assembly/prox_sensor(locate(x,y,z))
+			src.transfer_fingerprints_to(PS)
 			build_step = 4
 
 

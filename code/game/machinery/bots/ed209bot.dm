@@ -893,12 +893,14 @@ Auto Patrol: []"},
 		if(!t)	return
 		if(!in_range(src, usr) && src.loc != usr)	return
 		created_name = t
+		src.add_fingerprint(user)
 		return
 
 	switch(build_step)
 		if(0,1)
 			if( istype(W, /obj/item/robot_parts/l_leg) || istype(W, /obj/item/robot_parts/r_leg) )
 				user.drop_item()
+				W.transfer_fingerprints_to(src)
 				del(W)
 				build_step++
 				user << "<span class='notice'>You add the robot leg to [src].</span>"
@@ -917,6 +919,7 @@ Auto Patrol: []"},
 				lasercolor = "b"
 			if( lasercolor || istype(W, /obj/item/clothing/suit/armor/vest) )
 				user.drop_item()
+				W.transfer_fingerprints_to(src)
 				del(W)
 				build_step++
 				user << "<span class='notice'>You add the armor to [src].</span>"
@@ -934,6 +937,7 @@ Auto Patrol: []"},
 		if(4)
 			if( istype(W, /obj/item/clothing/head/helmet) )
 				user.drop_item()
+				W.transfer_fingerprints_to(src)
 				del(W)
 				build_step++
 				user << "<span class='notice'>You add the helmet to [src].</span>"
@@ -944,6 +948,7 @@ Auto Patrol: []"},
 		if(5)
 			if( isprox(W) )
 				user.drop_item()
+				W.transfer_fingerprints_to(src)
 				del(W)
 				build_step++
 				user << "<span class='notice'>You add the prox sensor to [src].</span>"
@@ -962,6 +967,7 @@ Auto Patrol: []"},
 					build_step++
 					user << "<span class='notice'>You wire the ED-209 assembly.</span>"
 					name = "wired ED-209 assembly"
+					add_fingerprint(user)
 
 		if(7)
 			switch(lasercolor)
@@ -984,6 +990,7 @@ Auto Patrol: []"},
 			src.item_state = "[lasercolor]ed209_taser"
 			src.icon_state = "[lasercolor]ed209_taser"
 			user.drop_item()
+			W.transfer_fingerprints_to(src)
 			del(W)
 
 		if(8)
@@ -996,16 +1003,19 @@ Auto Patrol: []"},
 					build_step++
 					name = "armed [name]"
 					user << "<span class='notice'>Taser gun attached.</span>"
+					src.add_fingerprint(user)
 
 		if(9)
 			if( istype(W, /obj/item/weapon/cell) )
 				build_step++
 				user << "<span class='notice'>You complete the ED-209.</span>"
 				var/turf/T = get_turf(src)
-				new /obj/machinery/bot/ed209(T,created_name,lasercolor)
+				var/obj/machinery/bot/ed209/B = new /obj/machinery/bot/ed209(T,created_name,lasercolor)
 				user.drop_item()
+				W.transfer_fingerprints_to(B)
 				del(W)
 				user.drop_from_inventory(src)
+				src.transfer_fingerprints_to(B)
 				del(src)
 
 

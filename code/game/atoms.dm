@@ -927,6 +927,24 @@ var/using_new_click_proc = 0 //TODO ERRORAGE (This is temporary, while the DblCl
 		var/mob/living/silicon/ai/ai = usr
 		if (ai.control_disabled)
 			return
+		if(istype(ai.current, /obj/machinery/hologram/holopad))
+			var/obj/machinery/hologram/holopad/H = ai.current
+			if( src.x && src.y && H.x && H.y )
+				var/dx = src.x - H.x
+				var/dy = src.y - H.y
+
+				if(dy || dx)
+					if(abs(dx) < abs(dy))
+						if(dy > 0)	H.dir = NORTH
+						else		H.dir = SOUTH
+					else
+						if(dx > 0)	H.dir = EAST
+						else		H.dir = WEST
+				else
+					if(pixel_y > 16)		H.dir = NORTH
+					else if(pixel_y < -16)	H.dir = SOUTH
+					else if(pixel_x > 16)	H.dir = EAST
+					else if(pixel_x < -16)	H.dir = WEST
 
 	// ------- CYBORG -------
 	else if (istype(usr, /mob/living/silicon/robot))
@@ -1273,6 +1291,16 @@ var/using_new_click_proc = 0 //TODO ERRORAGE (This is temporary, while the DblCl
 	return
 
 /atom/proc/AltClick()
+	var/obj/item/W = usr.get_active_hand()
+	if ( W && !( istype(src, /obj/screen)) )
+		if (usr.next_move < world.time)
+			usr.prev_move = usr.next_move
+			usr.next_move = world.time + 10
+		else
+			return
+		if ( !(usr.restrained() || (usr.lying && usr.buckled!=src)) )
+			W.afterattack(src, usr)
+
 
 	/* // NOT UNTIL I FIGURE OUT A GOOD WAY TO DO THIS SHIT
 	if((HULK in usr.mutations) || (SUPRSTR in usr.augmentations))

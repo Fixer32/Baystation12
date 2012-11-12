@@ -605,6 +605,7 @@ var/list/slot_equipment_priority = list( \
 			stop_pulling()
 
 		src.pulling = AM
+		AM.add_fingerprint(src)
 		AM.pulledby = src
 		if(ismob(AM))
 			var/mob/M = AM
@@ -715,6 +716,8 @@ note dizziness decrements automatically in the mob's Life() proc.
 		if(client && client.holder)
 			stat(null,"Location: \t ([x], [y], [z])")
 			stat(null,"CPU: \t [world.cpu]")
+			if(player_list && client_list)
+				stat(null,"Players: \t [player_list.len]/[client_list.len]")
 
 			if(master_controller)
 				stat(null,"MasterController-[last_tick_duration] ([master_controller.processing?"On":"Off"]-[controller_iteration])")

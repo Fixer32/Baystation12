@@ -733,6 +733,7 @@ Auto Patrol: []"},
 		user << "You add the prox sensor to [src]!"
 		src.overlays += image('icons/obj/aibots.dmi', "hs_eye")
 		src.name = "helmet/signaler/prox sensor assembly"
+		W.transfer_fingerprints_to(src)
 		del(W)
 
 	else if(((istype(W, /obj/item/robot_parts/l_arm)) || (istype(W, /obj/item/robot_parts/r_arm))) && (src.build_step == 2))
@@ -741,6 +742,7 @@ Auto Patrol: []"},
 		user << "You add the robot arm to [src]!"
 		src.name = "helmet/signaler/prox sensor/robot arm assembly"
 		src.overlays += image('icons/obj/aibots.dmi', "hs_arm")
+		W.transfer_fingerprints_to(src)
 		del(W)
 
 	else if((istype(W, /obj/item/weapon/melee/baton)) && (src.build_step >= 3))
@@ -750,6 +752,8 @@ Auto Patrol: []"},
 		var/obj/machinery/bot/secbot/S = new /obj/machinery/bot/secbot
 		S.loc = get_turf(src)
 		S.name = src.created_name
+		W.transfer_fingerprints_to(S)
+		src.transfer_fingerprints_to(S)
 		del(W)
 		del(src)
 
@@ -760,3 +764,4 @@ Auto Patrol: []"},
 		if(!in_range(src, usr) && src.loc != usr)
 			return
 		src.created_name = t
+		src.add_fingerprint(user)

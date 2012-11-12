@@ -67,6 +67,7 @@
 			icon_state = initial(icon_state) +"_ass"
 			name = "unsecured grenade with [beakers.len] containers[detonator?" and detonator":""]"
 			stage = 1
+			add_fingerprint(user)
 		else if(istype(W,/obj/item/weapon/screwdriver) && path != 2)
 			if(stage == 1)
 				path = 1
@@ -98,6 +99,7 @@
 				user << "\red The grenade can not hold more containers."
 				return
 			else
+				W.transfer_fingerprints_to(src)
 				if(W.reagents.total_volume)
 					user << "\blue You add \the [W] to the assembly."
 					user.drop_item()
@@ -165,6 +167,7 @@
 							user << "\blue You remove the cabling."
 							src.stage = 2
 							var/obj/item/weapon/cable_coil/A = new /obj/item/weapon/cable_coil( src.loc )
+							A.add_fingerprint(user)
 							A.amount = 1
 						if(issignaler(W))
 							playsound(src.loc, 'Deconstruct.ogg', 50, 1)
@@ -181,7 +184,8 @@
 							if(S)
 								S.loc = src.loc
 							else
-								new /obj/item/device/assembly/signaler( src.loc, 1 )
+								S = new /obj/item/device/assembly/signaler( src.loc, 1 )
+							S.add_fingerprint(user)
 						if(isprox(W) && motion == 0)
 							playsound(src.loc, 'Deconstruct.ogg', 50, 1)
 							user << "\blue You attach the proximity sensor."
@@ -195,7 +199,8 @@
 							if(S)
 								S.loc = src.loc
 							else
-								new /obj/item/device/assembly/prox_sensor( src.loc, 1 )
+								S = new /obj/item/device/assembly/prox_sensor( src.loc, 1 )
+							S.add_fingerprint(user)
 							motion = 0
 						if(istype(W, /obj/item/stack/sheet/glass))
 							if(W:amount >= 1)
@@ -223,6 +228,7 @@
 							B:network = input(usr, "Which network would you like to connect this camera to?", "Set Network", "SS13")
 							direct = input(user, "Direction?", "Assembling Camera", null) in list( "NORTH", "EAST", "SOUTH", "WEST" )
 							B:dir = text2dir(direct)
+							src.transfer_fingerprints_to(B)
 							del(src)
 
 	examine()

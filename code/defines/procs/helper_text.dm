@@ -35,10 +35,10 @@
 	return t
 
 /proc/sanitize_easy(var/t)
-	return sanitize_simple(t,list("ÿ"="&#1103;"))
+	return sanitize_simple(t,list("ÿ"="&#1103;","\t"=" ","\n"="<br>"))
 
 //Removes a few problematic characters
-/proc/sanitize_simple(var/t,var/list/repl_chars = list("\n"="#","\t"="#","ÿ"="&#1103;"))
+/proc/sanitize_simple(var/t,var/list/repl_chars = list("\n"="#","\t"="#","ÿ"="&#255;"))
 	for(var/char in repl_chars)
 		var/index = findtext(t, char)
 		while(index)
@@ -67,7 +67,7 @@
 	return t
 	
 /proc/parsepencode(var/t)
-	t = sanitize_simple(t,list("ÿ"="&#1103;","\t"=" ","\n"="<br>"))
+	t = sanitize_easy(t)
 
 	t = dd_replacetext(t, "\[center\]", "<center>")
 	t = dd_replacetext(t, "\[/center\]", "</center>")

@@ -44,6 +44,7 @@
 								return;
 							P:amount -= 5
 							if(!P:amount) del(P)
+							src.add_fingerprint(user)
 							user << "\blue You add cables to the frame."
 							state = 2
 							icon_state = "box_1"
@@ -51,7 +52,8 @@
 					if(istype(P, /obj/item/weapon/wrench))
 						playsound(src.loc, 'sound/items/Ratchet.ogg', 75, 1)
 						user << "\blue You dismantle the frame"
-						new /obj/item/stack/sheet/metal(src.loc, 5)
+						var/obj/item/stack/sheet/metal/M = new /obj/item/stack/sheet/metal(src.loc, 5)
+						M.add_fingerprint(user)
 						del(src)
 			if(2)
 				if(istype(P, /obj/item/weapon/circuitboard))
@@ -116,6 +118,7 @@
 							playsound(src.loc, 'sound/items/Screwdriver.ogg', 50, 1)
 							var/obj/machinery/new_machine = new src.circuit.build_path(src.loc)
 							for(var/obj/O in new_machine.component_parts)
+								O.transfer_fingerprints_to(new_machine)
 								del(O)
 							new_machine.component_parts = list()
 							for(var/obj/O in src)
@@ -129,6 +132,8 @@
 							else
 								circuit.loc = null
 							new_machine.RefreshParts()
+							src.transfer_fingerprints_to(new_machine)
+							new_machine.add_fingerprint(user)
 							del(src)
 					else
 						if(istype(P, /obj/item/weapon))
@@ -143,12 +148,14 @@
 											CC.amount = camt
 											CC.update_icon()
 											CP.use(camt)
+											add_fingerprint(user)
 											components += CC
 											req_components[I] -= camt
 											update_desc()
 											break
 									user.drop_item()
 									P.loc = src
+									add_fingerprint(user)
 									components += P
 									req_components[I]--
 									update_desc()

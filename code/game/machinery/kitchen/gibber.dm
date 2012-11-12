@@ -96,7 +96,7 @@
 
 	user.visible_message("\red [user] starts to put [G.affecting] into the gibber!")
 	src.add_fingerprint(user)
-	if(do_after(user, 30) && G && G.affecting && !occupant)
+	if(do_after(user, 50) && G && G.affecting && !occupant)
 		user.visible_message("\red [user] stuffs [G.affecting] into the gibber!")
 		var/mob/M = G.affecting
 		if(M.client)
@@ -133,6 +133,7 @@
 
 
 /obj/machinery/gibber/proc/startgibbing(mob/user as mob)
+	add_fingerprint(user)
 	if(src.operating)
 		return
 	if(!src.occupant)

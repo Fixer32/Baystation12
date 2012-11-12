@@ -20,6 +20,7 @@
 		if(trash)
 			if(ispath(trash,/obj/item))
 				var/obj/item/TrashItem = new trash(usr)
+				src.transfer_fingerprints_to(TrashItem)
 				usr.put_in_hands(TrashItem)
 			else if(istype(trash,/obj/item))
 				usr.put_in_hands(trash)
@@ -174,6 +175,7 @@
 	for(var/i=1 to (slices_num-slices_lost))
 		var/obj/slice = new slice_path (src.loc)
 		reagents.trans_to(slice,reagents_per_slice)
+		src.transfer_fingerprints_to(slice)
 	del(src)
 	return
 
