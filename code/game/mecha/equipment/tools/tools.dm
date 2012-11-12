@@ -1070,8 +1070,8 @@
 			return ..()
 
 	detach()
-		..()
 		chassis.proc_res["dyndomove"] = null
+		..()
 		return
 
 	attach(obj/mecha/M as obj)
