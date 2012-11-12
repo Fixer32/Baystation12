@@ -413,6 +413,23 @@ steam.start() -- spawns the effect
 				reagents.reaction(A)
 		else
 			reagents.reaction(A)
+	var/changed = 0
+	for(var/obj/effect/effect/chem_smoke/S in range(1, src))
+		S.reagents.trans_to(src,S.reagents.total_volume/2)
+		reagents.trans_to(S,reagents.total_volume/2)
+		changed = 1
+		var/color = mix_color_from_reagents(S.reagents.reagent_list)
+		S.icon = 'icons/effects/96x96.dmi'
+		S.icon_state = "smoke"
+		if(color)
+			S.icon += color // give the smoke color, if it has any to begin with
+
+	if(changed)
+		var/color = mix_color_from_reagents(reagents.reagent_list)
+		src.icon = 'icons/effects/96x96.dmi'
+		src.icon_state = "smoke"
+		if(color)
+			src.icon += color // give the smoke color, if it has any to begin with
 
 	return
 
@@ -806,7 +823,7 @@ steam.start() -- spawns the effect
 	var/expand = 1
 	animate_movement = 0
 	var/metal = 0
-
+	var/neighbours=0
 
 /obj/effect/effect/foam/New(loc, var/ismetal=0)
 	..(loc)
@@ -842,7 +859,6 @@ steam.start() -- spawns the effect
 	if(--amount < 0)
 		return
 
-
 	for(var/direction in cardinal)
 
 
@@ -855,15 +871,35 @@ steam.start() -- spawns the effect
 
 		var/obj/effect/effect/foam/F = locate() in T
 		if(F)
+			neighbours++
+			F.amount=max(F.amount,amount)
 			continue
 
 		F = new(T, metal)
 		F.amount = amount
-		if(!metal)
-			F.create_reagents(10)
-			if (reagents)
-				for(var/datum/reagent/R in reagents.reagent_list)
-					F.reagents.add_reagent(R.id,1)
+		F.create_reagents(reagents.maximum_volume)
+		neighbours++
+
+	var/transfer=reagents.total_volume/(1+neighbours)
+	if(!metal && reagents)
+		for(var/direction in cardinal)
+			var/turf/T = get_step(src,direction)
+			if(!T)
+				continue
+			if(!T.Enter(src))
+				continue
+
+			var/obj/effect/effect/foam/F = locate() in T
+			if(F)
+				var/transfer_back=F.reagents.total_volume/(1+F.neighbours)
+				if(transfer)
+					if(F.reagents.maximum_volume<F.reagents.total_volume+transfer)
+						F.reagents.maximum_volume=F.reagents.total_volume+transfer
+					reagents.trans_to(F,transfer)
+				if(transfer_back)
+					if(reagents.maximum_volume<reagents.total_volume+transfer_back)
+						reagents.maximum_volume=reagents.total_volume+transfer_back
+					F.reagents.trans_to(src,transfer_back)
 
 // foam disolves when heated
 // except metal foams
@@ -893,7 +929,7 @@ steam.start() -- spawns the effect
 
 /datum/effect/effect/system/foam_spread
 	var/amount = 5				// the size of the foam spread.
-	var/list/carried_reagents	// the IDs of reagents present when the foam was mixed
+	var/datum/reagents/reagents	// the IDs of reagents present when the foam was mixed
 	var/metal = 0				// 0=foam, 1=metalfoam, 2=ironfoam
 
 
@@ -906,18 +942,10 @@ steam.start() -- spawns the effect
 		else
 			location = get_turf(loca)
 
-		carried_reagents = list()
+		reagents = new/datum/reagents(carry.maximum_volume)
+		reagents.my_atom = carry.my_atom
+		carry.trans_to(src,carry.total_volume)
 		metal = metalfoam
-
-
-		// bit of a hack here. Foam carries along any reagent also present in the glass it is mixed
-		// with (defaults to water if none is present). Rather than actually transfer the reagents,
-		// this makes a list of the reagent ids and spawns 1 unit of that reagent when the foam disolves.
-
-
-		if(carry && !metal)
-			for(var/datum/reagent/R in carry.reagent_list)
-				carried_reagents += R.id
 
 	start()
 		spawn(0)
@@ -930,13 +958,8 @@ steam.start() -- spawns the effect
 			F.amount = amount
 
 			if(!metal)			// don't carry other chemicals if a metal foam
-				F.create_reagents(10)
-
-				if(carried_reagents)
-					for(var/id in carried_reagents)
-						F.reagents.add_reagent(id,1)
-				else
-					F.reagents.add_reagent("water", 1)
+				F.create_reagents(reagents.maximum_volume)
+				reagents.trans_to(F,reagents.total_volume)
 
 // wall formed by metal foams
 // dense and opaque, but easy to break
