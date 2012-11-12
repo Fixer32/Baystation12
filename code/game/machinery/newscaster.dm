@@ -280,7 +280,7 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 					else
 						active_num--
 				dat+="Network currently serves a total of [total_num] Feed channels, [active_num] of which are active, and a total of [message_num] Feed Stories." //TODO: CONTINUE
-				dat+="<BR><BR><B>Liquid Paper remaining:</B> [(src.paper_remaining) *100 ] cm^3"
+				dat+="<BR><BR><B>Toner remaining:</B> [(src.paper_remaining) *100 ] cm^3"
 				dat+="<BR><BR><A href='?src=\ref[src];print_paper=[0]'>Print Paper</A>"
 				dat+="<BR><A href='?src=\ref[src];setScreen=[0]'>Cancel</A>"
 			if(9)
@@ -677,6 +677,16 @@ var/list/obj/machinery/newscaster/allCasters = list() //Global list that will co
 				var/obj/item/weapon/card/id/T = I
 				src.scanned_user = text("[T.registered_name] ([T.assignment])")
 				src.screen=2*/  //Obsolete after autorecognition
+	if(istype(I, /obj/item/device/toner))
+		if(paper_remaining == 0)
+			user.drop_item()
+			del(I)
+			paper_remaining = 15
+			user << "<span class='notice'>You insert the toner cartridge into \the [src].</span>"
+			updateUsrDialog()
+		else
+			user << "<span class='notice'>This cartridge is not yet ready for replacement! Use up the rest of the toner.</span>"
+		return
 
 	if (src.isbroken)
 		playsound(src.loc, 'sound/effects/hit_on_shattered_glass.ogg', 100, 1)
@@ -888,7 +898,7 @@ obj/item/weapon/newspaper/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if(news_network.wanted_issue)
 		NEWSPAPER.important_message = news_network.wanted_issue
 	NEWSPAPER.loc = get_turf(src)
-//	src.paper_remaining--
+	src.paper_remaining--
 	return
 
 //Removed for now so these aren't even checked every tick. Left this here in-case Agouri needs it later.
