@@ -50,6 +50,29 @@
 /turf/Click()
 	if(!isAI(usr))
 		..()
+	else
+		var/mob/living/silicon/ai/ai = usr
+		if (ai.control_disabled)
+			return
+		if(istype(ai.current, /obj/machinery/hologram/holopad))
+			var/obj/machinery/hologram/holopad/H = ai.current
+			if(H.hologram)
+				if( src.x && src.y && H.x && H.y )
+					var/dx = src.x - H.hologram.x
+					var/dy = src.y - H.hologram.y
+
+					if(dy || dx)
+						if(abs(dx) < abs(dy))
+							if(dy > 0)	H.hologram.dir = NORTH
+							else		H.hologram.dir = SOUTH
+						else
+							if(dx > 0)	H.hologram.dir = EAST
+							else		H.hologram.dir = WEST
+					else
+						if(pixel_y > 16)	H.hologram.dir = NORTH
+						else if(pixel_y < -16)	H.hologram.dir = SOUTH
+						else if(pixel_x > 16)	H.hologram.dir = EAST
+						else if(pixel_x < -16)	H.hologram.dir = WEST
 
 /turf/ex_act(severity)
 	return 0
