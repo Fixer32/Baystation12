@@ -231,8 +231,8 @@ proc/get_damage_icon_part(damage_state, body_part)
 	if(stand_icon)	del(stand_icon)
 
 	var/husk_color_mod = rgb(96,88,80)
-	var/hulk_color_mod = rgb(96,194,96)
-	var/plant_color_mod = rgb(194,224,194)
+	var/hulk_color_mod = rgb(48,144,48)
+	var/plant_color_mod = rgb(144,224,144)
 
 	var/husk = (HUSK in src.mutations)  //100% unnecessary -Agouri	//nope, do you really want to iterate through src.mutations repeatedly? -Pete
 	var/fat = (FAT in src.mutations)
