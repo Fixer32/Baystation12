@@ -577,8 +577,8 @@ its easier to just keep the beam vertical.
 	if(usr.client.buildmode)
 		build_click(usr, usr.client.buildmode, location, control, params, src)
 		return
-//	if(using_new_click_proc)  //TODO ERRORAGE (see message below)
-//		return DblClickNew()
+	if(using_new_click_proc)  //TODO ERRORAGE (see message below)
+		return DblClickNew()
 	return DblClick(location, control, params)
 
 var/using_new_click_proc = 0 //TODO ERRORAGE (This is temporary, while the DblClickNew() proc is being tested)

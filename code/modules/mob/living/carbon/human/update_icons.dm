@@ -302,7 +302,7 @@ proc/get_damage_icon_part(damage_state, body_part)
 			stand_icon.Blend(temp, ICON_OVERLAY)
 
 	//Skin tone
-	if(!skeleton)
+	if(!skeleton && !husk && !hulk && !plant)
 		if(s_tone >= 0)
 			stand_icon.Blend(rgb(s_tone, s_tone, s_tone), ICON_ADD)
 		else

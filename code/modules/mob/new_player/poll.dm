@@ -6,6 +6,8 @@
 	var/address = sqladdress
 	var/port = sqlport
 
+	return
+
 	var/DBConnection/dbcon = new()
 
 	dbcon.Connect("dbi:mysql:[db]:[address]:[port]","[user]","[pass]")
