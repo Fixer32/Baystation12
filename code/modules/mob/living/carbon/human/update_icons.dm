@@ -247,11 +247,15 @@ proc/get_damage_icon_part(damage_state, body_part)
 	if(skeleton)
 		icobase = 'icons/mob/human_races/r_skeleton.dmi'
 	else if(dna)
-		if(dna.mutantrace in list("tajaran","lizard","skrell"))
-			var/icofile = "icons/mob/human_races/r_[dna.mutantrace].dmi"
-			icobase = new(file(icofile))
-		else
-			icobase = 'icons/mob/human_races/r_human.dmi'
+		switch(dna.mutantrace)
+			if("tajaran")
+				icobase = 'icons/mob/human_races/r_tajaran.dmi'
+			if("lizard")
+				icobase = 'icons/mob/human_races/r_lizard.dmi'
+			if("skrell")
+				icobase = 'icons/mob/human_races/r_skrell.dmi'
+			else
+				icobase = 'icons/mob/human_races/r_human.dmi'
 	else
 		icobase = 'icons/mob/human_races/r_human.dmi'
 
