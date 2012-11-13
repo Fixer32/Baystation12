@@ -670,6 +670,7 @@
 				else if(SA_pp > 0.01)	// There is sleeping gas in their lungs, but only a little, so give them a bit of a warning
 					if(prob(20))
 						spawn(0) emote(pick("giggle", "laugh"))
+				SA.moles = 0
 
 		if( (abs(310.15 - breath.temperature) > 50) && !(COLD_RESISTANCE in mutations)) // Hot air hurts :(
 			if(breath.temperature < 260.15)
@@ -1118,8 +1119,9 @@
 			else if(sleeping)
 				handle_dreams()
 				adjustHalLoss(-5)
-				if((mind && mind.active) || immune_to_ssd)
-					sleeping = max(sleeping-1, 0)
+				if (mind)
+					if(mind.active || immune_to_ssd)
+						sleeping = max(sleeping-1, 0)
 				blinded = 1
 				stat = UNCONSCIOUS
 				if( prob(10) && health && !hal_crit )
@@ -1168,6 +1170,13 @@
 
 			if(druggy)
 				druggy = max(druggy-1, 0)
+
+			// Increase germ_level regularly
+			if(prob(40))
+				germ_level += 1
+			// If you're dirty, your gloves will become dirty, too.
+			if(gloves && germ_level > gloves.germ_level && prob(10))
+				gloves.germ_level += 1
 		return 1
 
 	proc/handle_regular_hud_updates()
