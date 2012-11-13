@@ -118,7 +118,7 @@
 
 		//if(icon_state == initial(icon_state))
 	var/icontype = "" 
-	var/list/icons = list("Monochrome", "Blue", "Inverted", "Firewall", "Green", "Red", "Static")
+	var/list/icons = list("Angry", "Bliss", "Blue", "Dorf", "Firewall", "Green", "Inverted", "Matrix", "Monochrome", "Rainbow", "Red", "Smiley", "Static", "Text")
 	if (src.name == "B.A.N.N.E.D." && src.ckey == "spaceman96")
 		icons += "B.A.N.N.E.D."
 	if (src.name == "M00X-BC" && src.ckey == "searif")
@@ -131,22 +131,38 @@
 /*	if(icontype == "Clown")
 		icon_state = "ai-clown2"*/
 	icontype = input("Please, select a display!", "AI", null/*, null*/) in icons
-	if(icontype == "Monochrome")
-		icon_state = "ai-mono"
-	else if(icontype == "Blue")
+	if(icontype == "Blue")
 		icon_state = "ai"
+	else if(icontype == "Monochrome")
+		icon_state = "ai-mono"
+	else if(icontype == "Rainbow")
+		icon_state = "ai-clown"
 	else if(icontype == "Inverted")
 		icon_state = "ai-u"
 	else if(icontype == "Firewall")
 		icon_state = "ai-magma"
 	else if(icontype == "Green")
 		icon_state = "ai-wierd"
+	else if(icontype == "Text")
+		icon_state = "ai-text"
+	else if(icontype == "Smiley")
+		icon_state = "ai-smiley"
+	else if(icontype == "Angry")
+		icon_state = "ai-angryface"
+	else if(icontype == "Dorf")
+		icon_state = "ai-dorf"
+	else if(icontype == "Bliss")
+		icon_state = "ai-bliss"
+	else if(icontype == "B.A.N.N.E.D.")
+		icon_state = "ai-banned"
+	else if(icontype == "M00X-BC")
+		icon_state = "ai-searif"
 	else if(icontype == "Red")
 		icon_state = "ai-malf"
 	else if(icontype == "Static")
 		icon_state = "ai-static"
-	else if(icontype == "M00X-BC")
-		icon_state = "ai-searif"
+	else if(icontype == "Matrix")
+		icon_state = "ai-matrix"
 	else if(icontype == "Tribunal")
 		icon_state = "ai-tribunal"
 	else if(icontype == "Tribunal Malfunctioning")
@@ -647,7 +663,10 @@
 	else
 		var/icon_list[] = list(
 		"default",
-		"floating face"
+		"floating face",
+		"brain",
+		"MMI",
+		"custom"
 		)
 		input = input("Please select a hologram:") as null|anything in icon_list
 		if(input)
@@ -657,7 +676,187 @@
 					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo1"))
 				if("floating face")
 					holo_icon = getHologramIcon(icon('icons/mob/AI.dmi',"holo2"))
+				if("brain")
+					holo_icon = getHologramIcon(icon('icons/obj/surgery.dmi',"brain2"))
+				if("MMI")
+					holo_icon = getHologramIcon(icon('icons/obj/assemblies.dmi',"mmi_full"))
+				if("custom")
+					holo_icon = getHologramIcon(custom_mob_icon())
 	return
+
+/mob/living/silicon/ai/proc/custom_mob_icon()
+	var/icon/preview_icon = null
+
+	var/g = "m"
+	var/new_gender = alert(usr, "Please select gender.", "Character Generation", "Male", "Female")
+	if (new_gender)
+		if(new_gender == "Male")
+			g = "m"
+		else
+			g = "f"
+
+	var/race = input(usr, "Please select race", "Character Generation","Human")  as anything in list("Human","Tajaran","Soghun","Skrell")
+	switch(race)
+		if("Tajaran")
+			preview_icon = new /icon('icons/effects/species.dmi', "tajaran_[g]_s")
+			preview_icon.Blend(new /icon('icons/effects/species.dmi', "tajtail_s"), ICON_OVERLAY)
+		if( "Soghun")
+			preview_icon = new /icon('icons/effects/species.dmi', "lizard_[g]_s")
+			preview_icon.Blend(new /icon('icons/effects/species.dmi', "sogtail_s"), ICON_OVERLAY)
+		if("Skrell")
+			preview_icon = new /icon('icons/effects/species.dmi', "skrell_[g]_s")
+		else
+			preview_icon = new /icon('human.dmi', "torso_[g]_s")
+			preview_icon.Blend(new /icon('human.dmi', "chest_[g]_s"), ICON_OVERLAY)
+			preview_icon.Blend(new /icon('human.dmi', "groin_[g]_s"), ICON_OVERLAY)
+			preview_icon.Blend(new /icon('human.dmi', "head_[g]_s"), ICON_OVERLAY)
+
+	var/icon/eyes_s = new/icon("icon" = 'icons/mob/human_face.dmi', "icon_state" = "eyes_s")
+	eyes_s.Blend(rgb(255, 255, 255), ICON_ADD)
+
+	var/list/valid_hairstyles = list()
+	for(var/hairstyle in hair_styles_list)
+		var/datum/sprite_accessory/S = hair_styles_list[hairstyle]
+		if( !(race in S.species_allowed))
+			continue
+		valid_hairstyles[hairstyle] = hair_styles_list[hairstyle]
+
+	var/h_style = "Bald"
+	var/new_h_style = input(usr, "Choose your character's hair style:", "Character Preference")  as null|anything in valid_hairstyles
+	if(new_h_style)
+		h_style = new_h_style
+	var/datum/sprite_accessory/hair_style = hair_styles_list[h_style]
+	if(hair_style)
+		var/icon/hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_s")
+		hair_s.Blend(rgb(0, 0, 0), ICON_ADD)
+		eyes_s.Blend(hair_s, ICON_OVERLAY)
+
+	var/list/valid_facialhairstyles = list()
+	for(var/facialhairstyle in facial_hair_styles_list)
+		var/datum/sprite_accessory/S = facial_hair_styles_list[facialhairstyle]
+		if(gender == MALE && !S.choose_male)
+			continue
+		if(gender == FEMALE && !S.choose_female)
+			continue
+		if( !(race in S.species_allowed))
+			continue
+		valid_facialhairstyles[facialhairstyle] = facial_hair_styles_list[facialhairstyle]
+	var/f_style = "Shaved"
+	var/new_f_style = input(usr, "Choose your character's facial-hair style:", "Character Preference")  as null|anything in valid_facialhairstyles
+	if(new_f_style)
+		f_style = new_f_style
+	var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[f_style]
+	if(facial_hair_style)
+		var/icon/facial_s = new/icon("icon" = facial_hair_style.icon, "icon_state" = "[facial_hair_style.icon_state]_s")
+		facial_s.Blend(rgb(0, 0, 0), ICON_ADD)
+		eyes_s.Blend(facial_s, ICON_OVERLAY)
+
+	var/icon/clothes_s = null
+	var/job = input(usr, "Choose your job clothing:", "Character Preference")  as null|anything in get_all_jobs()
+	switch(job)
+		if("Head of Personnel")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "hop_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "brown"), ICON_UNDERLAY)
+		if("Bartender")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "ba_suit_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "black"), ICON_UNDERLAY)
+		if("Botanist")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "hydroponics_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "black"), ICON_UNDERLAY)
+		if("Chef")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "chef_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "black"), ICON_UNDERLAY)
+		if("Janitor")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "janitor_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "black"), ICON_UNDERLAY)
+		if("Librarian")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "red_suit_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "black"), ICON_UNDERLAY)
+		if("Quartermaster")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "qm_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "brown"), ICON_UNDERLAY)
+		if("Cargo Technician")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "cargotech_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "black"), ICON_UNDERLAY)
+		if("Shaft Miner")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "miner_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "black"), ICON_UNDERLAY)
+		if("Lawyer")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "lawyer_blue_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "brown"), ICON_UNDERLAY)
+		if("Chaplain")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "chapblack_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "black"), ICON_UNDERLAY)
+		if("Research Director")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "director_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "brown"), ICON_UNDERLAY)
+			clothes_s.Blend(new /icon('icons/mob/suit.dmi', "labcoat_open"), ICON_OVERLAY)
+		if("Scientist")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "toxinswhite_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "white"), ICON_UNDERLAY)
+			clothes_s.Blend(new /icon('icons/mob/suit.dmi', "labcoat_tox_open"), ICON_OVERLAY)
+		if("Chemist")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "chemistrywhite_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "white"), ICON_UNDERLAY)
+			clothes_s.Blend(new /icon('icons/mob/suit.dmi', "labcoat_chem_open"), ICON_OVERLAY)
+		if("Chief Medical Officer")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "cmo_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "brown"), ICON_UNDERLAY)
+			clothes_s.Blend(new /icon('icons/mob/suit.dmi', "labcoat_cmo_open"), ICON_OVERLAY)
+		if("Medical Doctor")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "medical_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "white"), ICON_UNDERLAY)
+			clothes_s.Blend(new /icon('icons/mob/suit.dmi', "labcoat_open"), ICON_OVERLAY)
+		if("Geneticist")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "geneticswhite_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "white"), ICON_UNDERLAY)
+			clothes_s.Blend(new /icon('icons/mob/suit.dmi', "labcoat_gen_open"), ICON_OVERLAY)
+		if("Virologist")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "virologywhite_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "white"), ICON_UNDERLAY)
+			clothes_s.Blend(new /icon('icons/mob/suit.dmi', "labcoat_vir_open"), ICON_OVERLAY)
+		if("Captain")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "captain_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "brown"), ICON_UNDERLAY)
+		if("Head of Security")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "hosred_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "jackboots"), ICON_UNDERLAY)
+		if("Warden")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "warden_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "jackboots"), ICON_UNDERLAY)
+		if("Detective")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "detective_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "brown"), ICON_UNDERLAY)
+			clothes_s.Blend(new /icon('icons/mob/suit.dmi', "detective"), ICON_OVERLAY)
+		if("Security Officer")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "secred_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "jackboots"), ICON_UNDERLAY)
+		if("Chief Engineer")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "chief_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "brown"), ICON_UNDERLAY)
+			clothes_s.Blend(new /icon('icons/mob/belt.dmi', "utility"), ICON_OVERLAY)
+		if("Station Engineer")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "engine_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "orange"), ICON_UNDERLAY)
+			clothes_s.Blend(new /icon('icons/mob/belt.dmi', "utility"), ICON_OVERLAY)
+		if("Atmospheric Technician")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "atmos_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "black"), ICON_UNDERLAY)
+			clothes_s.Blend(new /icon('icons/mob/belt.dmi', "utility"), ICON_OVERLAY)
+		if("Roboticist")
+			clothes_s = new /icon('icons/mob/uniform.dmi', "robotics_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "black"), ICON_UNDERLAY)
+			clothes_s.Blend(new /icon('icons/mob/suit.dmi', "labcoat_open"), ICON_OVERLAY)
+		else
+			clothes_s = new /icon('icons/mob/uniform.dmi', "grey_s")
+			clothes_s.Blend(new /icon('icons/mob/feet.dmi', "black"), ICON_UNDERLAY)
+	preview_icon.Blend(eyes_s, ICON_OVERLAY)
+	if(clothes_s)
+		preview_icon.Blend(clothes_s, ICON_OVERLAY)
+	del(eyes_s)
+	del(clothes_s)
+
+	return preview_icon
 
 /mob/living/silicon/ai/proc/corereturn()
 	set category = "Malfunction"

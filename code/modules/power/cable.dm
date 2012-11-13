@@ -528,7 +528,7 @@ obj/structure/cable/proc/cableColor(var/colorC)
 /obj/item/weapon/cable_coil/attack(mob/M as mob, mob/user as mob)
 	if(hasorgans(M))
 		var/datum/organ/external/S = M:organs[user.zone_sel.selecting]
-		if(!(S.status & ORGAN_ROBOT) || user.a_intent != "help")
+		if(user.a_intent != "help" || !(S && (S.status & ORGAN_ROBOT)))
 			return ..()
 		if(S.burn_dam > 0)
 			S.heal_damage(0,15,0,1)

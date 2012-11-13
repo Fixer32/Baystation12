@@ -251,7 +251,7 @@ That prevents a few funky behaviors.
 					if("AICARD")
 						var/obj/item/device/aicard/C = src
 						var/mob/living/silicon/ai/A = locate() in C//I love locate(). Best proc ever.
-						if(A)//If AI exists on the card. Else nothing since both are empty.
+						if(A && A.stat!=DEAD)//If AI exists on the card. Else nothing since both are empty.
 							A.control_disabled = 0
 							A.loc = T.loc//To replace the terminal.
 							C.icon_state = "aicard"
@@ -264,7 +264,7 @@ That prevents a few funky behaviors.
 					if("NINJASUIT")
 						var/obj/item/clothing/suit/space/space_ninja/C = src
 						var/mob/living/silicon/ai/A = C.AI
-						if(A)
+						if(A && A.stat!=DEAD)
 							A.control_disabled = 0
 							C.AI = null
 							A.loc = T.loc

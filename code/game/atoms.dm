@@ -929,22 +929,23 @@ var/using_new_click_proc = 0 //TODO ERRORAGE (This is temporary, while the DblCl
 			return
 		if(istype(ai.current, /obj/machinery/hologram/holopad))
 			var/obj/machinery/hologram/holopad/H = ai.current
-			if( src.x && src.y && H.x && H.y )
-				var/dx = src.x - H.x
-				var/dy = src.y - H.y
+			if(H.hologram)
+				if( src.x && src.y && H.x && H.y )
+					var/dx = src.x - H.hologram.x
+					var/dy = src.y - H.hologram.y
 
-				if(dy || dx)
-					if(abs(dx) < abs(dy))
-						if(dy > 0)	H.dir = NORTH
-						else		H.dir = SOUTH
+					if(dy || dx)
+						if(abs(dx) < abs(dy))
+							if(dy > 0)	H.hologram.dir = NORTH
+							else		H.hologram.dir = SOUTH
+						else
+							if(dx > 0)	H.hologram.dir = EAST
+							else		H.hologram.dir = WEST
 					else
-						if(dx > 0)	H.dir = EAST
-						else		H.dir = WEST
-				else
-					if(pixel_y > 16)		H.dir = NORTH
-					else if(pixel_y < -16)	H.dir = SOUTH
-					else if(pixel_x > 16)	H.dir = EAST
-					else if(pixel_x < -16)	H.dir = WEST
+						if(pixel_y > 16)	H.hologram.dir = NORTH
+						else if(pixel_y < -16)	H.hologram.dir = SOUTH
+						else if(pixel_x > 16)	H.hologram.dir = EAST
+						else if(pixel_x < -16)	H.hologram.dir = WEST
 
 	// ------- CYBORG -------
 	else if (istype(usr, /mob/living/silicon/robot))

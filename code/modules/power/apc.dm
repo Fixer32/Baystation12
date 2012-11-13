@@ -911,8 +911,8 @@
 		return
 	src.occupant = new /mob/living/silicon/ai(src,malf.laws,null,1)
 	src.occupant.adjustOxyLoss(malf.getOxyLoss())
-	if(!findtext(src.occupant.name,"APC Copy"))
-		src.occupant.name = "[malf.name] APC Copy"
+	if(!findtext(src.occupant.name," Copy"))
+		src.occupant.name = "[malf.name] Copy"
 	if(malf.parent)
 		src.occupant.parent = malf.parent
 	else
@@ -926,14 +926,22 @@
 /obj/machinery/power/apc/proc/malfvacate(var/forced)
 	if(!src.occupant)
 		return
-	if(src.occupant.parent && src.occupant.parent.stat != 2)
+	if(src.occupant.parent && src.occupant.parent.stat != 2 && !istype(src.occupant.parent.loc,/obj/item/device/aicard))
 		src.occupant.mind.transfer_to(src.occupant.parent)
 		src.occupant.parent.adjustOxyLoss(src.occupant.getOxyLoss())
 		src.occupant.parent.cancel_camera()
 		del(src.occupant)
-
 	else
-		src.occupant << "\red Primary core damaged, unable to return core processes."
+		src.occupant << "\red Primary core damaged."
+		if(istype(src.occupant.parent.loc,/obj/item/device/aicard))
+			var/obj/structure/AIcore/core = locate(/obj/structure/AIcore/deactivated) in world
+			src.occupant.control_disabled = 0
+			src.occupant.loc = core.loc
+			del(core)
+			src.occupant.cancel_camera()
+			return
+
+		src.occupant << "\red Unable to return core processes."
 		if(forced)
 			src.occupant.loc = src.loc
 			src.occupant.death()
