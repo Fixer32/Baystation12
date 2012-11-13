@@ -401,6 +401,14 @@
 	M.see_in_dark = 2
 	M.see_invisible = 0
 
+	if(PLANT in old_mutations)
+		M.mutations.Add(PLANT)
+	if(SKELETON in old_mutations)
+		M.mutations.Add(SKELETON)
+	if(FAT in old_mutations)
+		M.mutations.Add(FAT)
+	if(HUSK in old_mutations)
+		M.mutations.Add(HUSK)
 
 	if(ismuton(NOBREATHBLOCK,M))
 		if(probinj(45,inj) || (mNobreath in old_mutations))

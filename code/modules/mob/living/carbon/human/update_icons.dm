@@ -135,31 +135,41 @@ Please contact me on #coderbus IRC. ~Carn x
 	update_hud()		//TODO: remove the need for this
 	overlays = null
 
-	if(lying)		//can't be cloaked when lying. (for now)
-		icon = lying_icon
+//	if(lying)		//can't be cloaked when lying. (for now)
+//		icon = lying_icon
+//		for(var/image/I in overlays_lying)
+//			overlays += I
+//	else
+	var/stealth = 0
+	if(istype(wear_suit, /obj/item/clothing/suit/space/space_ninja) && wear_suit:s_active)
+		stealth = 1
+	else
+		//cloaking devices. //TODO: get rid of this :<
+		for(var/obj/item/weapon/cloaking_device/S in list(l_hand,r_hand,belt,l_store,r_store))
+			if(S.active)
+				stealth = 1
+				break
+	if(stealth)
+		icon = 'icons/mob/human.dmi'
+		icon_state = "body_cloaked"
+		var/image/I	= overlays_standing[L_HAND_LAYER]
+		if(istype(I))	overlays += I
+		I 			= overlays_standing[R_HAND_LAYER]
+		if(istype(I))	overlays += I
+	else
+		icon = stand_icon
+
+	if(lying)
+		var/icon/I = new(icon,dir=SOUTH)
+		I.MakeLying()
+		icon = I
+
+	if(lying)
 		for(var/image/I in overlays_lying)
 			overlays += I
 	else
-		var/stealth = 0
-		if(istype(wear_suit, /obj/item/clothing/suit/space/space_ninja) && wear_suit:s_active)
-			stealth = 1
-		else
-			//cloaking devices. //TODO: get rid of this :<
-			for(var/obj/item/weapon/cloaking_device/S in list(l_hand,r_hand,belt,l_store,r_store))
-				if(S.active)
-					stealth = 1
-					break
-		if(stealth)
-			icon = 'icons/mob/human.dmi'
-			icon_state = "body_cloaked"
-			var/image/I	= overlays_standing[L_HAND_LAYER]
-			if(istype(I))	overlays += I
-			I 			= overlays_standing[R_HAND_LAYER]
-			if(istype(I))	overlays += I
-		else
-			icon = stand_icon
-			for(var/image/I in overlays_standing)
-				overlays += I
+		for(var/image/I in overlays_standing)
+			overlays += I
 
 var/global/list/damage_icon_parts = list()
 proc/get_damage_icon_part(damage_state, body_part)
@@ -196,17 +206,19 @@ proc/get_damage_icon_part(damage_state, body_part)
 
 
 	// blend the individual damage states with our icons
-	for(var/datum/organ/external/O in organs)
-		if(!(O.status & ORGAN_DESTROYED))
-			O.update_icon()
-			if(O.damage_state == "00") continue
+	var/skeleton = (SKELETON in src.mutations)
+	if(!skeleton)
+		for(var/datum/organ/external/O in organs)
+			if(!(O.status & ORGAN_DESTROYED))
+				O.update_icon()
+				if(O.damage_state == "00") continue
 
-			var/icon/DI = get_damage_icon_part(O.damage_state, O.icon_name)
+				var/icon/DI = get_damage_icon_part(O.damage_state, O.icon_name)
 
-			standing_image.overlays += DI
+				standing_image.overlays += DI
 
-			DI = get_damage_icon_part("[O.damage_state]-2", "[O.icon_name]2")
-			lying_image.overlays += DI
+				DI = get_damage_icon_part("[O.damage_state]-2", "[O.icon_name]2")
+				lying_image.overlays += DI
 
 
 	overlays_standing[DAMAGE_LAYER]	= standing_image
@@ -217,117 +229,98 @@ proc/get_damage_icon_part(damage_state, body_part)
 //BASE MOB SPRITE
 /mob/living/carbon/human/proc/update_body(var/update_icons=1)
 	if(stand_icon)	del(stand_icon)
-	if(lying_icon)	del(lying_icon)
-	if(dna && dna.mutantrace)	return
+
+	var/husk_color_mod = rgb(96,88,80)
+	var/hulk_color_mod = rgb(96,194,96)
+	var/plant_color_mod = rgb(194,224,194)
 
 	var/husk = (HUSK in src.mutations)  //100% unnecessary -Agouri	//nope, do you really want to iterate through src.mutations repeatedly? -Pete
 	var/fat = (FAT in src.mutations)
+	var/hulk = (HULK in src.mutations)
 	var/skeleton = (SKELETON in src.mutations)
+	var/plant = (PLANT in src.mutations)
 
 	var/g = "m"
 	if(gender == FEMALE)	g = "f"
 
-	// whether to draw the individual limbs
-	var/individual_limbs = 0
-
-	//Base mob icon
-	if(husk)
-		stand_icon = new /icon('icons/mob/human.dmi', "husk_s")
-		lying_icon = new /icon('icons/mob/human.dmi', "husk_l")
-	else if(fat)
-		stand_icon = new /icon('icons/mob/human.dmi', "fatbody_s")
-		lying_icon = new /icon('icons/mob/human.dmi', "fatbody_l")
-	else if(skeleton)
-		stand_icon = new /icon('icons/mob/human.dmi', "skeleton_s")
-		lying_icon = new /icon('icons/mob/human.dmi', "skeleton_l")
+	var/icon/icobase
+	if(skeleton)
+		icobase = 'icons/mob/human_races/r_skeleton.dmi'
+	else if(dna)
+		if(dna.mutantrace in list("tajaran","lizard","skrell"))
+			var/icofile = "icons/mob/human_races/r_[dna.mutantrace].dmi"
+			icobase = new(file(icofile))
+		else
+			icobase = 'icons/mob/human_races/r_human.dmi'
 	else
-		stand_icon = new /icon('icons/mob/human.dmi', "torso_[g]_s")
-		lying_icon = new /icon('icons/mob/human.dmi', "torso_[g]_l")
-		individual_limbs = 1
+		icobase = 'icons/mob/human_races/r_human.dmi'
+
+	if(!skeleton)
+		stand_icon = new /icon(icobase, "torso_[g][fat?"_fat":""]")
+		if(husk)
+			stand_icon.ColorTone(husk_color_mod)
+		else if(hulk)
+			stand_icon.ColorTone(hulk_color_mod)
+		else if(plant)
+			stand_icon.ColorTone(plant_color_mod)
+	else
+		stand_icon = new /icon(icobase, "torso")
 
 	var/datum/organ/external/head = get_organ("head")
 	var/has_head = 0
 	if(head && !(head.status & ORGAN_DESTROYED))
 		has_head = 1
 
-	//remove destroyed limbs from base icon (if individual_limbs -> we do not have them already)
-	if(!individual_limbs)
-		for(var/datum/organ/external/part in organs)
-			if(!istype(part, /datum/organ/external/groin) \
-			&& !istype(part, /datum/organ/external/chest) \
-			&& (part.status & ORGAN_DESTROYED))
-				var/icon/temp = new /icon('dam_mask.dmi', "[part.icon_name]")
-				temp.MapColors(-1,0,0,0, 0,-1,0,0, 0,0,-1,0, 0,0,0,-1, 1,1,1,1)
-				stand_icon.AddAlphaMask(temp)
-
-				temp = new /icon('dam_mask.dmi', "[part.icon_name]2")
-				temp.MapColors(-1,0,0,0, 0,-1,0,0, 0,0,-1,0, 0,0,0,-1, 1,1,1,1)
-				lying_icon.AddAlphaMask(temp)
-	// Draw head and groin if we are assembling standart body from parts - they are not interchangeable for
-	// robotic limbs and are uncutoffable parts of limbless standard body
-	else
-		if(has_head)
-			stand_icon.Blend(new /icon('icons/mob/human.dmi', "head_[g]_s"), ICON_OVERLAY)
-			lying_icon.Blend(new /icon('icons/mob/human.dmi', "head_[g]_l"), ICON_OVERLAY)
-
-		for(var/datum/organ/external/part in organs)
-			if(!istype(part, /datum/organ/external/groin) \
-				&& !istype(part, /datum/organ/external/chest) \
-				&& !istype(part, /datum/organ/external/head) \
-				&& !(part.status & ORGAN_DESTROYED))
-				var/icon/temp = new /icon('human.dmi', "[part.icon_name]_s")
-				if(part.status & ORGAN_ROBOT) temp.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(0,0,0))
-				stand_icon.Blend(temp, ICON_OVERLAY)
-				temp = new /icon('human.dmi', "[part.icon_name]_l")
-				if(part.status & ORGAN_ROBOT) temp.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(0,0,0))
-				lying_icon.Blend(temp , ICON_OVERLAY)
-
-		stand_icon.Blend(new /icon('human.dmi', "groin_[g]_s"), ICON_OVERLAY)
-		lying_icon.Blend(new /icon('human.dmi', "groin_[g]_l"), ICON_OVERLAY)
-
-	// Draw [nondestroyed robotic limbs grayscale] and [other non-destroyed limbs if we are assembling an icon from parts]
 	for(var/datum/organ/external/part in organs)
-		if(!istype(part, /datum/organ/external/groin) \
-			&& !istype(part, /datum/organ/external/chest) \
-			&& !istype(part, /datum/organ/external/head) \
-			&& !(part.status & ORGAN_DESTROYED))
-			var/icon/temp = new /icon('human.dmi', "[part.icon_name]_s")
+		if(!istype(part, /datum/organ/external/chest) && !(part.status & ORGAN_DESTROYED))
+			var/icon/temp
+			if(istype(part, /datum/organ/external/groin))
+				if(skeleton)
+					temp = new /icon(icobase, "groin")
+				else
+					temp = new /icon(icobase, "groin_[g]")
+			else if(istype(part, /datum/organ/external/head))
+				if(skeleton)
+					temp = new /icon(icobase, "head")
+				else
+					temp = new /icon(icobase, "head_[g]")
+			else
+				temp = new /icon(icobase, "[part.icon_name]")
 			if(part.status & ORGAN_ROBOT)
 				temp.GrayScale()
-				stand_icon.Blend(temp, ICON_OVERLAY)
-			else if(individual_limbs)
-				stand_icon.Blend(temp, ICON_OVERLAY)
-
-			temp = new /icon('human.dmi', "[part.icon_name]_l")
-			if(part.status & ORGAN_ROBOT)
-				temp.GrayScale()
-				lying_icon.Blend(temp, ICON_OVERLAY)
-			else if(individual_limbs)
-				lying_icon.Blend(temp, ICON_OVERLAY)
+			else if(!skeleton)
+				if(husk)
+					temp.ColorTone(husk_color_mod)
+				else if(hulk)
+					temp.ColorTone(hulk_color_mod)
+				else if(plant)
+					temp.ColorTone(plant_color_mod)
+			stand_icon.Blend(temp, ICON_OVERLAY)
 
 	//Skin tone
 	if(!skeleton)
 		if(s_tone >= 0)
 			stand_icon.Blend(rgb(s_tone, s_tone, s_tone), ICON_ADD)
-			lying_icon.Blend(rgb(s_tone, s_tone, s_tone), ICON_ADD)
 		else
 			stand_icon.Blend(rgb(-s_tone,  -s_tone,  -s_tone), ICON_SUBTRACT)
-			lying_icon.Blend(rgb(-s_tone,  -s_tone,  -s_tone), ICON_SUBTRACT)
+
+	if(husk)
+		var/icon/mask = new(stand_icon)
+		var/icon/husk_over = new(icobase,"overlay_husk")
+		mask.MapColors(0,0,0,1, 0,0,0,1, 0,0,0,1, 0,0,0,1, 0,0,0,0)
+		husk_over.Blend(mask, ICON_ADD)
+		stand_icon.Blend(husk_over, ICON_OVERLAY)
 
 	if(has_head)
 		//Eyes
 		if(!skeleton)
 			var/icon/eyes_s = new/icon('icons/mob/human_face.dmi', "eyes_s")
-			var/icon/eyes_l = new/icon('icons/mob/human_face.dmi', "eyes_l")
 			eyes_s.Blend(rgb(r_eyes, g_eyes, b_eyes), ICON_ADD)
-			eyes_l.Blend(rgb(r_eyes, g_eyes, b_eyes), ICON_ADD)
 			stand_icon.Blend(eyes_s, ICON_OVERLAY)
-			lying_icon.Blend(eyes_l, ICON_OVERLAY)
 
 	//Mouth	(lipstick!)
 	if(lip_style)	//skeletons are allowed to wear lipstick no matter what you think, agouri.
 		stand_icon.Blend(new/icon('icons/mob/human_face.dmi', "lips_[lip_style]_s"), ICON_OVERLAY)
-		lying_icon.Blend(new/icon('icons/mob/human_face.dmi', "lips_[lip_style]_l"), ICON_OVERLAY)
 
 	//Underwear
 	if(underwear >0 && underwear < 12)
@@ -432,27 +425,28 @@ proc/get_damage_icon_part(damage_state, body_part)
 	var/fat
 	if( FAT in mutations )
 		fat = "fat"
-	var/g = "m"
-	if (gender == FEMALE)	g = "f"
+//	var/g = "m"
+//	if (gender == FEMALE)	g = "f"
 //BS12 EDIT
 	if(dna)
 		switch(dna.mutantrace)
 			if("golem","metroid")
 				overlays_lying[MUTANTRACE_LAYER]	= image("icon" = 'icons/effects/genetics.dmi', "icon_state" = "[dna.mutantrace][fat]_l")
 				overlays_standing[MUTANTRACE_LAYER]	= image("icon" = 'icons/effects/genetics.dmi', "icon_state" = "[dna.mutantrace][fat]_s")
-			if("lizard", "tajaran", "skrell")
-				overlays_lying[MUTANTRACE_LAYER]	= image("icon" = 'icons/effects/species.dmi', "icon_state" = "[dna.mutantrace]_[g]_l")
-				overlays_standing[MUTANTRACE_LAYER]	= image("icon" = 'icons/effects/species.dmi', "icon_state" = "[dna.mutantrace]_[g]_s")
-			if("plant")
-				if(stat == DEAD)	//TODO
-					overlays_lying[MUTANTRACE_LAYER] = image("icon" = 'icons/effects/genetics.dmi', "icon_state" = "[dna.mutantrace]_d")
-				else
-					overlays_lying[MUTANTRACE_LAYER]	= image("icon" = 'icons/effects/genetics.dmi', "icon_state" = "[dna.mutantrace][fat]_[gender]_l")
-					overlays_standing[MUTANTRACE_LAYER]	= image("icon" = 'icons/effects/genetics.dmi', "icon_state" = "[dna.mutantrace][fat]_[gender]_s")
+//			if("lizard", "tajaran", "skrell")
+//				overlays_lying[MUTANTRACE_LAYER]	= image("icon" = 'icons/effects/species.dmi', "icon_state" = "[dna.mutantrace]_[g]_l")
+//				overlays_standing[MUTANTRACE_LAYER]	= image("icon" = 'icons/effects/species.dmi', "icon_state" = "[dna.mutantrace]_[g]_s")
+//			if("plant")
+//				if(stat == DEAD)	//TODO
+//					overlays_lying[MUTANTRACE_LAYER] = image("icon" = 'icons/effects/genetics.dmi', "icon_state" = "[dna.mutantrace]_d")
+//				else
+//					overlays_lying[MUTANTRACE_LAYER]	= image("icon" = 'icons/effects/genetics.dmi', "icon_state" = "[dna.mutantrace][fat]_[gender]_l")
+//					overlays_standing[MUTANTRACE_LAYER]	= image("icon" = 'icons/effects/genetics.dmi', "icon_state" = "[dna.mutantrace][fat]_[gender]_s")
 			else
 				overlays_lying[MUTANTRACE_LAYER]	= null
 				overlays_standing[MUTANTRACE_LAYER]	= null
-	update_body(0)
+	if(!dna || !(dna.mutantrace in list("golem","metroid")))
+		update_body(0)
 	update_hair(0)
 	if(update_icons)   update_icons()
 

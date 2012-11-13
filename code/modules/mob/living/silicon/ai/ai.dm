@@ -688,28 +688,41 @@
 	var/icon/preview_icon = null
 
 	var/g = "m"
-	var/new_gender = alert(usr, "Please select gender.", "Character Generation", "Male", "Female")
-	if (new_gender)
-		if(new_gender == "Male")
-			g = "m"
-		else
-			g = "f"
 
 	var/race = input(usr, "Please select race", "Character Generation","Human")  as anything in list("Human","Tajaran","Soghun","Skrell")
+	var/icon/icobase
 	switch(race)
 		if("Tajaran")
-			preview_icon = new /icon('icons/effects/species.dmi', "tajaran_[g]_s")
-			preview_icon.Blend(new /icon('icons/effects/species.dmi', "tajtail_s"), ICON_OVERLAY)
+			icobase = 'icons/mob/human_races/r_tajaran.dmi'
 		if( "Soghun")
-			preview_icon = new /icon('icons/effects/species.dmi', "lizard_[g]_s")
-			preview_icon.Blend(new /icon('icons/effects/species.dmi', "sogtail_s"), ICON_OVERLAY)
+			icobase = 'icons/mob/human_races/r_lizard.dmi'
 		if("Skrell")
-			preview_icon = new /icon('icons/effects/species.dmi', "skrell_[g]_s")
+			icobase = 'icons/mob/human_races/r_skrell.dmi'
 		else
-			preview_icon = new /icon('human.dmi', "torso_[g]_s")
-			preview_icon.Blend(new /icon('human.dmi', "chest_[g]_s"), ICON_OVERLAY)
-			preview_icon.Blend(new /icon('human.dmi', "groin_[g]_s"), ICON_OVERLAY)
-			preview_icon.Blend(new /icon('human.dmi', "head_[g]_s"), ICON_OVERLAY)
+			icobase = 'icons/mob/human_races/r_human.dmi'
+
+	var/icon/temp
+	preview_icon = new /icon(icobase, "torso_[g]")
+	temp = new /icon(icobase, "groin_[g]")
+	preview_icon.Blend(temp, ICON_OVERLAY)
+	temp = new /icon(icobase, "head_[g]")
+	preview_icon.Blend(temp, ICON_OVERLAY)
+	temp = new /icon(icobase, "l_arm")
+	preview_icon.Blend(temp, ICON_OVERLAY)
+	temp = new /icon(icobase, "r_arm")
+	preview_icon.Blend(temp, ICON_OVERLAY)
+	temp = new /icon(icobase, "l_leg")
+	preview_icon.Blend(temp, ICON_OVERLAY)
+	temp = new /icon(icobase, "r_leg")
+	preview_icon.Blend(temp, ICON_OVERLAY)
+	temp = new /icon(icobase, "l_hand")
+	preview_icon.Blend(temp, ICON_OVERLAY)
+	temp = new /icon(icobase, "r_hand")
+	preview_icon.Blend(temp, ICON_OVERLAY)
+	temp = new /icon(icobase, "l_foot")
+	preview_icon.Blend(temp, ICON_OVERLAY)
+	temp = new /icon(icobase, "r_foot")
+	preview_icon.Blend(temp, ICON_OVERLAY)
 
 	var/icon/eyes_s = new/icon("icon" = 'icons/mob/human_face.dmi', "icon_state" = "eyes_s")
 	eyes_s.Blend(rgb(255, 255, 255), ICON_ADD)

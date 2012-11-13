@@ -1160,7 +1160,8 @@ datum
 					if(ishuman(M))
 						var/mob/living/carbon/human/H = M
 						if(H.dna)
-							if(H.dna.mutantrace == "plant") //plantmen take a LOT of damage
+//							if(H.dna.mutantrace == "plant") //plantmen take a LOT of damage
+							if(PLANT in H.mutations) //plantmen take a LOT of damage
 								H.adjustToxLoss(10)
 
 		plasma

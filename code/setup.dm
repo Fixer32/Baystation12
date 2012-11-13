@@ -351,6 +351,7 @@ var/MAX_EXPLOSION_RANGE = 14
 
 	//2spooky
 #define SKELETON 29
+#define PLANT 30
 
 // Other Mutations:
 #define mNobreath		100 	// no need to breathe
