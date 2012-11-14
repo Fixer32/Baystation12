@@ -108,7 +108,7 @@ var/list/admin_datums = list()
 			if("permissions")
 				usr << "Currently unavailable since nothing runs off of permissions"
 			if("rank")
-				var/new_rank = input("Please, select a rank", "New rank for player", null, null) as null|anything in list("Game Master","Game Admin", "Trial Admin", "Admin Observer")
+				var/new_rank = input("Please, select a rank", "New rank for player", null, null) as null|anything in list("Moderator", "Temporary Admin", "Admin Candidate", "Trial Admin", "Badmin", "Game Admin", "Game Master")
 				if(!new_rank)
 					return
 				message_admins("[key_name_admin(usr)] edited the admin rank of [adm_ckey] to [new_rank]")
@@ -123,7 +123,7 @@ var/list/admin_datums = list()
 				var/new_ckey = input(usr,"New admin's ckey","Admin ckey", null) as text|null
 				if(!new_ckey)
 					return
-				var/new_rank = input("Please, select a rank", "New rank for player", null, null) as null|anything in list("Game Master","Game Admin", "Trial Admin", "Admin Observer")
+				var/new_rank = input("Please, select a rank", "New rank for player", null, null) as null|anything in list("Moderator", "Temporary Admin", "Admin Candidate", "Trial Admin", "Badmin", "Game Admin", "Game Master")
 				if(!new_rank)
 					return
 				message_admins("[key_name_admin(usr)] added [new_ckey] as a new admin to the rank [new_rank]")

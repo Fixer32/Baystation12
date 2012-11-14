@@ -117,15 +117,32 @@
 		new_admin = 0
 		admin_id = text2num(select_query.item[1])
 
+	var/lvl = 0
+	switch(src.rank)
+		if("Moderator")
+			lvl = 1
+		if("Temporary Admin")
+			lvl = 2
+		if("Admin Candidate")
+			lvl = 3
+		if("Trial Admin")
+			lvl = 4
+		if("Badmin")
+			lvl = 5
+		if("Game Admin")
+			lvl = 6
+		if("Game Master")
+			lvl = 7
+
 	if(new_admin)
-		var/DBQuery/insert_query = dbcon.NewQuery("INSERT INTO `erro_admin` (`id`, `ckey`, `rank`, `level`, `flags`) VALUES (null, '[adm_ckey]', '[new_rank]', -1, 0)")
+		var/DBQuery/insert_query = dbcon.NewQuery("INSERT INTO `erro_admin` (`id`, `ckey`, `rank`, `level`, `flags`) VALUES (null, '[adm_ckey]', '[new_rank]', [lvl], 0)")
 		insert_query.Execute()
 		var/DBQuery/log_query = dbcon.NewQuery("INSERT INTO `test`.`erro_admin_log` (`id` ,`datetime` ,`adminckey` ,`adminip` ,`log` ) VALUES (NULL , NOW( ) , '[usr.ckey]', '[usr.client.address]', 'Added new admin [adm_ckey] to rank [new_rank]');")
 		log_query.Execute()
 		usr << "\blue New admin added."
 	else
 		if(!isnull(admin_id) && isnum(admin_id))
-			var/DBQuery/insert_query = dbcon.NewQuery("UPDATE `erro_admin` SET rank = '[new_rank]' WHERE id = [admin_id]")
+			var/DBQuery/insert_query = dbcon.NewQuery("UPDATE `erro_admin` SET rank = '[new_rank]', level = '[lvl]' WHERE id = [admin_id]")
 			insert_query.Execute()
 			var/DBQuery/log_query = dbcon.NewQuery("INSERT INTO `test`.`erro_admin_log` (`id` ,`datetime` ,`adminckey` ,`adminip` ,`log` ) VALUES (NULL , NOW( ) , '[usr.ckey]', '[usr.client.address]', 'Edited the rank of [adm_ckey] to [new_rank]');")
 			log_query.Execute()
