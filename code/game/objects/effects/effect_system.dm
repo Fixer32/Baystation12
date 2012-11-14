@@ -863,8 +863,8 @@ steam.start() -- spawns the effect
 		F.create_reagents(reagents.maximum_volume)
 		neighbours++
 
-	var/transfer=reagents.total_volume/(1+neighbours)
 	if(!metal && reagents)
+		var/transfer=reagents.total_volume/(1+neighbours)
 		for(var/direction in cardinal)
 			var/turf/T = get_step(src,direction)
 			if(!T)
@@ -874,7 +874,10 @@ steam.start() -- spawns the effect
 
 			var/obj/effect/effect/foam/F = locate() in T
 			if(F)
+				if(!F.reagents)
+					F.create_reagents(transfer)
 				var/transfer_back=F.reagents.total_volume/(1+F.neighbours)
+
 				if(transfer)
 					if(F.reagents.maximum_volume<F.reagents.total_volume+transfer)
 						F.reagents.maximum_volume=F.reagents.total_volume+transfer
