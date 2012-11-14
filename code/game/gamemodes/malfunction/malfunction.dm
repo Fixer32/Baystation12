@@ -80,7 +80,10 @@
 	return
 
 
-/datum/game_mode/malfunction/proc/hack_intercept()
+/datum/game_mode/proc/hack_intercept()
+	return
+
+/datum/game_mode/malfunction/hack_intercept()
 	intercept_hacked = 1
 
 
