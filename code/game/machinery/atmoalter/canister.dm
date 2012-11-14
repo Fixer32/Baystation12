@@ -136,6 +136,10 @@
 	else
 		can_label = 0
 
+	if(return_temperature() > temperature_resistance || return_pressure() > pressure_resistance*5)
+		health -= 5
+		healthcheck()
+
 	src.updateDialog()
 	return
 
