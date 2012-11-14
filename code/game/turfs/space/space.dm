@@ -92,9 +92,10 @@
 			var/move_to_z = text2num(move_to_z_str)
 
 			if(!move_to_z)
-				return
+				move_to_z = 6
+//				return
 
-			if(z == 6)
+			if(move_to_z == 6)
 				if(istype(A,/mob))
 					var/mob/M = A
 					if(M.stat==DEAD)
