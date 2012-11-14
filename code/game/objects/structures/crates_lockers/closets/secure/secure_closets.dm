@@ -49,10 +49,7 @@
 		for(var/mob/O in viewers(user, 3))
 			if((O.client && !( O.blinded )))
 				O << "<span class='notice'>The locker has been [locked ? null : "un"]locked by [user].</span>"
-		if(src.locked)
-			src.icon_state = src.icon_locked
-		else
-			src.icon_state = src.icon_closed
+		update_icon()
 	else
 		user << "<span class='notice'>Access Denied</span>"
 
