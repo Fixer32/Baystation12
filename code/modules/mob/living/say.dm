@@ -120,7 +120,7 @@ var/list/department_radio_keys = list(
 		if (ishuman(src))
 			message_mode = "headset"
 	// Special message handling
-	else if (copytext(message, 1, 2) == ";")
+	else if (copytext(message, 1, 2) == ";" || copytext(message, 1, 2) == ".")
 		if (ishuman(src))
 			message_mode = "headset"
 		else if(ispAI(src) || isrobot(src))
