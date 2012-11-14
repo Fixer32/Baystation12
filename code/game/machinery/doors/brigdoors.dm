@@ -18,6 +18,7 @@
 	density = 0       		// can walk through it.
 	var/id = null     		// id of door it controls.
 	var/releasetime = 0		// when world.time reaches it - release the prisoneer
+	var/hold_time = 0
 	var/timing = 1    		// boolean, true/1 timer is on, false/0 means it's not timing
 	var/picture_state		// icon_state of alert picture, if not displaying text/numbers
 	var/list/obj/machinery/targets = list()
@@ -108,13 +109,18 @@
 
 
 	proc/timeleft()
-		. = (releasetime-world.time)/10
+		if(timing)
+			. = (releasetime-world.time)/10
+		else
+			. = hold_time
 		if(. < 0)
 			. = 0
 
 
 	proc/timeset(var/seconds)
-		releasetime=world.time+seconds*10
+		if(timing)
+			releasetime=world.time+seconds*10
+		hold_time=seconds
 		return
 
 
