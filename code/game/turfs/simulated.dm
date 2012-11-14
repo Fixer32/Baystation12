@@ -77,8 +77,8 @@
 							step(M, M.dir)
 							M << "\blue You slipped on [dirt]!"
 							playsound(src.loc, 'sound/misc/slip.ogg', 50, 1, -3)
-							M.Stun(8)
-							M.Weaken(5)
+							M.Stun(8*dirt.slipChance/50)
+							M.Weaken(5*dirt.slipChance/50)
 						else
 							M.inertia_dir = 0
 							return
@@ -88,8 +88,8 @@
 							step(M, M.dir)
 							M << "\blue You slipped on [dirt]!"
 							playsound(src.loc, 'sound/misc/slip.ogg', 50, 1, -3)
-							M.Stun(8)
-							M.Weaken(5)
+							M.Stun(8*dirt.slipChance/50)
+							M.Weaken(5*dirt.slipChance/50)
 						else
 							M.inertia_dir = 0
 							return
