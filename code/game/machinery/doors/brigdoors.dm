@@ -178,6 +178,10 @@
 		usr.machine = src
 		if(href_list["timing"])
 			src.timing = text2num(href_list["timing"])
+			if(timing)
+				releasetime = world.time+hold_time*10
+			else
+				hold_time = (releasetime-world.time)/10
 		else
 			if(href_list["tp"])  //adjust timer, close door if not already closed
 				var/tp = text2num(href_list["tp"])
