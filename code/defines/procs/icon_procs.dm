@@ -8,9 +8,11 @@
 
 icon
 	proc/MakeLying()
-		Turn(90)
-		Shift(SOUTH,6)
-		Shift(EAST,1)
+		var/icon/I = new(src,dir=SOUTH)
+		I.Turn(90)
+		I.Shift(SOUTH,6)
+		I.Shift(EAST,1)
+		return I
 
 	// Multiply all alpha values by this float
 	proc/ChangeOpacity(opacity = 1.0)

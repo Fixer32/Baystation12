@@ -160,9 +160,9 @@ Please contact me on #coderbus IRC. ~Carn x
 		icon = stand_icon
 
 	if(lying)
-		var/icon/I = new(icon,dir=SOUTH)
-		I.MakeLying()
-		icon = I
+		var/icon/I = icon
+		icon = I.MakeLying()
+		del(I)
 
 	if(lying)
 		for(var/image/I in overlays_lying)
@@ -362,7 +362,7 @@ proc/get_damage_icon_part(damage_state, body_part)
 		var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[f_style]
 		if(facial_hair_style)
 			var/icon/facial_s = new/icon("icon" = facial_hair_style.icon, "icon_state" = "[facial_hair_style.icon_state]_s")
-			var/icon/facial_l = new/icon("icon" = facial_hair_style.icon, "icon_state" = "[facial_hair_style.icon_state]_l")
+			var/icon/facial_l = facial_s.MakeLying()
 			facial_s.Blend(rgb(r_facial, g_facial, b_facial), ICON_ADD)
 			facial_l.Blend(rgb(r_facial, g_facial, b_facial), ICON_ADD)
 			face_standing.Blend(facial_s, ICON_OVERLAY)
@@ -372,7 +372,7 @@ proc/get_damage_icon_part(damage_state, body_part)
 		var/datum/sprite_accessory/hair_style = hair_styles_list[h_style]
 		if(hair_style)
 			var/icon/hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_s")
-			var/icon/hair_l = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_l")
+			var/icon/hair_l = hair_s.MakeLying()
 			hair_s.Blend(rgb(r_hair, g_hair, b_hair), ICON_ADD)
 			hair_l.Blend(rgb(r_hair, g_hair, b_hair), ICON_ADD)
 			face_standing.Blend(hair_s, ICON_OVERLAY)
