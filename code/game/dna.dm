@@ -395,6 +395,7 @@
 	M.dna.check_integrity()
 
 	M.disabilities = 0
+	M.sdisabilities = 0
 	var/old_mutations = M.mutations
 	M.mutations = list()
 

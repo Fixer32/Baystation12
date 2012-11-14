@@ -305,6 +305,7 @@ var/list/admin_datums = list()
 				reason = input(usr,"Reason?","reason",reason2) as text|null
 				if(!reason)	return
 
+		reason=sanitize(reason)
 		log_admin("[key_name(usr)] edited [banned_key]'s ban. Reason: [reason] Duration: [duration]")
 		ban_unban_log_save("[key_name(usr)] edited [banned_key]'s ban. Reason: [reason] Duration: [duration]")
 		message_admins("\blue [key_name_admin(usr)] edited [banned_key]'s ban. Reason: [reason] Duration: [duration]", 1)

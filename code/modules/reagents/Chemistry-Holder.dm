@@ -198,6 +198,7 @@ datum
 				update_total()
 
 			handle_reactions()
+				if(!my_atom) return
 				if(my_atom.flags & NOREACT) return //Yup, no reactions here. No siree.
 
 				var/reaction_occured = 0
@@ -286,7 +287,8 @@ datum
 						reagent_list -= A
 						del(A)
 						update_total()
-						my_atom.on_reagent_change()
+						if(my_atom)
+							my_atom.on_reagent_change()
 						return 0
 
 
@@ -350,7 +352,8 @@ datum
 					if (R.id == reagent)
 						R.volume += amount
 						update_total()
-						my_atom.on_reagent_change()
+						if(my_atom)
+							my_atom.on_reagent_change()
 
 						// mix dem viruses
 						if(R.id == "blood" && reagent == "blood")
@@ -383,7 +386,8 @@ datum
 					//	world << "Container data: [D] = [R.data[D]]"
 					//debug
 					update_total()
-					my_atom.on_reagent_change()
+					if(my_atom)
+						my_atom.on_reagent_change()
 					handle_reactions()
 					return 0
 
@@ -406,7 +410,8 @@ datum
 							update_total()
 							if(!safety)//So it does not handle reactions when it need not to
 								handle_reactions()
-							my_atom.on_reagent_change()
+							if(my_atom)
+								my_atom.on_reagent_change()
 							return 0
 
 				return 1

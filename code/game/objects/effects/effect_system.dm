@@ -413,23 +413,6 @@ steam.start() -- spawns the effect
 				reagents.reaction(A)
 		else
 			reagents.reaction(A)
-	var/changed = 0
-	for(var/obj/effect/effect/chem_smoke/S in range(1, src))
-		S.reagents.trans_to(src,S.reagents.total_volume/2)
-		reagents.trans_to(S,reagents.total_volume/2)
-		changed = 1
-		var/color = mix_color_from_reagents(S.reagents.reagent_list)
-		S.icon = 'icons/effects/96x96.dmi'
-		S.icon_state = "smoke"
-		if(color)
-			S.icon += color // give the smoke color, if it has any to begin with
-
-	if(changed)
-		var/color = mix_color_from_reagents(reagents.reagent_list)
-		src.icon = 'icons/effects/96x96.dmi'
-		src.icon_state = "smoke"
-		if(color)
-			src.icon += color // give the smoke color, if it has any to begin with
 
 	return
 
