@@ -1063,6 +1063,7 @@
 	energy_drain = 50
 	var/wait = 0
 	var/datum/effect/effect/system/ion_trail_follow/ion_trail
+	equip_ready = 0
 
 
 	can_attach(obj/mecha/M as obj)
@@ -1084,18 +1085,18 @@
 	proc/toggle()
 		if(!chassis)
 			return
-		!equip_ready? turn_off() : turn_on()
-		return equip_ready
+		equip_ready? turn_off() : turn_on()
+		return !equip_ready
 
 	proc/turn_on()
-		set_ready_state(0)
+		set_ready_state(1)
 		chassis.proc_res["dyndomove"] = src
 		ion_trail.start()
 		occupant_message("Activated")
 		log_message("Activated")
 
 	proc/turn_off()
-		set_ready_state(1)
+		set_ready_state(0)
 		chassis.proc_res["dyndomove"] = null
 		ion_trail.stop()
 		occupant_message("Deactivated")
@@ -1128,7 +1129,7 @@
 		return 0
 
 	action_checks()
-		if(equip_ready || wait)
+		if(!equip_ready || wait)
 			return 0
 		if(energy_drain && !chassis.has_charge(energy_drain))
 			return 0

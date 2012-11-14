@@ -5,7 +5,6 @@
 	var/projectile
 	var/fire_sound
 
-
 /obj/item/mecha_parts/mecha_equipment/weapon/can_attach(var/obj/mecha/combat/M as obj)
 	if(..())
 		if(istype(M))
