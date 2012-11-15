@@ -821,6 +821,12 @@
 /mob/living/carbon/human/proc/morph()
 	set name = "Morph"
 	set category = "Superpower"
+	
+	if(stat!=CONSCIOUS)
+		reset_view(0)
+		remoteview_target = null
+		return
+
 	if(!(mMorph in mutations))
 		src.verbs -= /mob/living/carbon/human/proc/morph
 		return
@@ -894,6 +900,12 @@
 /mob/living/carbon/human/proc/remotesay()
 	set name = "Project mind"
 	set category = "Superpower"
+
+	if(stat!=CONSCIOUS)
+		reset_view(0)
+		remoteview_target = null
+		return
+
 	if(!(mRemotetalk in src.mutations))
 		src.verbs -= /mob/living/carbon/human/proc/remotesay
 		return
@@ -916,6 +928,11 @@
 /mob/living/carbon/human/proc/remoteobserve()
 	set name = "Remote View"
 	set category = "Superpower"
+
+	if(stat!=CONSCIOUS)
+		reset_view(0)
+		remoteview_target = null
+		return
 
 	if(!(mRemote in src.mutations))
 		reset_view(0)
