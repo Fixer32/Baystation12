@@ -5,6 +5,7 @@
 	name = "external"
 	var/icon_name = null
 	var/body_part = null
+	var/icon_position = 0
 
 	var/dropped = 0
 	var/damage_state = "00"
@@ -570,6 +571,7 @@
 	max_damage = 75
 	min_broken_damage = 30
 	body_part = LEG_LEFT
+	icon_position = LEFT
 
 /datum/organ/external/r_arm
 	name = "r_arm"
@@ -586,6 +588,7 @@
 	max_damage = 75
 	min_broken_damage = 30
 	body_part = LEG_RIGHT
+	icon_position = RIGHT
 
 /datum/organ/external/l_foot
 	name = "l_foot"
@@ -594,6 +597,7 @@
 	max_damage = 40
 	min_broken_damage = 15
 	body_part = FOOT_LEFT
+	icon_position = LEFT
 
 /datum/organ/external/r_foot
 	name = "r_foot"
@@ -602,6 +606,7 @@
 	max_damage = 40
 	min_broken_damage = 15
 	body_part = FOOT_RIGHT
+	icon_position = RIGHT
 
 /datum/organ/external/r_hand
 	name = "r_hand"

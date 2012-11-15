@@ -9,10 +9,13 @@
 icon
 	proc/MakeLying()
 		var/icon/I = new(src,dir=SOUTH)
-		I.Turn(90)
-		I.Shift(SOUTH,6)
-		I.Shift(EAST,1)
+		I.BecomeLying()
 		return I
+
+	proc/BecomeLying()
+		Turn(90)
+		Shift(SOUTH,6)
+		Shift(EAST,1)
 
 	// Multiply all alpha values by this float
 	proc/ChangeOpacity(opacity = 1.0)
