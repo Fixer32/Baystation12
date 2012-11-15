@@ -12,7 +12,7 @@
 	var/color = "yellow"
 	var/can_label = 1
 	var/filled = 0.5
-	pressure_resistance = 7*ONE_ATMOSPHERE
+	pressure_resistance = ONE_ATMOSPHERE
 	var/temperature_resistance = 1000 + T0C
 	volume = 1000
 	use_power = 0
@@ -136,7 +136,7 @@
 	else
 		can_label = 0
 
-	if(return_temperature() > temperature_resistance || return_pressure() > pressure_resistance*5)
+	if(return_temperature() > temperature_resistance || return_pressure() > maximum_pressure*1.05)
 		health -= 5
 		healthcheck()
 
