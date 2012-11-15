@@ -144,21 +144,21 @@ var/list/department_radio_keys = list(
 
 	//work out if we're speaking skrell or not
 	var/is_speaking_skrell = 0
-	if(copytext(message, 1, 3) == ":k" || copytext(message, 1, 3) == ":K")
+	if(copytext(message, 1, 3) == ":k" || copytext(message, 1, 3) == ":K" || copytext(message, 1, 3) == ":ë" || copytext(message, 1, 3) == ":Ë")
 		message = copytext(message, 3)
 		if(skrell_talk_understand || universal_speak)
 			is_speaking_skrell = 1
 
 	//work out if we're speaking soghun or not
 	var/is_speaking_soghun = 0
-	if(copytext(message, 1, 3) == ":o" || copytext(message, 1, 3) == ":O")
+	if(copytext(message, 1, 3) == ":o" || copytext(message, 1, 3) == ":O" || copytext(message, 1, 3) == ":ù" || copytext(message, 1, 3) == ":Ù")
 		message = copytext(message, 3)
 		if(soghun_talk_understand || universal_speak)
 			is_speaking_soghun = 1
 
 	//work out if we're speaking soghun or not
 	var/is_speaking_taj = 0
-	if(copytext(message, 1, 3) == ":j" || copytext(message, 1, 3) == ":J")
+	if(copytext(message, 1, 3) == ":j" || copytext(message, 1, 3) == ":J" || copytext(message, 1, 3) == ":î" || copytext(message, 1, 3) == ":Î")
 		message = copytext(message, 3)
 		if(tajaran_talk_understand || universal_speak)
 			is_speaking_taj = 1

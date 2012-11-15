@@ -655,8 +655,7 @@ var/global/floorIsLava = 0
 	if(!usr.client.holder)	return
 	var/message = input("Global message to send:", "Admin Announce", null, null)  as message
 	if (message)
-		if(usr.client.holder.rank != "Game Admin" && usr.client.holder.rank != "Game Master")
-			message = adminscrub(message,500)
+		message = adminscrub(message,500)
 		world << "\blue <b>[usr.client.holder.fakekey ? "Administrator" : usr.key] Announces:</b>\n \t [message]"
 		log_admin("Announce: [key_name(usr)] : [message]")
 	feedback_add_details("admin_verb","A") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!

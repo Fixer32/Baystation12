@@ -15,6 +15,7 @@
 				var/matches
 				if( (M.lastKnownIP == client.address) )
 					matches += "IP ([client.address])"
+					return
 				if( (M.computer_id == client.computer_id) )
 					if(matches)	matches += " and "
 					matches += "ID ([client.computer_id])"

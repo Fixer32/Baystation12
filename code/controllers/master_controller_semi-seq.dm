@@ -13,7 +13,7 @@ var/global/obj/machinery/last_machine_processed		//Used for MC 'proc break' debu
 
 datum/controller/game_controller
 	var/processing = 0
-	var/breather_ticks = 0		//a somewhat crude attempt to iron over the 'bumps' caused by high-cpu use by letting the MC have a breather for this many ticks after every step
+	var/breather_ticks = 1		//a somewhat crude attempt to iron over the 'bumps' caused by high-cpu use by letting the MC have a breather for this many ticks after every step
 	var/minimum_ticks = 10		//The minimum length of time between MC ticks
 
 	var/global/air_master_ready		= 0
@@ -149,6 +149,22 @@ datum/controller/game_controller/proc/process()
 //			sleep(breather_ticks)
 
 			spawn(0)
+				var/i = 1
+				while(i<=machines.len)
+					var/obj/machinery/Machine = machines[i]
+					if(Machine)
+						if(Machine.process() != PROCESS_KILL)
+							if(Machine)
+								if(Machine.use_power)
+									Machine.auto_use_power()
+								i++
+								continue
+					machines.Cut(i,i+1)
+				machines_ready = 1
+				machines_cost = (world.timeofday - start_time) / 10
+			sleep(breather_ticks)
+
+			spawn(0)
 				sun.calc_position()
 				sun_ready = 1
 				sun_cost = (world.timeofday - start_time) / 10
@@ -180,22 +196,6 @@ datum/controller/game_controller/proc/process()
 					active_diseases.Cut(i,i+1)
 				diseases_ready = 1
 				diseases_cost = (world.timeofday - start_time) / 10
-			sleep(breather_ticks)
-
-			spawn(0)
-				var/i = 1
-				while(i<=machines.len)
-					var/obj/machinery/Machine = machines[i]
-					if(Machine)
-						if(Machine.process() != PROCESS_KILL)
-							if(Machine)
-								if(Machine.use_power)
-									Machine.auto_use_power()
-								i++
-								continue
-					machines.Cut(i,i+1)
-				machines_ready = 1
-				machines_cost = (world.timeofday - start_time) / 10
 			sleep(breather_ticks)
 
 			spawn(0)

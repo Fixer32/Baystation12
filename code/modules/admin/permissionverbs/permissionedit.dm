@@ -118,7 +118,7 @@
 		admin_id = text2num(select_query.item[1])
 
 	var/lvl = 0
-	switch(src.rank)
+	switch(new_rank)
 		if("Moderator")
 			lvl = 1
 		if("Temporary Admin")

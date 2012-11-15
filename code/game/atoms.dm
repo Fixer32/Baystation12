@@ -336,9 +336,16 @@ its easier to just keep the beam vertical.
 
 /atom/proc/add_fingerprint(mob/living/M as mob)
 	if(isnull(M)) return
-	if(isAI(M)) return
+	if(isAI(M))
+		if(fingerprintslast != M.key)
+			fingerprintshidden += "(AI) Real name: [M.real_name], Key: [M.key]"
+			fingerprintslast = M.key
+		return
 	if(isnull(M.key)) return
 	if (!( src.flags ) & FPRINT)
+		if(fingerprintslast != M.key)
+			fingerprintshidden += "(flag FPRINT) Real name: [M.real_name], Key: [M.key]"
+			fingerprintslast = M.key
 		return
 	if (ishuman(M))
 		//Add the list if it does not exist.

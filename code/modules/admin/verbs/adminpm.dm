@@ -59,9 +59,9 @@
 		return
 
 	//clean the message if it's not sent by a GA or GM
-	if( !holder || !(holder.rank in list("Game Admin", "Game Master")) )
-		msg = sanitize(copytext(msg,1,MAX_MESSAGE_LEN))
-		if(!msg)	return
+//	if( !holder || !(holder.rank in list("Game Admin", "Game Master")) )
+	msg = sanitize(copytext(msg,1,MAX_MESSAGE_LEN))
+	if(!msg)	return
 
 	if(C.holder)
 		if(holder)	//both are admins

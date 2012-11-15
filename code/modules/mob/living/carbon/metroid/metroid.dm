@@ -771,7 +771,7 @@ mob/living/carbon/metroid/var/temperature_resistance = T0C+75
 	name = "metroid core"
 	desc = "A very slimy and tender part of a metroidbeast. Legends claim these to have \"magical powers\"."
 	icon = 'icons/obj/surgery.dmi'
-	icon_state = "metroid core"
+	icon_state = "roro core"
 	flags = TABLEPASS
 	force = 1.0
 	w_class = 1.0
@@ -807,7 +807,7 @@ mob/living/carbon/metroid/var/temperature_resistance = T0C+75
 	name = "metroid egg"
 	desc = "A small, gelatinous egg."
 	icon = 'icons/mob/mob.dmi'
-	icon_state = "metroid egg-growing"
+	icon_state = "roro egg-growing"
 	bitesize = 12
 	origin_tech = "biotech=4"
 	var/grown = 0
