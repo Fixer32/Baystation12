@@ -18,7 +18,6 @@
 	unacidable = 1 //and no deleting hoomans inside
 	layer = MOB_LAYER //icon draw layer
 	infra_luminosity = 15 //byond implementation is bugged.
-	var/safety = 1
 	var/can_move = 1
 	var/mob/living/carbon/occupant = null
 	var/step_in = 10 //make a step in step_in/10 sec.
@@ -1304,7 +1303,6 @@
 						<b>Cabin pressure: </b>[cabin_pressure>WARNING_HIGH_PRESSURE ? "<font color='red'>[cabin_pressure]</font>": cabin_pressure]kPa<br>
 						<b>Cabin temperature: </b> [return_temperature()]&deg;K|[return_temperature() - T0C]&deg;C<br>
 						<b>Lights: </b>[lights?"on":"off"]<br>
-						<b>Safety: </b>[safety?"safe":"armed"]<br>
 						[src.dna?"<b>DNA-locked:</b><br> <span style='font-size:10px;letter-spacing:-1px;'>[src.dna]</span> \[<a href='?src=\ref[src];reset_dna=1'>Reset</a>\]<br>":null]
 					"}
 	return output
@@ -1314,7 +1312,6 @@
 						<div class='header'>Electronics</div>
 						<div class='links'>
 						<a href='?src=\ref[src];toggle_lights=1'>Toggle Lights</a><br>
-						<a href='?src=\ref[src];toggle_safety=1'>Toggle Safety</a><br>
 						<b>Radio settings:</b><br>
 						Microphone: <a href='?src=\ref[src];rmictoggle=1'><span id="rmicstate">[radio.broadcasting?"Engaged":"Disengaged"]</span></a><br>
 						Speaker: <a href='?src=\ref[src];rspktoggle=1'><span id="rspkstate">[radio.listening?"Engaged":"Disengaged"]</span></a><br>
@@ -1475,11 +1472,6 @@
 		return
 	if(href_list["toggle_lights"])
 		src.toggle_lights()
-		return
-	if(href_list["toggle_safety"])
-		safety = !safety
-		src.occupant_message("Toggled safety [safety?"safe":"armed"].")
-		log_message("Toggled safety [safety?"safe":"armed"].")
 		return
 	if(href_list["toggle_airtank"])
 		src.toggle_internal_tank()

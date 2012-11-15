@@ -88,8 +88,10 @@
 		return 0
 	if(energy_drain && !chassis.has_charge(energy_drain))
 		return 0
-	if(istype(src,/obj/item/mecha_parts/mecha_equipment/weapon) && chassis.safety)
-		return 0
+	if(istype(src,/obj/item/mecha_parts/mecha_equipment/weapon))
+		var/obj/mecha/combat/C = chassis
+		if(C.safety)
+			return 0
 	return 1
 
 /obj/item/mecha_parts/mecha_equipment/proc/action(atom/target)

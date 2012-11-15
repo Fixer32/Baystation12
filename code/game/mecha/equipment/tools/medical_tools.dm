@@ -8,7 +8,7 @@
 	range = MELEE
 	construction_cost = list("metal"=5000,"glass"=10000)
 	reliability = 1000
-	equip_cooldown = 20
+	equip_cooldown = 50
 	var/mob/living/carbon/occupant = null
 	var/datum/global_iterator/pr_mech_sleeper
 	var/inject_amount = 10

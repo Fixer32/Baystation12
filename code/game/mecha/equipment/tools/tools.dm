@@ -1,7 +1,7 @@
 /obj/item/mecha_parts/mecha_equipment/tool/hydraulic_clamp
 	name = "Hydraulic Clamp"
 	icon_state = "mecha_clamp"
-	equip_cooldown = 15
+	equip_cooldown = 35
 	energy_drain = 10
 	var/dam_force = 20
 	var/obj/mecha/working/ripley/cargo_holder
@@ -619,6 +619,7 @@
 	equip_cooldown = 20
 	energy_drain = 100
 	range = 0
+	equip_ready = 0
 	construction_cost = list("metal"=10000,"gold"=1000,"silver"=2000,"glass"=5000)
 	var/health_boost = 2
 	var/datum/global_iterator/pr_repair_droid
@@ -660,10 +661,11 @@
 			if(pr_repair_droid.toggle())
 				droid_overlay = new(src.icon, icon_state = "repair_droid_a")
 				log_message("Activated.")
+				set_ready_state(1)
 			else
 				droid_overlay = new(src.icon, icon_state = "repair_droid")
 				log_message("Deactivated.")
-				set_ready_state(1)
+				set_ready_state(0)
 			chassis.overlays += droid_overlay
 			send_byjax(chassis.occupant,"exosuit.browser","\ref[src]",src.get_equip_info())
 		return
@@ -674,7 +676,7 @@
 	process(var/obj/item/mecha_parts/mecha_equipment/repair_droid/RD as obj)
 		if(!RD.chassis)
 			stop()
-			RD.set_ready_state(1)
+			RD.set_ready_state(0)
 			return
 		var/health_boost = RD.health_boost
 		var/repaired = 0
@@ -691,10 +693,10 @@
 			repaired = 1
 		if(repaired)
 			if(RD.chassis.use_power(RD.energy_drain))
-				RD.set_ready_state(0)
+				RD.set_ready_state(1)
 			else
 				stop()
-				RD.set_ready_state(1)
+				RD.set_ready_state(0)
 				return
 		else
 			RD.set_ready_state(1)
@@ -709,6 +711,7 @@
 	equip_cooldown = 10
 	energy_drain = 0
 	range = 0
+	equip_ready = 0
 	construction_cost = list("metal"=10000,"gold"=2000,"silver"=3000,"glass"=2000)
 	var/datum/global_iterator/pr_energy_relay
 	var/coeff = 100
@@ -740,7 +743,7 @@
 		return 0
 
 	proc/dyngetcharge()
-		if(equip_ready) //disabled
+		if(!equip_ready) //disabled
 			return chassis.dyngetcharge()
 		var/area/A = get_area(chassis)
 		var/pow_chan = get_power_channel(A)
@@ -764,10 +767,10 @@
 		..()
 		if(href_list["toggle_relay"])
 			if(pr_energy_relay.toggle())
-				set_ready_state(0)
+				set_ready_state(1)
 				log_message("Activated.")
 			else
-				set_ready_state(1)
+				set_ready_state(0)
 				log_message("Deactivated.")
 		return
 
@@ -776,7 +779,7 @@
 		return "<span style=\"color:[equip_ready?"#0f0":"#f00"];\">*</span>&nbsp;[src.name] - <a href='?src=\ref[src];toggle_relay=1'>[pr_energy_relay.active()?"Dea":"A"]ctivate</a>"
 
 	proc/dynusepower(amount)
-		if(!equip_ready) //enabled
+		if(equip_ready) //enabled
 			var/area/A = get_area(chassis)
 			var/pow_chan = get_power_channel(A)
 			if(pow_chan)
@@ -789,12 +792,12 @@
 	process(var/obj/item/mecha_parts/mecha_equipment/tesla_energy_relay/ER)
 		if(!ER.chassis || ER.chassis.hasInternalDamage(MECHA_INT_SHORT_CIRCUIT))
 			stop()
-			ER.set_ready_state(1)
+			ER.set_ready_state(0)
 			return
 		var/cur_charge = ER.chassis.get_charge()
 		if(isnull(cur_charge))
 			stop()
-			ER.set_ready_state(1)
+			ER.set_ready_state(0)
 			ER.occupant_message("No powercell detected.")
 			return
 		if(cur_charge<ER.chassis.cell.maxcharge)
@@ -853,10 +856,10 @@
 		..()
 		if(href_list["toggle"])
 			if(pr_mech_generator.toggle())
-				set_ready_state(0)
+				set_ready_state(1)
 				log_message("Activated.")
 			else
-				set_ready_state(1)
+				set_ready_state(0)
 				log_message("Deactivated.")
 		return
 

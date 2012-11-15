@@ -898,6 +898,10 @@ var/using_new_click_proc = 0 //TODO ERRORAGE (This is temporary, while the DblCl
 	if(istype(usr.loc,/obj/mecha))
 		if(usr.client && (src in usr.client.screen))
 			return
+		if(params)
+			var/parameters = params2list(params)
+			if(parameters["shift"] || parameters["alt"] || parameters["ctrl"] || parameters["middle"])
+				return
 		var/obj/mecha/Mech = usr.loc
 		Mech.click_action(src,usr)
 		return
