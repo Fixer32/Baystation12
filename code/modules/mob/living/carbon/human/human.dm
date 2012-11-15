@@ -919,18 +919,20 @@
 
 	if(!(mRemote in src.mutations))
 		reset_view(0)
+		remoteview_target = null
 		src.verbs -= /mob/living/carbon/human/proc/remoteobserve
 		return
 
 	if(client.eye != client.mob)
 		reset_view(0)
+		remoteview_target = null
 		return
 
 	var/list/mob/creatures = list()
 
 	for(var/mob/living/carbon/h in world)
 		var/turf/temp_turf = get_turf(h)
-		if(temp_turf.z != 1 && temp_turf.z != 5) //Not on mining or the station.
+		if((temp_turf.z != 1 && temp_turf.z != 5) || h.stat==DEAD) //Not on mining or the station. Or dead
 			continue
 		creatures += h
 
@@ -938,8 +940,10 @@
 
 	if (target)
 		reset_view(target)
+		remoteview_target = target
 	else
 		reset_view(0)
+		remoteview_target = null
 
 /mob/living/carbon/human/proc/get_visible_gender()
 	if(wear_suit && wear_suit.flags_inv & HIDEJUMPSUIT && ((head && head.flags_inv & HIDEMASK) || wear_mask))
