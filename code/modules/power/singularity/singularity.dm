@@ -32,13 +32,13 @@ var/global/list/uneatable = list(
 	var/last_failed_movement = 0//Will not move in the same dir if it couldnt before, will help with the getting stuck on fields thing
 	var/teleport_del = 0
 	var/last_warning
-	var/even = 0
 
 /obj/machinery/singularity/New(loc, var/starting_energy = 50, var/temp = 0)
 	//CARN: admin-alert for chuckle-fuckery.
 	admin_investigate_setup()
 
 	src.energy = starting_energy
+	dissipate_track = world.time
 	if(temp)
 		spawn(temp)
 			del(src)
@@ -115,12 +115,9 @@ var/global/list/uneatable = list(
 /obj/machinery/singularity/proc/dissipate()
 	if(!dissipate)
 		return
-	even = !even
-	if(dissipate_track >= dissipate_delay)
+	if(dissipate_track+dissipate_delay <= world.time)
 		src.energy -= dissipate_strength
-		dissipate_track = 0
-	else if(even)
-		dissipate_track++
+		dissipate_track = world.time
 
 
 /obj/machinery/singularity/proc/expand(var/force_size = 0)
@@ -137,7 +134,7 @@ var/global/list/uneatable = list(
 			grav_pull = 4
 			consume_range = 0
 			dissipate_delay = 10
-			dissipate_track = 0
+			dissipate_track = world.time
 			dissipate_strength = 1
 		if(3)//1 to 3 does not check for the turfs if you put the gens right next to a 1x1 then its going to eat them
 			current_size = 3
@@ -148,7 +145,7 @@ var/global/list/uneatable = list(
 			grav_pull = 6
 			consume_range = 1
 			dissipate_delay = 5
-			dissipate_track = 0
+			dissipate_track = world.time
 			dissipate_strength = 5
 		if(5)
 			if((check_turfs_in(1,2))&&(check_turfs_in(2,2))&&(check_turfs_in(4,2))&&(check_turfs_in(8,2)))
@@ -160,7 +157,7 @@ var/global/list/uneatable = list(
 				grav_pull = 8
 				consume_range = 2
 				dissipate_delay = 4
-				dissipate_track = 0
+				dissipate_track = world.time
 				dissipate_strength = 20
 		if(7)
 			if((check_turfs_in(1,3))&&(check_turfs_in(2,3))&&(check_turfs_in(4,3))&&(check_turfs_in(8,3)))
@@ -172,7 +169,7 @@ var/global/list/uneatable = list(
 				grav_pull = 10
 				consume_range = 3
 				dissipate_delay = 10
-				dissipate_track = 0
+				dissipate_track = world.time
 				dissipate_strength = 10
 		if(9)//this one also lacks a check for gens because it eats everything
 			current_size = 9
