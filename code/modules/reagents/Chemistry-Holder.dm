@@ -225,7 +225,7 @@ datum
 							matching_container = 1
 
 						else
-							if(my_atom.type == C.required_container)
+							if(my_atom && my_atom.type == C.required_container)
 								matching_container = 1
 
 						if(!C.required_other)
