@@ -346,7 +346,7 @@ mob/living/parasite/meme/verb/Hallucinate()
 	set name	 = "Hallucinate(300)"
 	set desc     = "Makes your host hallucinate, has a short delay."
 
-	var/mob/target = select_indoctrinated("Hallucination", "Who should hallucinate?")
+	var/mob/living/target = select_indoctrinated("Hallucination", "Who should hallucinate?")
 
 	if(!target) return
 	if(!use_points(300)) return
@@ -527,7 +527,7 @@ mob/living/parasite/meme/verb/Possession()
 		host_mind.transfer_to(dummy)
 		meme_mind.transfer_to(host)
 		host_mind.current.clearHUD()
-		host.update_clothing()
+		host.update_icons()
 
 		dummy << "\blue You feel very drowsy.. Your eyelids become heavy..."
 
@@ -542,7 +542,7 @@ mob/living/parasite/meme/verb/Possession()
 		meme_mind.transfer_to(src)
 		host_mind.transfer_to(host)
 		meme_mind.current.clearHUD()
-		host.update_clothing()
+		host.update_icons()
 		src << "\red You lose control.."
 
 		del dummy
@@ -590,7 +590,7 @@ mob/living/parasite/check_contents_for(t)
 
 	return host.check_contents_for(t)
 
-mob/living/parasite/check_contents_for_reagent(t)
-	if(!host) return 0
-
-	return host.check_contents_for_reagent(t)
+//mob/living/parasite/check_contents_for_reagent(t)
+//	if(!host) return 0
+//
+//	return host.check_contents_for_reagent(t)

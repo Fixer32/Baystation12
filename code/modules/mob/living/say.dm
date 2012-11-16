@@ -83,6 +83,10 @@ var/list/department_radio_keys = list(
 	if (!message)
 		return
 
+	if(!speech_allowed && usr == src)
+		usr << "\red You can't speak."
+		return
+
 	if (stat == 2)
 		return say_dead(message)
 

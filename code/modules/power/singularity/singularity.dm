@@ -133,7 +133,7 @@ var/global/list/uneatable = list(
 			pixel_y = 0
 			grav_pull = 4
 			consume_range = 0
-			dissipate_delay = 10
+			dissipate_delay = 20
 			dissipate_track = world.time
 			dissipate_strength = 1
 		if(3)//1 to 3 does not check for the turfs if you put the gens right next to a 1x1 then its going to eat them
@@ -144,7 +144,7 @@ var/global/list/uneatable = list(
 			pixel_y = -32
 			grav_pull = 6
 			consume_range = 1
-			dissipate_delay = 5
+			dissipate_delay = 10
 			dissipate_track = world.time
 			dissipate_strength = 5
 		if(5)
@@ -156,7 +156,7 @@ var/global/list/uneatable = list(
 				pixel_y = -64
 				grav_pull = 8
 				consume_range = 2
-				dissipate_delay = 4
+				dissipate_delay = 8
 				dissipate_track = world.time
 				dissipate_strength = 20
 		if(7)
@@ -168,7 +168,7 @@ var/global/list/uneatable = list(
 				pixel_y = -96
 				grav_pull = 10
 				consume_range = 3
-				dissipate_delay = 10
+				dissipate_delay = 20
 				dissipate_track = world.time
 				dissipate_strength = 10
 		if(9)//this one also lacks a check for gens because it eats everything

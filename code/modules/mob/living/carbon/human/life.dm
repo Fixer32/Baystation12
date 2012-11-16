@@ -1021,7 +1021,7 @@
 				adjustToxLoss(-1)
 				adjustOxyLoss(-1)
 
-/*		//The fucking FAT mutation is the dumbest shit ever. It makes the code so difficult to work with
+		//The fucking FAT mutation is the dumbest shit ever. It makes the code so difficult to work with
 		if(FAT in mutations)
 			if(overeatduration < 100)
 				src << "\blue You feel fit again!"
@@ -1038,7 +1038,7 @@
 				update_mutations(0)
 				update_inv_w_uniform(0)
 				update_inv_wear_suit()
-*/
+
 
 		// nutrition decrease
 		if (nutrition > 0 && stat != 2)

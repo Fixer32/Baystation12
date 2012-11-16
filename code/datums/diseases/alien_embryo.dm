@@ -83,6 +83,7 @@
 			affected_mob.updatehealth()
 			if(prob(50))
 				if(gibbed != 0) return 0
+				var/mob/living/carbon/alien/larva/new_xeno = new(affected_mob.loc)
 				var/list/candidates = list() //List of candidate KEYS to assume control of the new larva ~Carn
 				var/i = 0
 				while(candidates.len <= 0 && i < 5)
@@ -93,14 +94,12 @@
 									candidates += G.key
 					i++
 
-				var/mob/living/carbon/alien/larva/new_xeno = new(affected_mob.loc)
-				if(candidates.len)
+				if(candidates.len && !(affected_mob.key in candidates))
 					new_xeno.key = pick(candidates)
 				else
 					new_xeno.key = affected_mob.key
 
 				new_xeno << sound('sound/voice/hiss5.ogg',0,0,0,100)	//To get the player's attention
-				affected_mob.gib()
 				src.cure(0)
 				gibbed = 1
 				return

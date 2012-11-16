@@ -12,6 +12,7 @@ var/global/list/special_roles = list( //keep synced with the defines BE_* in set
 	"pAI candidate" = 1, // -- TLE                       // 7
 	"cultist" = IS_MODE_COMPILED("cult"),                // 8
 	"infested monkey" = IS_MODE_COMPILED("monkey"),      // 9
+	"meme" = IS_MODE_COMPILED("meme"),      // 9
 )
 
 var/global/list/underwear_m = list("White", "Grey", "Green", "Blue", "Black", "Mankini", "Love-Hearts", "Black2", "Grey2", "Stripey", "Kinky", "None") //Curse whoever made male/female underwear diffrent colours
@@ -28,6 +29,7 @@ var/const/BE_ALIEN     =(1<<6)
 var/const/BE_PAI       =(1<<7)
 var/const/BE_CULTIST   =(1<<8)
 var/const/BE_MONKEY    =(1<<9)
+var/const/BE_MEME      =(1<<10)
 
 
 var/const/MAX_SAVE_SLOTS = 10

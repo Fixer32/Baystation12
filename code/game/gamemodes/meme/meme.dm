@@ -114,11 +114,9 @@
 	meme.objectives += attune_objective
 
 	// generate some random objectives, use standard traitor objectives
-	var/job = first_host.assigned_role
+//	var/job = first_host.assigned_role
 
-	for(var/datum/objective/o in SelectObjectives(job, meme))
-		o.owner = meme
-		meme.objectives += o
+	forge_traitor_objectives(meme)
 
 	greet_meme(meme)
 
