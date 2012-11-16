@@ -1084,7 +1084,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 
 /datum/surgery_step/ribcage
 	can_use(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		return target_zone == "chest"
+		return target_zone == "chest" && hasorgans(target)
 
 /datum/surgery_step/ribcage/saw_ribcage
 	required_tool = /obj/item/weapon/circular_saw
