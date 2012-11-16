@@ -1297,9 +1297,11 @@
 			sight &= ~(SEE_TURFS|SEE_MOBS|SEE_OBJS)
 			if(dna)
 				switch(dna.mutantrace)
-					if("lizard","metroid")
+					if("metroid")
 						see_in_dark = 3
 						see_invisible = SEE_INVISIBLE_LEVEL_ONE
+					if("lizard")
+						see_in_dark = 3
 					if("tajaran")
 						see_in_dark = 5
 					else
@@ -1474,7 +1476,7 @@
 			if(machine)
 				if(!machine.check_eye(src))		reset_view(null)
 			else
-				if(!(mRemote in mutations && remoteview_target && remoteview_target.stat!=DEAD) && !client.adminobs)
+				if(!(remoteview_target && (mRemote in mutations) && remoteview_target.stat==CONSCIOUS) && !client.adminobs)
 					remoteview_target = null
 					reset_view(null)
 		return 1

@@ -930,19 +930,19 @@
 	set category = "Superpower"
 
 	if(stat!=CONSCIOUS)
-		reset_view(0)
 		remoteview_target = null
+		reset_view(0)
 		return
 
 	if(!(mRemote in src.mutations))
-		reset_view(0)
 		remoteview_target = null
+		reset_view(0)
 		src.verbs -= /mob/living/carbon/human/proc/remoteobserve
 		return
 
 	if(client.eye != client.mob)
-		reset_view(0)
 		remoteview_target = null
+		reset_view(0)
 		return
 
 	var/list/mob/creatures = list()
@@ -956,11 +956,11 @@
 	var/mob/target = input ("Who do you want to project your mind to ?") as mob in creatures
 
 	if (target)
-		reset_view(target)
 		remoteview_target = target
+		reset_view(target)
 	else
-		reset_view(0)
 		remoteview_target = null
+		reset_view(0)
 
 /mob/living/carbon/human/proc/get_visible_gender()
 	if(wear_suit && wear_suit.flags_inv & HIDEJUMPSUIT && ((head && head.flags_inv & HIDEMASK) || wear_mask))
