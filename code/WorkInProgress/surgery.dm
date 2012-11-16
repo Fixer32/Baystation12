@@ -1032,6 +1032,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		affected.status |= ORGAN_ATTACHABLE
 		affected.status &= ~ORGAN_BLEEDING
 		affected.amputated = 1
+		affected.setAmputatedTree()
 		affected.open = 0
 
 	fail_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)

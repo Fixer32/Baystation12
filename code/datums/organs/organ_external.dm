@@ -320,18 +320,16 @@
 		return 0
 
 	proc/setAmputatedTree()
-		for(var/datum/organ/external/O in owner.organs)
-			if(O.parent == src)
-				O.amputated=amputated
+		for(var/datum/organ/external/O in children)
+			O.amputated=amputated
+			O.setAmputatedTree()
 
 	proc/droplimb(var/override = 0,var/no_explode = 0)
-		if(dropped) return
+		if(destspawn) return
 		if(override)
 			status |= ORGAN_DESTROYED
 		if(status & ORGAN_DESTROYED)
-			dropped = 1
-
-			if(UPPER_TORSO)
+			if(body_part == UPPER_TORSO)
 				return
 
 			if(status & ORGAN_SPLINTED)
@@ -407,8 +405,25 @@
 					if(ismonkey(owner))
 						H.icon_state = "l_foot_l"
 					owner.u_equip(owner.shoes)
-			if(ismonkey(owner))
-				H.icon = 'monkey.dmi'
+			if(H)
+				if(ismonkey(owner))
+					H.icon = 'monkey.dmi'
+				else if(ishuman(owner) && owner.dna)
+					var/icon/I
+					switch(owner.dna.mutantrace)
+						if("tajaran")
+							I = new('icons/mob/human_races/r_tajaran.dmi')
+						if("lizard")
+							I = new('icons/mob/human_races/r_lizard.dmi')
+						if("skrell")
+							I = new('icons/mob/human_races/r_skrell.dmi')
+						else
+							I = new('icons/mob/human_races/r_human.dmi')
+					if(I)
+						H.icon = I.MakeLying()
+				else
+					H.icon_state = initial(H.icon_state)+"_l"
+
 			var/lol = pick(cardinal)
 			step(H,lol)
 			destspawn = 1
@@ -642,7 +657,7 @@
 ****************************************************/
 
 obj/item/weapon/organ
-	icon = 'icons/mob/human.dmi'
+	icon = 'icons/mob/human_races/r_human.dmi'
 
 obj/item/weapon/organ/New(loc, mob/living/carbon/human/H)
 	..(loc)
@@ -733,25 +748,25 @@ obj/item/weapon/organ/head/attackby(obj/item/weapon/W as obj, mob/user as mob)
 
 obj/item/weapon/organ/l_arm
 	name = "left arm"
-	icon_state = "l_arm_l"
+	icon_state = "l_arm"
 obj/item/weapon/organ/l_foot
 	name = "left foot"
-	icon_state = "l_foot_l"
+	icon_state = "l_foot"
 obj/item/weapon/organ/l_hand
 	name = "left hand"
-	icon_state = "l_hand_l"
+	icon_state = "l_hand"
 obj/item/weapon/organ/l_leg
 	name = "left leg"
-	icon_state = "l_leg_l"
+	icon_state = "l_leg"
 obj/item/weapon/organ/r_arm
 	name = "right arm"
-	icon_state = "r_arm_l"
+	icon_state = "r_arm"
 obj/item/weapon/organ/r_foot
 	name = "right foot"
-	icon_state = "r_foot_l"
+	icon_state = "r_foot"
 obj/item/weapon/organ/r_hand
 	name = "right hand"
-	icon_state = "r_hand_l"
+	icon_state = "r_hand"
 obj/item/weapon/organ/r_leg
 	name = "right leg"
-	icon_state = "r_leg_l"
+	icon_state = "r_leg"
