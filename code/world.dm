@@ -53,7 +53,8 @@
 
 	src.update_status()
 
-	master_controller = new /datum/controller/game_controller()
+	new /datum/controller/game_controller()
+	if(!lighting_controller) new /datum/controller/lighting()
 	spawn(-1)
 		master_controller.setup()
 		lighting_controller.Initialize()

@@ -169,8 +169,11 @@ atom/movable/Del()
 //If we are setting luminosity to 0 the light will be cleaned up and delted once all its queues are complete
 //if we have a light already it is merely updated
 atom/proc/SetLuminosity(new_luminosity, max_luminosity = LIGHTING_MAX_LUMINOSITY)
-	if(new_luminosity < 0)
-		new_luminosity = 0
+	if(new_luminosity <= 0)
+		if(opacity)
+			new_luminosity = 1
+		else
+			new_luminosity = 0
 //		world.log << "## WARNING: [type] - luminosity cannot be negative"
 	else if(max_luminosity < new_luminosity)
 		new_luminosity = max_luminosity
