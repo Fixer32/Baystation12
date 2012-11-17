@@ -98,8 +98,13 @@
 			else
 				src.blinded = 0
 
-		else	//Not stunned.
-			src.stat = 0
+		else if(src.cell)	//Not stunned.
+			if(src.cell.charge>0)
+				src.stat = 0
+			else
+				src.stat=1
+		else
+			src.stat=1
 
 	else //Dead.
 		src.blinded = 1
@@ -295,6 +300,6 @@
 			weaponlock_time = 120
 
 /mob/living/silicon/robot/update_canmove()
-	if(paralysis || stunned || weakened || buckled || lockcharge) canmove = 0
+	if(paralysis || stunned || weakened || buckled || lockcharge || stat!=CONSCIOUS) canmove = 0
 	else canmove = 1
 	return canmove

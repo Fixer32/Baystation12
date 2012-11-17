@@ -879,7 +879,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		if (affected.parent)
 			if (affected.parent.status & ORGAN_DESTROYED)
 				return 0
-		return target_zone == "r_leg"||target_zone=="l_leg"||target_zone=="l_arm"||target_zone=="r_arm"||target_zone == "r_foot"||target_zone=="l_foot"||target_zone=="l_hand"||target_zone=="r_hand"
+		return target_zone in list("r_leg","l_leg","l_arm","r_arm","r_foot","l_foot","l_hand","r_hand")
 
 	proc/is_missing(mob/living/carbon/human/target, target_zone)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -888,14 +888,21 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		if(affected.status&(ORGAN_DESTROYED|ORGAN_CUT_AWAY)>0) return 1
 		else return 0
 
-/datum/surgery_step/limb/cut_away
+/datum/surgery_step/generic/cut_away
 	required_tool = /obj/item/weapon/circular_saw
 
 	min_duration = 90
 	max_duration = 110
 
+	proc/is_missing(mob/living/carbon/human/target, target_zone)
+		var/datum/organ/external/affected = target.get_organ(target_zone)
+		if (affected == null)
+			return 0
+		if(affected.status&(ORGAN_DESTROYED|ORGAN_CUT_AWAY)>0) return 1
+		else return 0
+
 	can_use(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		return ..() && !is_missing(target, target_zone)
+		return ..() && !is_missing(target, target_zone) && (target_zone in list("r_leg","l_leg","l_arm","r_arm","r_foot","l_foot","l_hand","r_hand"))
 
 	begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -936,6 +943,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
 		user.visible_message("\blue [user] cuts away flesh where [target]'s [affected.display_name] used to be with \the [tool].",	\
 		"\blue You cut away flesh where [target]'s [affected.display_name] used to be with \the [tool].")
+		affected.status |= ORGAN_DESTROYED
 		affected.status |= ORGAN_CUT_AWAY
 
 	fail_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)

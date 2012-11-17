@@ -409,9 +409,9 @@
 	if (subject.suiciding == 1)
 		scantemp = "Error: Subject's brain is not responding to scanning stimuli."
 		return
-//	if ((!subject.ckey) || (!subject.client))
-//		scantemp = "Error: Mental interface failure."
-//		return
+	if (!subject.ckey)
+		scantemp = "Error: Mental interface failure."
+		return
 	if (NOCLONE in subject.mutations)
 		scantemp = "Error: Mental interface failure."
 		return
