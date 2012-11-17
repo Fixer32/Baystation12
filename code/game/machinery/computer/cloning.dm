@@ -381,7 +381,7 @@
 				var/mob/selected = find_dead_player("[C.fields["ckey"]]")
 				selected << 'chime.ogg'	//probably not the best sound but I think it's reasonable
 				var/answer = alert(selected,"Do you want to return to life?","Cloning","Yes","No")
-				if(answer != "No" && pod1.growclone(C.fields["ckey"], C.fields["name"], C.fields["UI"], C.fields["SE"], C.fields["mind"], C.fields["mrace"], C.fields["interface"]))
+				if(istype(C) && answer != "No" && pod1.growclone(C.fields["ckey"], C.fields["name"], C.fields["UI"], C.fields["SE"], C.fields["mind"], C.fields["mrace"], C.fields["interface"]))
 					temp = "Initiating cloning cycle..."
 					records.Remove(C)
 					del(C)
@@ -410,8 +410,11 @@
 		scantemp = "Error: Subject's brain is not responding to scanning stimuli."
 		return
 	if (!subject.ckey)
-		scantemp = "Error: Mental interface failure."
-		return
+		if(subject.mind)
+			subject.ckey=lowertext(subject.mind.key)
+		if(!subject.ckey)
+			scantemp = "Error: Mental interface failure."
+			return
 	if (NOCLONE in subject.mutations)
 		scantemp = "Error: Mental interface failure."
 		return

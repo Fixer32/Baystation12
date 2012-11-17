@@ -187,6 +187,8 @@
 	else if (W == wear_mask)
 		wear_mask = null
 		update_inv_wear_mask(0)
+	if(client)
+		client.screen -= W
 	return
 
 

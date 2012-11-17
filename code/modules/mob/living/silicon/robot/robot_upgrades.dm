@@ -6,13 +6,13 @@
 	desc = "Protected by FRM."
 	icon = 'module.dmi'
 	icon_state = "cyborg_upgrade"
-	var/construction_time = 120
-	var/construction_cost = list("metal"=10000)
-	var/locked = 0
-	var/require_module = 0
-	var/installed = 0
+	construction_time = 120
+	construction_cost = list("metal"=10000)
+	locked = 0
+	require_module = 0
+	installed = 0
 
-/obj/item/borg/upgrade/proc/action()
+/obj/item/borg/upgrade/action()
 	return
 
 
@@ -55,7 +55,7 @@
 
 	return 1
 
-/obj/item/borg/upgrade/restart/
+/*/obj/item/borg/upgrade/restart/
 	name = "Borg emergancy restart module"
 	desc = "Used to force a restart of a disabled-but-repaired borg, bringing it back online."
 	construction_cost = list("metal"=60000 , "glass"=5000)
@@ -74,7 +74,7 @@
 
 	R.stat = 0
 	return 1
-
+*/
 
 /obj/item/borg/upgrade/vtec/
 	name = "Borg VTEC Module"

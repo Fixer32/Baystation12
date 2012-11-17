@@ -80,6 +80,7 @@ datum/mind
 
 		if(active)
 			new_character.key = key		//now transfer the key to link the client to our new body
+			new_character.ckey = lowertext(key)
 
 	proc/store_memory(new_text)
 		memory += "[new_text]<BR>"
