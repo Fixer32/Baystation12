@@ -190,7 +190,6 @@ mob/living/parasite/meme/proc/select_indoctrinated(var/title, var/message)
 
 	return target
 
-
 // A meme can make people hear things with the thought ability
 mob/living/parasite/meme/verb/Thought()
 	set category = "Meme"
@@ -356,7 +355,7 @@ mob/living/parasite/meme/verb/Hallucinate()
 	usr << "<b>You make [target] hallucinate.</b>"
 
 // Jump to a closeby target through a whisper
-mob/living/parasite/meme/verb/SubtleJump(mob/living/carbon/human/target as mob in (view(1, host)+src))
+mob/living/parasite/meme/verb/SubtleJump(mob/living/carbon/human/target as mob in oview(1, host))
 	set category = "Meme"
 	set name	 = "Subtle Jump(350)"
 	set desc     = "Move to a closeby human through a whisper."
@@ -395,7 +394,7 @@ mob/living/parasite/meme/verb/SubtleJump(mob/living/carbon/human/target as mob i
 	message_admins("[src.key] has jumped to [target]")
 
 // Jump to a distant target through a shout
-mob/living/parasite/meme/verb/ObviousJump(mob/living/carbon/human/target as mob in view(host))
+mob/living/parasite/meme/verb/ObviousJump(mob/living/carbon/human/target as mob in oview(host))
 	set category = "Meme"
 	set name	 = "Obvious Jump(750)"
 	set desc     = "Move to any mob in view through a shout."
@@ -434,7 +433,7 @@ mob/living/parasite/meme/verb/ObviousJump(mob/living/carbon/human/target as mob 
 	message_admins("[src.key] has jumped to [target]")
 
 // Jump to an attuned mob for free
-mob/living/parasite/meme/verb/AttunedJump(mob/living/carbon/human/target as mob in view(host))
+mob/living/parasite/meme/verb/AttunedJump(mob/living/carbon/human/target as mob in oview(host))
 	set category = "Meme"
 	set name	 = "Attuned Jump(0)"
 	set desc     = "Move to a mob in sight that you have already attuned."

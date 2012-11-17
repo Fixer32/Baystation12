@@ -115,7 +115,7 @@ var/global/list/uneatable = list(
 /obj/machinery/singularity/proc/dissipate()
 	if(!dissipate)
 		return
-	if(dissipate_track+dissipate_delay <= world.time)
+	if(dissipate_track+dissipate_delay*10 <= world.time)
 		src.energy -= dissipate_strength
 		dissipate_track = world.time
 

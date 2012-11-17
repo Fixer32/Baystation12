@@ -182,7 +182,14 @@ obj/machinery/airlock_sensor/New()
 	if(radio_controller)
 		set_frequency(frequency)
 
-
+obj/machinery/airlock_sensor/remote
+	name = "External Airlock Sensor"
+	return_air()
+		var/turf/T = get_step(loc,dir)
+		if(T)
+			return T.return_air()
+		else
+			return ..()
 
 
 obj/machinery/access_button
