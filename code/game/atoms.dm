@@ -21,6 +21,11 @@
 	//Detective Work, used for the duplicate data points kept in the scanners
 	var/list/original_atom
 
+/atom/New()
+	if(usr)
+		add_fingerprint(usr)
+	..()
+
 /atom/proc/throw_impact(atom/hit_atom)
 	if(istype(hit_atom,/mob/living))
 		var/mob/living/M = hit_atom

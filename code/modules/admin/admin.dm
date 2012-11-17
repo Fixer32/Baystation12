@@ -148,7 +148,7 @@ var/global/floorIsLava = 0
 			body += "\[ Construct: <A href='?src=\ref[src];simplemake=constructarmoured;mob=\ref[M]'>Armoured</A> , "
 			body += "<A href='?src=\ref[src];simplemake=constructbuilder;mob=\ref[M]'>Builder</A> , "
 			body += "<A href='?src=\ref[src];simplemake=constructwraith;mob=\ref[M]'>Wraith</A> \] "
-			body += "<A href='?src=\ref[src];simplemake=shade;mob=\ref[M]'>Shade</A>"
+			body += "<A href='?src=\ref[src];simplemake=shade;mob=\ref[M]'>Shade</A> "
 			body += "<A href='?src=\ref[src];simplemake=meme;mob=\ref[M]'>Meme</A>"
 			body += "<br>"
 
