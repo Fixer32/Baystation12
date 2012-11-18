@@ -64,7 +64,7 @@
 #define DOOR_CRUSH_DAMAGE 10
 
 // Factor of how fast mob nutrition decreases
-#define	HUNGER_FACTOR 0.025
+#define	HUNGER_FACTOR 0.05
 #define	REAGENTS_METABOLISM 0.2
 
 #define MINIMUM_AIR_RATIO_TO_SUSPEND 0.05
