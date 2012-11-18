@@ -20,6 +20,7 @@ Buildable meters
 #define PIPE_PASSIVE_GATE       15
 #define PIPE_VOLUME_PUMP        16
 #define PIPE_HEAT_EXCHANGE      17
+#define PIPE_MANIFOLD4W			18
 
 /obj/item/pipe
 	name = "pipe"
@@ -75,6 +76,8 @@ Buildable meters
 			src.pipe_type = PIPE_VOLUME_PUMP
 		else if(istype(make_from, /obj/machinery/atmospherics/unary/heat_exchanger))
 			src.pipe_type = PIPE_HEAT_EXCHANGE
+		else if(istype(make_from, /obj/machinery/atmospherics/pipe/manifold4w))
+			src.pipe_type = PIPE_MANIFOLD4W
 	else
 		src.pipe_type = pipe_type
 		src.dir = dir
@@ -105,6 +108,7 @@ Buildable meters
 		"passive gate", \
 		"volume pump", \
 		"heat exchanger", \
+		"manifold4w", \
 	)
 	name = nlist[pipe_type+1] + " fitting"
 	var/list/islist = list( \
@@ -126,6 +130,7 @@ Buildable meters
 		"passivegate", \
 		"volumepump", \
 		"heunary", \
+		"manifold4w", \
 	)
 	icon_state = islist[pipe_type + 1]
 
@@ -192,6 +197,8 @@ Buildable meters
 			return flip|cw|acw
 		if(PIPE_GAS_FILTER, PIPE_GAS_MIXER)
 			return dir|flip|cw
+		if(PIPE_MANIFOLD4W)
+			return dir|flip|cw|acw
 	return 0
 
 /obj/item/pipe/proc/get_pdir() //endpoints for regular pipes
@@ -325,6 +332,29 @@ Buildable meters
 			if (M.node3)
 				M.node3.initialize()
 				M.node3.build_network()
+
+		if(PIPE_MANIFOLD4W)		//manifold
+			var/obj/machinery/atmospherics/pipe/manifold4w/M = new( src.loc )
+			//M.New()
+			var/turf/T = M.loc
+			M.level = T.intact ? 2 : 1
+			M.initialize()
+			if (!M)
+				usr << "There's nothing to connect this manifold to! (with how the pipe code works, at least one end needs to be connected to something, otherwise the game deletes the segment)"
+				return 1
+			M.build_network()
+			if (M.node1)
+				M.node1.initialize()
+				M.node1.build_network()
+			if (M.node2)
+				M.node2.initialize()
+				M.node2.build_network()
+			if (M.node3)
+				M.node3.initialize()
+				M.node3.build_network()
+			if (M.node4)
+				M.node4.initialize()
+				M.node4.build_network()
 
 		if(PIPE_JUNCTION)
 			var/obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction/P = new ( src.loc )
@@ -570,3 +600,4 @@ Buildable meters
 #undef PIPE_PASSIVE_GATE
 #undef PIPE_VOLUME_PUMP
 #undef PIPE_OUTLET_INJECT
+#undef PIPE_MANIFOLD4W
