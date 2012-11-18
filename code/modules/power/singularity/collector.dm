@@ -121,7 +121,7 @@ var/global/list/rad_collectors = list()
 /obj/machinery/power/rad_collector/proc/receive_pulse(var/pulse_strength)
 	if(P && active)
 		var/power_produced = 0
-		power_produced = P.air_contents.toxins*pulse_strength*20
+		power_produced = P.air_contents.toxins*pulse_strength*10
 		add_avail(power_produced)
 		last_power = power_produced
 		return
