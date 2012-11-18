@@ -135,10 +135,29 @@
 	return
 
 /obj/machinery/chem_dispenser/attackby(var/obj/item/weapon/reagent_containers/glass/B as obj, var/mob/user as mob)
-	if(isrobot(user))
+	if(!istype(B, /obj/item/weapon/reagent_containers/glass))
 		return
 
-	if(!istype(B, /obj/item/weapon/reagent_containers/glass))
+	if(isrobot(user))
+		var/list/text_reagents = list()
+		var/list/map_text_to_re = list()
+		for(var/re in dispensable_reagents)
+			var/datum/reagent/temp = chemical_reagents_list[re]
+			if(temp)
+				text_reagents += temp.name
+				map_text_to_re[temp.name] = re
+		var/selected = input("Reagent","Reagent") as null|anything in text_reagents
+		if(!selected) return
+		var/reagent = map_text_to_re[selected]
+
+		var/datum/reagents/R = B.reagents
+		var/space = R.maximum_volume - R.total_volume
+
+		var/amount = input("Amount per transfer from this:","[src]") as null|anything in B.possible_transfer_amounts
+		if(!amount) return
+
+		R.add_reagent(reagent, min(amount, energy * 10, space))
+		energy = max(energy - min(amount, energy * 10, space) / 10, 0)
 		return
 
 	if(src.beaker)
@@ -225,8 +244,21 @@
 	if(istype(B, /obj/item/weapon/reagent_containers/glass))
 
 		if(src.beaker)
-			user << "A beaker is already loaded into the machine."
+			if(isrobot(user))
+				var/obj/item/weapon/reagent_containers/glass/Bint = src.beaker
+				if(!Bint || !Bint.reagents)
+					user << "There is no beaker installed"
+					return
+				var/datum/reagents/Rint = Bint.reagents
+				var/datum/reagents/Rext = B.reagents
+				var/space = Rint.maximum_volume - Rint.total_volume
+				var/amount = min(Rext.total_volume,space)
+				var/trans = Rext.trans_to(beaker,amount);
+				user << "You transferred [trans] units to [src]"
+			else
+				user << "A beaker is already loaded into the machine."
 			return
+		if(isrobot(user)) return
 		src.beaker = B
 		user.drop_item()
 		B.loc = src
@@ -776,15 +808,31 @@
 		istype(O,/obj/item/weapon/reagent_containers/food/drinks/drinkingglass) || \
 		istype(O,/obj/item/weapon/reagent_containers/food/drinks/shaker))
 
-		if (beaker)
+		if(src.beaker)
+			if(isrobot(user))
+				var/obj/item/weapon/reagent_containers/glass/Bint = src.beaker
+				if(!Bint || !Bint.reagents)
+					user << "There is no beaker installed"
+					return
+				var/datum/reagents/Rint = Bint.reagents
+
+				var/obj/item/weapon/reagent_containers/Bext = src.beaker
+				var/datum/reagents/Rext = Bext.reagents
+				var/space = Rint.maximum_volume - Rint.total_volume
+				var/amount = min(Rext.total_volume,space)
+				var/trans = Rext.trans_to(beaker,amount);
+				user << "You transferred [trans] units to [src]"
+			else
+				user << "A beaker is already loaded into the machine."
 			return 1
-		else
-			src.beaker =  O
-			user.drop_item()
-			O.loc = src
-			update_icon()
-			src.updateUsrDialog()
-			return 0
+		if(isrobot(user)) return 1
+
+		src.beaker =  O
+		user.drop_item()
+		O.loc = src
+		update_icon()
+		src.updateUsrDialog()
+		return 0
 
 	if(holdingitems && holdingitems.len >= limit)
 		usr << "The machine cannot hold anymore items."
