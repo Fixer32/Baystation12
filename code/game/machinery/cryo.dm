@@ -154,7 +154,7 @@
 			if(air_contents.oxygen > 2)
 				if(occupant.getOxyLoss()) occupant.adjustOxyLoss(-1)
 			else
-				occupant.adjustOxyLoss(-1)
+				occupant.adjustOxyLoss(1)
 			//severe damage should heal waaay slower without proper chemicals
 			if(occupant.bodytemperature < 225)
 				if (occupant.getToxLoss())
