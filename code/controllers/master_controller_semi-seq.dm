@@ -165,6 +165,16 @@ datum/controller/game_controller/proc/process()
 						machines.Cut(i,i+1)
 					machines_ready = 1
 					machines_cost = (world.timeofday - start_time) / 10
+
+					while(i<=powernets.len)
+						var/datum/powernet/Powernet = powernets[i]
+						if(Powernet)
+							Powernet.reset()
+							i++
+							continue
+						powernets.Cut(i,i+1)
+					powernets_ready = 1
+					powernets_cost = ((world.timeofday - start_time) / 10) - machines_cost
 				sleep(breather_ticks)
 
 				spawn(0)
@@ -225,19 +235,6 @@ datum/controller/game_controller/proc/process()
 						pipe_networks.Cut(i,i+1)
 					networks_ready = 1
 					networks_cost = (world.timeofday - start_time) / 10
-				sleep(breather_ticks)
-
-				spawn(0)
-					var/i = 1
-					while(i<=powernets.len)
-						var/datum/powernet/Powernet = powernets[i]
-						if(Powernet)
-							Powernet.reset()
-							i++
-							continue
-						powernets.Cut(i,i+1)
-					powernets_ready = 1
-					powernets_cost = (world.timeofday - start_time) / 10
 				sleep(breather_ticks)
 
 				spawn(0)
