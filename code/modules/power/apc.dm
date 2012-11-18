@@ -1123,7 +1123,7 @@
 				else
 					chargecount = 0
 
-				if(chargecount == 10)
+				if(chargecount >= 10)
 
 					chargecount = 0
 					charging = 1
