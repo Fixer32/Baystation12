@@ -15,7 +15,7 @@
 /datum/sun/proc/calc_position()
 
 	counter++
-	if(counter<50)		// count 50 pticks (50 seconds, roughly - about a 5deg change)
+	if(counter<100)		// count 50 pticks (50 seconds, roughly - about a 5deg change)
 		return
 	counter = 0
 

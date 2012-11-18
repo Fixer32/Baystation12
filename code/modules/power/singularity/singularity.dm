@@ -115,7 +115,7 @@ var/global/list/uneatable = list(
 /obj/machinery/singularity/proc/dissipate()
 	if(!dissipate)
 		return
-	if(dissipate_track+dissipate_delay*10 <= world.time)
+	if(dissipate_track+dissipate_delay*20 <= world.time)
 		src.energy -= dissipate_strength
 		dissipate_track = world.time
 
@@ -133,7 +133,7 @@ var/global/list/uneatable = list(
 			pixel_y = 0
 			grav_pull = 4
 			consume_range = 0
-			dissipate_delay = 20
+			dissipate_delay = 10
 			dissipate_track = world.time
 			dissipate_strength = 1
 		if(3)//1 to 3 does not check for the turfs if you put the gens right next to a 1x1 then its going to eat them
@@ -144,7 +144,7 @@ var/global/list/uneatable = list(
 			pixel_y = -32
 			grav_pull = 6
 			consume_range = 1
-			dissipate_delay = 10
+			dissipate_delay = 5
 			dissipate_track = world.time
 			dissipate_strength = 5
 		if(5)
@@ -156,7 +156,7 @@ var/global/list/uneatable = list(
 				pixel_y = -64
 				grav_pull = 8
 				consume_range = 2
-				dissipate_delay = 12
+				dissipate_delay = 6
 				dissipate_track = world.time
 				dissipate_strength = 10
 		if(7)
@@ -446,7 +446,7 @@ var/global/list/uneatable = list(
 
 	for(var/obj/machinery/power/rad_collector/R in rad_collectors)
 		if(get_dist(R, src) <= 15) // Better than using orange() every process
-			R.receive_pulse(energy/2)
+			R.receive_pulse(energy)
 	return
 
 

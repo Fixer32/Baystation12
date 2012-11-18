@@ -166,6 +166,8 @@ datum/controller/game_controller/proc/process()
 					machines_ready = 1
 					machines_cost = (world.timeofday - start_time) / 10
 
+					sleep(breather_ticks)
+					i = 1
 					while(i<=powernets.len)
 						var/datum/powernet/Powernet = powernets[i]
 						if(Powernet)
