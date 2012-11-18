@@ -83,6 +83,18 @@
 		else if(istype(target, /obj/item/clothing/suit/space/space_ninja))
 			return
 
+		else if(istype(target,/obj/item/weapon/reagent_containers/blood))
+			if(!reagents.total_volume)
+				user << "\red [src] is empty."
+				return
+
+			if(target.reagents.total_volume >= target.reagents.maximum_volume)
+				user << "\red [target] is full."
+				return
+
+			var/trans = src.reagents.trans_to(target, amount_per_transfer_from_this)
+			user << "\blue You transfer [trans] units of the solution to [target]."
+
 		else if(reagents.total_volume)
 			user << "\blue You splash the solution onto [target]."
 			src.reagents.reaction(target, TOUCH)

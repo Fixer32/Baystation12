@@ -148,7 +148,7 @@
 				if(istype(target, /obj/item/weapon/implantcase/chem))
 					return
 
-				if(!target.is_open_container() && !ismob(target) && !istype(target, /obj/item/weapon/reagent_containers/food) && !istype(target, /obj/item/metroid_core) && !istype(target, /obj/item/clothing/mask/cigarette) && !istype(target, /obj/item/weapon/cigpacket))
+				if(!target.is_open_container() && !ismob(target) && !istype(target, /obj/item/weapon/reagent_containers/food) && !istype(target, /obj/item/weapon/reagent_containers/blood) && !istype(target, /obj/item/metroid_core) && !istype(target, /obj/item/clothing/mask/cigarette) && !istype(target, /obj/item/weapon/cigpacket))
 					user << "\red You cannot directly fill this object."
 					return
 				if(target.reagents.total_volume >= target.reagents.maximum_volume)
