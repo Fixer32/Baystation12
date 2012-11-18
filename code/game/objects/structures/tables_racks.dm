@@ -241,7 +241,7 @@
 
 
 /obj/structure/table/attack_paw(mob/user as mob)
-	if ((HULK in usr.mutations))
+	if (((HULK in usr.mutations) || (SUPRSTR in usr.augmentations)) && user:a_intent=="harm")
 		usr << "\blue You destroy the table."
 		visible_message("\red [user] smashes the table apart!")
 		if(istype(src, /obj/structure/table/reinforced))
@@ -293,7 +293,7 @@
 
 
 /obj/structure/table/attack_hand(mob/user as mob)
-	if ((HULK in usr.mutations) || (SUPRSTR in usr.augmentations))
+	if (((HULK in usr.mutations) || (SUPRSTR in usr.augmentations)) && usr:a_intent=="harm")
 		usr << "\blue You destroy the table."
 		visible_message("\red [user] smahes the table apart!")
 		if(istype(src, /obj/structure/table/reinforced))

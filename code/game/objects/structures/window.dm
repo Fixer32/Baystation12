@@ -109,7 +109,7 @@
 //These all need to be rewritten to use visiblemessage()
 
 /obj/structure/window/attack_hand()
-	if ((HULK in usr.mutations) || (SUPRSTR in usr.augmentations))
+	if (((HULK in usr.mutations) || (SUPRSTR in usr.augmentations)) && usr:a_intent=="harm")
 		usr << "\blue You smash through the window."
 		for(var/mob/O in oviewers())
 			if ((O.client && !( O.blinded )))

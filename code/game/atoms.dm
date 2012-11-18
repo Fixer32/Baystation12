@@ -1322,7 +1322,7 @@ var/using_new_click_proc = 0 //TODO ERRORAGE (This is temporary, while the DblCl
 
 
 	/* // NOT UNTIL I FIGURE OUT A GOOD WAY TO DO THIS SHIT
-	if((HULK in usr.mutations) || (SUPRSTR in usr.augmentations))
+	if(((HULK in usr.mutations) || (SUPRSTR in usr.augmentations)) && usr:a_intent=="harm")
 		if(!istype(src, /obj/item) && !istype(src, /mob) && !istype(src, /turf))
 			if(!usr.get_active_hand())
 

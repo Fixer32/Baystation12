@@ -49,7 +49,7 @@
 	user.visible_message("[user.name] kicks the [src.name].", \
 						"You kick the [src.name].", \
 						"You hear a noise")
-	if((HULK in usr.mutations) || (SUPRSTR in usr.augmentations))
+	if(((HULK in usr.mutations) || (SUPRSTR in usr.augmentations)) && usr:a_intent=="harm")
 		src.health -= 5
 	else if(!shock(user, 70))
 		src.health -= 3

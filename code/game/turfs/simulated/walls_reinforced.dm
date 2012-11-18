@@ -10,7 +10,7 @@
 	var/d_state = 0
 
 /turf/simulated/wall/r_wall/attack_hand(mob/user as mob)
-	if ((HULK in user.mutations) || (SUPRSTR in user.augmentations))
+	if (((HULK in user.mutations) || (SUPRSTR in user.augmentations)) && user:a_intent=="harm")
 		if (prob(10))
 			usr << text("\blue You smash through the wall.")
 			dismantle_wall(1)
