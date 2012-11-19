@@ -72,6 +72,11 @@
 		meme.assigned_role = "MODE" //So they aren't chosen for other jobs.
 		meme.special_role = "Meme"
 
+	while(possible_memes.len > 0)
+		var/datum/mind/first_host = pick(possible_memes)
+		possible_memes.Remove(first_host)
+		first_hosts += first_host
+
 	return 1
 
 /datum/game_mode/meme/pre_setup()
@@ -93,6 +98,12 @@
 		if(!first_host)
 			first_host = pick(first_hosts)
 			first_hosts.Remove(first_host)
+		if(!ishuman(first_host))
+			first_host = pick(first_hosts)
+			if(!ishuman(first_host))
+				meme.transfer_to(original)
+				del meme
+				continue
 		M.enter_host(first_host.current)
 		forge_meme_objectives(meme, first_host)
 
