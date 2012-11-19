@@ -7,6 +7,7 @@
 	var/dna = null
 	var/block = null
 	var/owner = null
+	var/race = null
 	var/ue = null
 	var/s_time = 10.0
 	throw_speed = 1
@@ -29,15 +30,13 @@
 		if (dnatype == "ui")
 			if (!block) //isolated block?
 				if (ue) //unique enzymes? yes
-					M.dna.uni_identity = dna
-					updateappearance(M, M.dna.uni_identity)
-					M.real_name = ue
-					M.name = ue
-					uses--
-				else //unique enzymes? no
-					M.dna.uni_identity = dna
-					updateappearance(M, M.dna.uni_identity)
-					uses--
+					M.dna.unique_enzymes = ue
+					M.real_name = owner
+					M.name = owner
+				M.dna.uni_identity = dna
+				M.dna.mutantrace = race
+				updateappearance(M, M.dna.uni_identity)
+				uses--
 			else
 				M.dna.uni_identity = setblock(M.dna.uni_identity,block,dna,3)
 				updateappearance(M, M.dna.uni_identity)
@@ -45,12 +44,10 @@
 		if (dnatype == "se")
 			if (!block) //isolated block?
 				M.dna.struc_enzymes = dna
-				domutcheck(M, null)
-				uses--
 			else
 				M.dna.struc_enzymes = setblock(M.dna.struc_enzymes,block,dna,3)
-				domutcheck(M, null,1)
-				uses--
+			domutcheck(M, null,1)
+			uses--
 			if(prob(5))
 				trigger_side_effect(M)
 

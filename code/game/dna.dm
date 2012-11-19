@@ -122,7 +122,7 @@
 
 	struc_enzymes = mutstring
 
-	unique_enzymes = md5(character.real_name)
+	unique_enzymes = md5(character.real_name+rand(1,1024))
 	reg_dna[unique_enzymes] = character.real_name
 
 /////////////////////////// DNA DATUM
@@ -1366,7 +1366,7 @@
 					src.buffer1owner = src.connected.occupant.real_name
 				src.buffer1label = "Unique Identifier & Unique Enzymes"
 				src.buffer1type = "ui"
-				src.buffer1iue = 1
+				src.buffer1iue = src.connected.occupant.dna.unique_enzymes
 				dopage(src,"buffermenu")
 		if (href_list["b2adduiue"])
 			if(src.connected.occupant && src.connected.occupant.dna)
@@ -1377,7 +1377,7 @@
 					src.buffer2owner = src.connected.occupant.real_name
 				src.buffer2label = "Unique Identifier & Unique Enzymes"
 				src.buffer2type = "ui"
-				src.buffer2iue = 1
+				src.buffer2iue = src.connected.occupant.dna.unique_enzymes
 				dopage(src,"buffermenu")
 		if (href_list["b3adduiue"])
 			if(src.connected.occupant && src.connected.occupant.dna)
@@ -1388,7 +1388,7 @@
 					src.buffer3owner = src.connected.occupant.real_name
 				src.buffer3label = "Unique Identifier & Unique Enzymes"
 				src.buffer3type = "ui"
-				src.buffer3iue = 1
+				src.buffer3iue = src.connected.occupant.dna.unique_enzymes
 				dopage(src,"buffermenu")
 		if (href_list["b2addui"])
 			if(src.connected.occupant && src.connected.occupant.dna)
@@ -1479,6 +1479,7 @@
 				if (src.buffer1iue)
 					src.connected.occupant.real_name = src.buffer1owner
 					src.connected.occupant.name = src.buffer1owner
+					src.connected.occupant.dna.unique_enzymes = src.buffer1iue
 				src.connected.occupant.dna.uni_identity = src.buffer1
 				updateappearance(src.connected.occupant,src.connected.occupant.dna.uni_identity)
 			else if (src.buffer1type == "se")
@@ -1494,6 +1495,7 @@
 				if (src.buffer2iue)
 					src.connected.occupant.real_name = src.buffer2owner
 					src.connected.occupant.name = src.buffer2owner
+					src.connected.occupant.dna.unique_enzymes = src.buffer2iue
 				src.connected.occupant.dna.uni_identity = src.buffer2
 				updateappearance(src.connected.occupant,src.connected.occupant.dna.uni_identity)
 			else if (src.buffer2type == "se")
@@ -1509,6 +1511,7 @@
 				if (src.buffer3iue)
 					src.connected.occupant.real_name = src.buffer3owner
 					src.connected.occupant.name = src.buffer3owner
+					src.connected.occupant.dna.unique_enzymes = src.buffer3iue
 				src.connected.occupant.dna.uni_identity = src.buffer3
 				updateappearance(src.connected.occupant,src.connected.occupant.dna.uni_identity)
 			else if (src.buffer3type == "se")
@@ -1530,7 +1533,9 @@
 				if(success)
 					I.loc = src.loc
 					I.name += " ([src.buffer1label])"
-					if (src.buffer1iue) I.ue = src.buffer1owner //lazy haw haw
+					if (src.buffer1iue)
+						I.ue = src.buffer1iue //lazy haw haw
+						I.owner = src.buffer1owner
 					src.temphtml = "Injector created."
 					src.delete = 0
 					src.injectorready = 0
@@ -1555,7 +1560,9 @@
 				if(success)
 					I.loc = src.loc
 					I.name += " ([src.buffer2label])"
-					if (src.buffer2iue) I.ue = src.buffer2owner //lazy haw haw
+					if (src.buffer2iue)
+						I.ue = src.buffer2iue //lazy haw haw
+						I.owner = src.buffer2owner
 					src.temphtml = "Injector created."
 					src.delete = 0
 					src.injectorready = 0
@@ -1580,7 +1587,9 @@
 				if(success)
 					I.loc = src.loc
 					I.name += " ([src.buffer3label])"
-					if (src.buffer3iue) I.ue = src.buffer3owner //lazy haw haw
+					if (src.buffer3iue)
+						I.ue = src.buffer3iue //lazy haw haw
+						I.owner = src.buffer3owner
 					src.temphtml = "Injector created."
 					src.delete = 0
 					src.injectorready = 0
