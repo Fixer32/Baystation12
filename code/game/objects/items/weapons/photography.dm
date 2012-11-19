@@ -62,6 +62,9 @@
 	show(usr)
 
 /obj/item/weapon/photo/proc/show(var/mob/usr)
+        if(!img)
+        	usr << "Empty photopaper"
+        	return
 	usr << browse_rsc(src.img, "tmp_photo.png")
 	usr << browse("<html><head><title>Photo</title></head>" \
 		+ "<body style='overflow:hidden'>" \
