@@ -33,6 +33,14 @@
 					P.orient2hud(user)
 				else
 					user << "\blue The pill bottle is full."
+		else if(istype(W, /obj/item/weapon/pen))
+			var/t = stripped_input(user, "Enter new pill name", initial(src.name), src.name)
+			if(!t)
+				return
+			if(!in_range(src, usr) && src.loc != usr)
+				return
+			src.name = t
+			src.add_fingerprint(user)
 		return
 	attack_self(mob/user as mob)
 		return

@@ -258,24 +258,21 @@
 /obj/machinery/telecomms/proc/Options_Menu()
 	return ""
 
-/*
 // Add an option to the processor to switch processing mode. (COMPRESS -> UNCOMPRESS or UNCOMPRESS -> COMPRESS)
 /obj/machinery/telecomms/processor/Options_Menu()
 	var/dat = "<br>Processing Mode: <A href='?src=\ref[src];process=1'>[process_mode ? "UNCOMPRESS" : "COMPRESS"]</a>"
 	return dat
-*/
+
 // The topic for Additional Options. Use this for checking href links for your specific option.
 // Example of how to use below.
 /obj/machinery/telecomms/proc/Options_Topic(href, href_list)
 	return
 
-/*
 /obj/machinery/telecomms/processor/Options_Topic(href, href_list)
 
 	if(href_list["process"])
 		temp = "<font color = #666633>-% Processing mode changed. %-</font color>"
 		src.process_mode = !src.process_mode
-*/
 
 /obj/machinery/telecomms/Topic(href, href_list)
 

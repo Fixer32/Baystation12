@@ -88,8 +88,6 @@
 	for(var/datum/mind/meme in memes)
 		var/mob/living/parasite/meme/M = new
 		var/mob/original = meme.current
-		meme.transfer_to(M)
-		M.clearHUD()
 
 		// get the host for this meme
 		var/datum/mind/first_host = assigned_hosts[meme.key]
@@ -101,9 +99,11 @@
 		if(!ishuman(first_host))
 			first_host = pick(first_hosts)
 			if(!ishuman(first_host))
-				meme.transfer_to(original)
 				del meme
 				continue
+
+		meme.transfer_to(M)
+		M.clearHUD()
 		M.enter_host(first_host.current)
 		forge_meme_objectives(meme, first_host)
 

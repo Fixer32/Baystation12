@@ -34,6 +34,8 @@ mob/living/parasite
 
 
 mob/living/parasite/proc/enter_host(mob/living/carbon/host)
+	if(!ishuman(host))
+		return 0
 	// by default, parasites can't share a body with other life forms
 	if(host.parasites.len > 0)
 		return 0
