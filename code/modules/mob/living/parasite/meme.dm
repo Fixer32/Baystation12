@@ -21,6 +21,9 @@ mob/living/carbon/var/list/parasites = list()
 
 mob/living/parasite
 	var/mob/living/carbon/host // the host that this parasite occupies
+	var/datum/mind/host_mind
+	var/datum/mind/meme_mind
+	var/posessed = 0
 
 	Login()
 		..()
@@ -97,6 +100,13 @@ mob/living/parasite/meme/Life()
 
 mob/living/parasite/meme/death()
 	// make sure the mob is on the actual map before gibbing
+	if(posessed)
+		meme_mind.transfer_to(src)
+		host_mind.transfer_to(host)
+		meme_mind.current.clearHUD()
+		host.update_icons()
+		src << "\red You lose control.."
+		posessed = 0
 	if(host) src.loc = host.loc
 	src.stat = 2
 	..()
@@ -520,13 +530,14 @@ mob/living/parasite/meme/verb/Possession()
 		dummy.loc = 0
 		dummy.sight = BLIND
 
-		var/datum/mind/host_mind = host.mind
-		var/datum/mind/meme_mind = src.mind
+		host_mind = host.mind
+		meme_mind = src.mind
 
 		host_mind.transfer_to(dummy)
 		meme_mind.transfer_to(host)
 		host_mind.current.clearHUD()
 		host.update_icons()
+		posessed = 1
 
 		dummy << "\blue You feel very drowsy.. Your eyelids become heavy..."
 
@@ -538,11 +549,13 @@ mob/living/parasite/meme/verb/Possession()
 		log_admin("[meme_mind.key] has lost possession of [host]([host_mind.key])")
 		message_admins("[meme_mind.key] has lost possession of [host]([host_mind.key])")
 
-		meme_mind.transfer_to(src)
-		host_mind.transfer_to(host)
-		meme_mind.current.clearHUD()
-		host.update_icons()
-		src << "\red You lose control.."
+		if(posessed)
+			meme_mind.transfer_to(src)
+			host_mind.transfer_to(host)
+			meme_mind.current.clearHUD()
+			host.update_icons()
+			src << "\red You lose control.."
+			posessed = 0
 
 		del dummy
 

@@ -820,7 +820,7 @@ mob/living/carbon/metroid/var/temperature_resistance = T0C+75
 
 	proc/Grow()
 		grown = 1
-		icon_state = "metroid egg-grown"
+		icon_state = "roro egg-grown"
 		processing_objects.Add(src)
 		return
 
@@ -838,6 +838,7 @@ mob/living/carbon/metroid/var/temperature_resistance = T0C+75
 
 /obj/item/weapon/reagent_containers/food/snacks/roro_egg/process()
 	var/turf/location = get_turf(src)
-	var/datum/gas_mixture/environment = location.return_air()
-	if (environment.toxins > MOLES_PLASMA_VISIBLE)//plasma exposure causes the egg to hatch
-		src.Hatch()
+	if(location)
+		var/datum/gas_mixture/environment = location.return_air()
+		if (environment.toxins > MOLES_PLASMA_VISIBLE)//plasma exposure causes the egg to hatch
+			src.Hatch()

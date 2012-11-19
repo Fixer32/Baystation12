@@ -1102,8 +1102,9 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 	max_duration = 70
 
 	can_use(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+		if(!..()) return 0
 		var/datum/organ/external/affected = target.get_organ(target_zone)
-		return ..() && target.ribcage_op_stage == 0 && affected.open >= 2
+		return target.ribcage_op_stage == 0 && affected.open >= 2
 
 	begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		user.visible_message("[user] begins to cut through [target]'s ribcage with \the [tool].", \

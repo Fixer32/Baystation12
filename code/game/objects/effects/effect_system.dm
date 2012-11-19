@@ -994,7 +994,7 @@ steam.start() -- spawns the effect
 		return
 
 	attack_hand(var/mob/user)
-		if ((prob(75 - metal*25)) || (((HULK in user.mutations) || (SUPRSTR in user.augmentations)) && user:a_intent=="harm"))
+		if ((prob(75 - metal*25)) || (((HULK in user.mutations) || (SUPRSTR in user.augmentations)) && user:a_intent=="hurt"))
 			user << "\blue You smash through the metal foam wall."
 			for(var/mob/O in oviewers(user))
 				if ((O.client && !( O.blinded )))

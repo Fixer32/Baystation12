@@ -168,7 +168,7 @@ var/global/list/uneatable = list(
 				pixel_y = -96
 				grav_pull = 10
 				consume_range = 3
-				dissipate_delay = 15
+				dissipate_delay = 10
 				dissipate_track = world.time
 				dissipate_strength = 20
 		if(9)//this one also lacks a check for gens because it eats everything

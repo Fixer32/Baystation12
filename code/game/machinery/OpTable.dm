@@ -50,7 +50,7 @@
 	return
 
 /obj/machinery/optable/attack_paw(mob/user as mob)
-	if (((HULK in usr.mutations) || (SUPRSTR in usr.augmentations)) && user:a_intent=="harm")
+	if (((HULK in usr.mutations) || (SUPRSTR in usr.augmentations)) && user:a_intent=="hurt")
 		usr << text("\blue You destroy the operating table.")
 		visible_message("\red [usr] destroys the operating table!")
 		src.density = 0
@@ -63,7 +63,7 @@
 	return
 
 /obj/machinery/optable/attack_hand(mob/user as mob)
-	if (((HULK in usr.mutations) || (SUPRSTR in usr.augmentations)) && user:a_intent=="harm")
+	if (((HULK in usr.mutations) || (SUPRSTR in usr.augmentations)) && user:a_intent=="hurt")
 		usr << text("\blue You destroy the table.")
 		visible_message("\red [usr] destroys the operating table!")
 		src.density = 0

@@ -137,6 +137,7 @@ datum/computer/file/embedded_program/airlock_controller
 				"sigtype"="command"
 			)
 			if(memory["pump_status"] == "siphon")
+				signal.data["set_external_pressure"] = 1.1*ext_sensor_pressure
 				signal.data["stabalize"] = 1
 			else if(memory["pump_status"] != "release")
 				signal.data["power"] = 1

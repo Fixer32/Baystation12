@@ -160,8 +160,8 @@ ZIPPO
 		if(ismob(loc))
 			var/mob/living/M = loc
 			M << "<span class='notice'>Your [name] goes out.</span>"
-			//M.u_equip(src)	//un-equip it so the overlays can update
-			//M.update_inv_wear_mask(0)
+//			M.u_equip(src)	//un-equip it so the overlays can update
+//			M.update_inv_wear_mask(0)
 		return
 	if(lit == 1)
 		if(location)
@@ -199,6 +199,7 @@ ZIPPO
 		if (usr)
 			usr.update_inv_l_hand()
 			usr.update_inv_r_hand()
+			usr.update_inv_wear_mask()
 
 
 ////////////

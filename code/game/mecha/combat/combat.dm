@@ -10,7 +10,6 @@
 	//operation_req_access = list(access_hos)
 	damage_absorption = list("brute"=0.7,"fire"=1,"bullet"=0.7,"laser"=0.85,"energy"=1,"bomb"=0.8)
 	var/am = "d3c2fbcadca903a41161ccc9df9cf948"
-	var/safety = 1
 
 /*
 /obj/mecha/combat/range_action(target as obj|mob|turf)
@@ -267,11 +266,6 @@
 	if(filter.get("close"))
 		am = null
 		return
-	if(href_list["toggle_safety"])
-		safety = !safety
-		src.occupant_message("Toggled safety to [safety?"safe":"armed"].")
-		log_message("Toggled safety to [safety?"safe":"armed"].")
-		return
 	/*
 	if(filter.get("saminput"))
 		if(md5(filter.get("saminput")) == am)
@@ -279,8 +273,3 @@
 		am = null
 	return
 	*/
-
-/obj/mecha/combat/get_stats_part()
-	var/output = ..()
-	output += "<b>Safety: </b><span style=\"color:[safety?"#0f0":"#f00"];\">[safety?"safe":"armed"]</span> - <a href='?src=\ref[src];toggle_safety=1'>Toggle</a><br>"
-	return output

@@ -152,7 +152,7 @@
 		dismantle_wall()
 
 /turf/simulated/wall/attack_paw(mob/user as mob)
-	if (((HULK in user.mutations) || (SUPRSTR in user.augmentations)) && user:a_intent=="harm")
+	if (((HULK in user.mutations) || (SUPRSTR in user.augmentations)) && user:a_intent=="hurt")
 		if (prob(40))
 			usr << text("\blue You smash through the wall.")
 			dismantle_wall(1)
@@ -182,7 +182,7 @@
 	return
 
 /turf/simulated/wall/attack_hand(mob/user as mob)
-	if (((HULK in user.mutations) || (SUPRSTR in user.augmentations)) && user:a_intent=="harm")
+	if (((HULK in user.mutations) || (SUPRSTR in user.augmentations)) && user:a_intent=="hurt")
 		if (prob(40))
 			usr << text("\blue You smash through the wall.")
 			dismantle_wall(1)
