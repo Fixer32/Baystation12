@@ -62,9 +62,9 @@
 	show(usr)
 
 /obj/item/weapon/photo/proc/show(var/mob/usr)
-        if(!img)
-        	usr << "Empty photopaper"
-        	return
+	if(!img)
+		usr << "Empty photopaper"
+		return
 	usr << browse_rsc(src.img, "tmp_photo.png")
 	usr << browse("<html><head><title>Photo</title></head>" \
 		+ "<body style='overflow:hidden'>" \
@@ -167,6 +167,13 @@
 			mob_detail += "You can also see [A] on the photo[A:health < 75 ? " - [A] looks hurt":""].[holding ? " [holding]":"."]."
 	return mob_detail
 
+/obj/item/weapon/camera_test/attackby(obj/item/weapon/P as obj, mob/user as mob)
+	if(istype(P,/obj/item/weapon/camera_film) && !pictures_left)
+		pictures_left = !pictures_max
+		usr << "You reload camera with new [P.name]"
+		del(P)
+		return
+		
 /obj/item/weapon/camera_test/afterattack(atom/target as mob|obj|turf|area, mob/user as mob, flag)
 	if (!can_use || !pictures_left || ismob(target.loc)) return
 

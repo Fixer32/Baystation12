@@ -154,7 +154,7 @@
 					src.name = newtitle
 					src.title = newtitle
 			if("Contents")
-				var/content = strip_html(input(usr, "Write your book's contents (HTML NOT allowed):"),8192) as message|null
+				var/content = parsepencode(html_encode_simple((input(usr, "Write your book's contents (HTML NOT allowed):") as message|null),8192))
 				if(!content)
 					usr << "The content is invalid."
 					return

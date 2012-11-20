@@ -19,14 +19,20 @@
 			return
 		user.machine = src
 		var/dat = "<html><head><title>[src.name]</title><style>h3 {margin: 0px; padding: 0px;}</style></head><body>"
+		var/list/mechas = list()
 		if(screen == 0)
 			dat += "<h3>Tracking beacons data</h3>"
 			for(var/obj/item/mecha_parts/mecha_tracking/TR in world)
 				var/answer = TR.get_mecha_info()
 				if(answer)
+					var/obj/mecha/M = TR.in_mecha()
+					if(M in mechas) continue
+					mechas += M
 					dat += {"<hr>[answer]<br/>
 							  <a href='?src=\ref[src];send_message=\ref[TR]'>Send message</a><br/>
-							  <a href='?src=\ref[src];get_log=\ref[TR]'>Show exosuit log</a> | <a style='color: #f00;' href='?src=\ref[src];shock=\ref[TR]'>(EMP pulse)</a><br>"}
+							  <a href='?src=\ref[src];get_log=\ref[TR]'>Show exosuit log</a> | <a style='color: #f00;' href='?src=\ref[src];shock=\ref[TR]'>(EMP pulse)</a><br/>"}
+					if(!M.maint_access)
+						dat += {"<a href='?src=\ref[src];maintenance=\ref[TR]>Enable maintenance</a><br/>"}
 
 		if(screen==1)
 			dat += "<h3>Log contents</h3>"
@@ -54,6 +60,9 @@
 		if(href_list["shock"])
 			var/obj/item/mecha_parts/mecha_tracking/MT = filter.getObj("shock")
 			MT.shock()
+		if(href_list["maintenance"])
+			var/obj/item/mecha_parts/mecha_tracking/MT = filter.getObj("maintenance")		
+			MT.allow_maintenance()
 		if(href_list["get_log"])
 			var/obj/item/mecha_parts/mecha_tracking/MT = filter.getObj("get_log")
 			stored_data = MT.get_mecha_log()
@@ -99,6 +108,11 @@
 	ex_act()
 		del src
 		return
+
+	proc/allow_maintenance()
+		var/obj/mecha/M = in_mecha()
+		if(M)
+			M.maint_access = 1
 
 	proc/in_mecha()
 		if(istype(src.loc, /obj/mecha))

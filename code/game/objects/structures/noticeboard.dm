@@ -18,7 +18,7 @@
 
 //attaching papers!!
 /obj/structure/noticeboard/attackby(var/obj/item/weapon/O as obj, var/mob/user as mob)
-	if(istype(O, /obj/item/weapon/paper))
+	if(istype(O, /obj/item/weapon/paper) || istype(O, /obj/item/weapon/photo))
 		if(notices < 5)
 			O.add_fingerprint(user)
 			add_fingerprint(user)
@@ -34,6 +34,8 @@
 	var/dat = "<B>Noticeboard</B><BR>"
 	for(var/obj/item/weapon/paper/P in src)
 		dat += "<A href='?src=\ref[src];read=\ref[P]'>[P.name]</A> <A href='?src=\ref[src];write=\ref[P]'>Write</A> <A href='?src=\ref[src];remove=\ref[P]'>Remove</A><BR>"
+	for(var/obj/item/weapon/photo/Ph in src)
+		dat += "<A href='?src=\ref[src];remove=\ref[Ph]'>Remove</A> - <A href='?src=\ref[src];look=\ref[Ph]'>[Ph.name]</A><BR>"
 	user << browse("<HEAD><TITLE>Notices</TITLE></HEAD>[dat]","window=noticeboard")
 	onclose(user, "noticeboard")
 
@@ -46,11 +48,16 @@
 			return
 		var/obj/item/P = locate(href_list["remove"])
 		if((P && P.loc == src))
-			P.loc = get_turf(src)	//dump paper on the floor because you're a clumsy fuck
 			P.add_fingerprint(usr)
 			add_fingerprint(usr)
 			notices--
 			icon_state = "nboard0[notices]"
+			usr.put_in_hands(P)
+
+	if(href_list["look"])
+		var/obj/item/weapon/photo/P = locate(href_list["look"])
+		if(P)
+			P.show(usr)
 
 	if(href_list["write"])
 		if((usr.stat || usr.restrained())) //For when a player is handcuffed while they have the notice window open

@@ -1417,6 +1417,8 @@
 						[add_req_access?"<a href='?src=\ref[src];req_access=1;id_card=\ref[id_card];user=\ref[user]'>Edit operation keycodes</a>":null]
 						[maint_access?"<a href='?src=\ref[src];maint_access=1;id_card=\ref[id_card];user=\ref[user]'>Initiate maintenance protocol</a>":null]
 						[(state>0) ?"<a href='?src=\ref[src];set_internal_tank_valve=1;user=\ref[user]'>Set Cabin Air Pressure</a>":null]
+						[(state>0) ?"<a href='?src=\ref[src];flush_dna=1;user=\ref[user]'>Flush DNA-Lock</a>":null]
+						[(state>0) ?"<a href='?src=\ref[src];eject_pilot=1;user=\ref[user]'>Eject Pilot</a>":null]
 						</body>
 						</html>"}
 	user << browse(output, "window=exosuit_maint_console")
@@ -1532,6 +1534,12 @@
 				state = 0
 				user << "The securing bolts are now hidden."
 			output_maintenance_dialog(filter.getObj("id_card"),user)
+		return
+	if(href_list["flush_dna"] && state >=1)
+		src.dna = null
+		return
+	if(href_list["eject_pilot"] && state >=1)
+		src.eject()
 		return
 	if(href_list["set_internal_tank_valve"] && state >=1)
 		var/mob/user = filter.getMob("user")

@@ -2,6 +2,10 @@
 	name = "shuttle"
 	icon = 'shuttle.dmi'
 
+	CanPass(atom/movable/mover, turf/target, height, air_group)
+		if(!height || air_group) return 0
+		else return ..()
+
 /obj/structure/shuttle/window
 	name = "shuttle window"
 	icon = 'podwindows.dmi'

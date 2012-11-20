@@ -122,7 +122,7 @@
 
 	struc_enzymes = mutstring
 
-	unique_enzymes = md5(character.real_name+rand(1,1024))
+	unique_enzymes = md5(character.real_name+"[rand(1,1024)]")
 	reg_dna[unique_enzymes] = character.real_name
 
 /////////////////////////// DNA DATUM

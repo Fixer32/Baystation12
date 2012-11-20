@@ -60,7 +60,9 @@
 /proc/adminscrub(var/t,var/limit=MAX_MESSAGE_LEN)
 	return copytext(parsepencode(html_encode_simple(t)),1,limit)
 
-/proc/html_encode_simple(var/t)
+/proc/html_encode_simple(var/t, var/l=0)
+	if(l)
+		t = copytext(t,1,l)
 	t = dd_replacetext(t, "&", "&amp;")
 	t = dd_replacetext(t, "<", "&lt;")
 	t = dd_replacetext(t, ">", "&gt;")
