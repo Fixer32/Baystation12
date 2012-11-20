@@ -43,11 +43,22 @@
 	if(!..())
 		return 0
 
+	return 1
+
+/datum/game_mode/meme/pre_setup()
+	if(config.protect_roles_from_antagonist)
+		restricted_jobs += protected_jobs
+
 	// for every 10 players, get 1 meme, and for each meme, get a host
 	// also make sure that there's at least one meme and one host
 	recommended_enemies = max(src.num_players() / 20 * 2, 2)
 
 	var/list/datum/mind/possible_memes = get_players_for_role(BE_MEME)
+
+	for(var/datum/mind/player in assigned_hosts)
+		for(var/job in restricted_jobs)//Removing robots from the list
+			if(player.assigned_role == job)
+				assigned_hosts -= player
 
 	if(possible_memes.len < 2)
 		log_admin("MODE FAILURE: MEME. NOT ENOUGH MEME CANDIDATES.")
@@ -77,9 +88,6 @@
 		possible_memes.Remove(first_host)
 		first_hosts += first_host
 
-	return 1
-
-/datum/game_mode/meme/pre_setup()
 	return 1
 
 
