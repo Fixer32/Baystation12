@@ -38,10 +38,10 @@
 "L" = (/obj/effect/overlay/coconut,/turf/unsimulated/beach/sand,/area/awaymission/beach)
 "M" = (/mob/living/simple_animal/crab/Coffee,/turf/unsimulated/beach/sand,/area/awaymission/beach)
 "N" = (/obj/structure/stool/bed/chair,/turf/unsimulated/beach/sand,/area/awaymission/beach)
-"O" = (/turf/unsimulated/beach/coastline,/area/awaymission/beach)
-"P" = (/turf/unsimulated/beach/coastline{density = 1; opacity = 1},/area/awaymission/beach)
-"Q" = (/turf/unsimulated/beach/water,/area/awaymission/beach)
-"R" = (/turf/unsimulated/beach/water{density = 1; opacity = 1},/area/awaymission/beach)
+"O" = (/turf/unsimulated/beach/coastline/pickable,/area/awaymission/beach)
+"P" = (/turf/unsimulated/beach/coastline/pickable{density = 1; opacity = 1},/area/awaymission/beach)
+"Q" = (/turf/unsimulated/beach/water/pickable,/area/awaymission/beach)
+"R" = (/turf/unsimulated/beach/water/pickable{density = 1; opacity = 1},/area/awaymission/beach)
 
 (1,1,1) = {"
 aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa

@@ -156,7 +156,7 @@ var/global/list/uneatable = list(
 				pixel_y = -64
 				grav_pull = 8
 				consume_range = 2
-				dissipate_delay = 6
+				dissipate_delay = 5
 				dissipate_track = world.time
 				dissipate_strength = 10
 		if(7)
@@ -170,7 +170,7 @@ var/global/list/uneatable = list(
 				consume_range = 3
 				dissipate_delay = 10
 				dissipate_track = world.time
-				dissipate_strength = 20
+				dissipate_strength = 25
 		if(9)//this one also lacks a check for gens because it eats everything
 			current_size = 9
 			icon = 'icons/effects/288x288.dmi'
