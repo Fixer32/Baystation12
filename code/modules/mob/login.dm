@@ -2,6 +2,7 @@
 /mob/proc/update_Login_details()
 	//trigger admin holder updates. This is hear as all Login() calls this proc.
 	if(client.holder)
+		message_admins("Admin login: [key_name(src)]")
 		client.update_admins(client.holder.rank)
 
 	//Multikey checks and logging
