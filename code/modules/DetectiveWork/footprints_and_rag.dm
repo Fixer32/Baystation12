@@ -74,7 +74,7 @@ turf/Entered(mob/living/carbon/human/M)
 								var/obj/item/clothing/shoes/S = M.shoes
 								S.add_blood(B.blood_owner)
 								S.track_blood_mob = B.blood_owner
-								S.track_blood = max(S.track_blood,8)
+								S.track_blood = max(S.track_blood,rand(4,8))
 								S.track_blood_type = track_type
 						else
 							M.add_blood(B.blood_owner)

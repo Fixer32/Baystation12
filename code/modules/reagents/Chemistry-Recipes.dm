@@ -811,6 +811,8 @@ datum
 					var/obj/B = new chosen
 					if(B)
 						B.loc = get_turf_loc(holder.my_atom)
+						if(B:reagents && !(B:reagents.total_volume))
+							B:reagents.add_reagent("nutriment", 30)
 						if(prob(50))
 							for(var/j = 1, j <= rand(1, 3), j++)
 								step(B, pick(NORTH,SOUTH,EAST,WEST))

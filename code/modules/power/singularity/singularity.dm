@@ -116,7 +116,7 @@ var/global/list/uneatable = list(
 /obj/machinery/singularity/proc/dissipate()
 	if(!dissipate)
 		return
-	if(dissipate_track+dissipate_delay*10 <= world.time)
+	if(dissipate_track+dissipate_delay <= world.time)
 		src.energy -= dissipate_strength
 		dissipate_track = world.time
 
@@ -134,7 +134,7 @@ var/global/list/uneatable = list(
 			pixel_y = 0
 			grav_pull = 4
 			consume_range = 0
-			dissipate_delay = 10
+			dissipate_delay = 20
 			dissipate_track = world.time
 			dissipate_strength = 1
 		if(3)//1 to 3 does not check for the turfs if you put the gens right next to a 1x1 then its going to eat them
@@ -147,7 +147,7 @@ var/global/list/uneatable = list(
 			consume_range = 1
 			dissipate_delay = 10
 			dissipate_track = world.time
-			dissipate_strength = 5
+			dissipate_strength = 1
 		if(5)
 			if((check_turfs_in(1,2))&&(check_turfs_in(2,2))&&(check_turfs_in(4,2))&&(check_turfs_in(8,2)))
 				current_size = 5
@@ -159,7 +159,7 @@ var/global/list/uneatable = list(
 				consume_range = 2
 				dissipate_delay = 10
 				dissipate_track = world.time
-				dissipate_strength = 10
+				dissipate_strength = 2
 		if(7)
 			if((check_turfs_in(1,3))&&(check_turfs_in(2,3))&&(check_turfs_in(4,3))&&(check_turfs_in(8,3)))
 				current_size = 7
@@ -171,7 +171,7 @@ var/global/list/uneatable = list(
 				consume_range = 3
 				dissipate_delay = 10
 				dissipate_track = world.time
-				dissipate_strength = 35
+				dissipate_strength = 1
 		if(9)//this one also lacks a check for gens because it eats everything
 			current_size = 9
 			icon = 'icons/effects/288x288.dmi'
@@ -334,7 +334,7 @@ var/global/list/uneatable = list(
 			if(1)
 				steps = 1
 			if(3)
-				steps = 3//Yes this is right
+				steps = 2//Yes this is right
 			if(5)
 				steps = 3
 			if(7)
@@ -360,12 +360,12 @@ var/global/list/uneatable = list(
 			dir2 = 1
 			dir3 = 2
 	var/turf/T2 = T
-	for(var/j = 1 to steps)
+	for(var/j = 1 to steps-1)
 		T2 = get_step(T2,dir2)
 		if(!isturf(T2))
 			return 0
 		turfs.Add(T2)
-	for(var/k = 1 to steps)
+	for(var/k = 1 to steps-1)
 		T = get_step(T,dir3)
 		if(!isturf(T))
 			return 0

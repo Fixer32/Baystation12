@@ -71,12 +71,15 @@
 		if(src.allowed(user) || !src.registered_name || (istype(I) && (src.registered_name == I.registered_name)))
 			//they can open all lockers, or nobody owns this, or they own this locker
 			src.locked = !( src.locked )
-			if(src.locked)	src.icon_state = src.icon_locked
-			else	src.icon_state = src.icon_closed
+			if(src.locked)
+				src.icon_state = src.icon_locked
+				if(!src.registered_name)
+					src.registered_name = I.registered_name
+					src.desc = "Owned by [I.registered_name]."
+			else
+				src.icon_state = src.icon_closed
+				registered_name = null
 
-			if(!src.registered_name)
-				src.registered_name = I.registered_name
-				src.desc = "Owned by [I.registered_name]."
 		else
 			user << "\red Access Denied"
 	else if( (istype(W, /obj/item/weapon/card/emag)||istype(W, /obj/item/weapon/melee/energy/blade)) && !src.broken)
