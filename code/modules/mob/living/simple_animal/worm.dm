@@ -113,6 +113,8 @@
 			currentlyEating = obstacle
 			eatingDuration = 0
 
+		if(istype(obstacle,/mob/living/simple_animal/space_worm)) return
+
 		if(!AttemptToEat(obstacle))
 			eatingDuration++
 		else

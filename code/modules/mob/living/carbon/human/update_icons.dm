@@ -173,12 +173,12 @@ Please contact me on #coderbus IRC. ~Carn x
 		else
 			icon = stand_icon
 	
-	if(lying)
-		for(var/image/I in overlays_lying)
-			if(istype(I))	overlays += I
-	else
-		for(var/image/I in overlays_standing)
-			if(istype(I))	overlays += I
+		if(lying)
+			for(var/image/I in overlays_lying)
+				if(istype(I))	overlays += I
+		else
+			for(var/image/I in overlays_standing)
+				if(istype(I))	overlays += I
 
 var/global/list/damage_icon_parts = list()
 proc/get_damage_icon_part(damage_state, body_part)
