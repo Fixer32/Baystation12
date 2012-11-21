@@ -430,14 +430,14 @@ proc
 		// Layers will be a sorted list of icons/overlays, based on the order in which they are displayed
 		var/list/layers = list()
 
+		// dir defaults to A's dir
+		if(!dir) dir = A.dir
+
 		// Add the atom's icon itself
 		if(A.icon)
 			// Make a copy without pixel_x/y settings
-			var/image/copy = image(icon=A.icon,icon_state=A.icon_state,layer=A.layer,dir=A.dir)
+			var/image/copy = image(icon=A.icon,icon_state=A.icon_state,layer=A.layer,dir=dir)
 			layers[copy] = A.layer
-
-		// dir defaults to A's dir
-		if(!dir) dir = A.dir
 
 		// Loop through the underlays, then overlays, sorting them into the layers list
 		var/list/process = A.underlays // Current list being processed
@@ -493,17 +493,17 @@ proc
 			if(I:icon)
 				if(I:icon_state)
 					// Has icon and state set
-					add = icon(I:icon, I:icon_state)
+					add = icon(I:icon, I:icon_state, dir, 1, 0)
 				else
 					if(A.icon_state in icon_states(I:icon))
 						// Inherits icon_state from atom
-						add = icon(I:icon, A.icon_state)
+						add = icon(I:icon, A.icon_state, dir, 1, 0)
 					else
 						// Uses default state ("")
-						add = icon(I:icon)
+						add = icon(I:icon, null, dir, 1, 0)
 			else if(I:icon_state)
 				// Inherits icon from atom
-				add = icon(A.icon, I:icon_state)
+				add = icon(A.icon, I:icon_state, dir, 1, 0)
 			else
 				// Unknown
 				continue
