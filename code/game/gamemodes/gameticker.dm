@@ -301,6 +301,16 @@ var/global/datum/controller/gameticker/ticker
 		emergency_shuttle.process()
 
 		var/mode_finished = mode.check_finished() || (emergency_shuttle.location == 2 && emergency_shuttle.alert == 1)
+		if(!mode_finished)
+			mode_finished = 1
+			for(var/mob/living/M in living_mob_list)
+				if(M.client && M.stat!=DEAD)
+					mode_finished = 0
+			for(var/client/C)
+				if(C.holder)
+					mode_finished = 0
+			if(mode_finished)
+				world << "\red Everybody dies, Game Over..."
 		if(!mode.explosion_in_progress && mode_finished)
 			current_state = GAME_STATE_FINISHED
 
