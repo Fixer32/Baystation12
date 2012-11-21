@@ -590,6 +590,7 @@
 	if(brain_explode && !destspawn && !(status&ORGAN_DESTROYED))
 		status |= ORGAN_DESTROYED
 		destspawn = 1
+		brain_explode = 0
 
 		var/atom/movable/overlay/animation = null
 		animation = new(owner.loc)
@@ -605,14 +606,16 @@
 		owner.u_equip(owner.ears)
 		owner.u_equip(owner.wear_mask)
 		owner.regenerate_icons()
+		spawn(10)
+			owner << "Your brain decides it has had enough of you and leaves."
+			new /obj/effect/decal/cleanable/blood(owner.loc)
+			var/obj/item/brain/B = new(owner.loc)
+			B.transfer_identity(owner)
+			var/lol = pick(cardinal)
+			step(B,lol)
+
 		spawn(60)
 			owner.death()
-		owner << "Your brain decides it has had enough of you and leaves."
-		new /obj/effect/decal/cleanable/blood(owner.loc)
-		var/obj/item/brain/B = new(owner.loc)
-		B.transfer_identity(owner)
-		var/lol = pick(cardinal)
-		step(B,lol)
 
 /datum/organ/external/l_arm
 	name = "l_arm"
