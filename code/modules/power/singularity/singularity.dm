@@ -158,7 +158,7 @@ var/global/list/uneatable = list(
 				consume_range = 2
 				dissipate_delay = 5
 				dissipate_track = world.time
-				dissipate_strength = 10
+				dissipate_strength = 12.5
 		if(7)
 			if((check_turfs_in(1,3))&&(check_turfs_in(2,3))&&(check_turfs_in(4,3))&&(check_turfs_in(8,3)))
 				current_size = 7
@@ -170,7 +170,7 @@ var/global/list/uneatable = list(
 				consume_range = 3
 				dissipate_delay = 10
 				dissipate_track = world.time
-				dissipate_strength = 25
+				dissipate_strength = 35
 		if(9)//this one also lacks a check for gens because it eats everything
 			current_size = 9
 			icon = 'icons/effects/288x288.dmi'
