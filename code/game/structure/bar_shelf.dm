@@ -91,7 +91,7 @@
 		var/icon/Id = new(b.icon,b.icon_state)
 		Id.Scale(12,12)
 		var/image/Img = image(Id)
-		Img.pixel_y = (i<=6)?11:1
+		Img.pixel_y = (i<=6)?13:1
 		if(i<=6)
 			Img.pixel_x = (i-2)*4+2
 		else
