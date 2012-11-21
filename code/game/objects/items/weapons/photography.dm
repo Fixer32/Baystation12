@@ -191,12 +191,13 @@
 			var/viewer = user
 			if (user.client)		//To make shooting through security cameras possible
 				viewer = user.client.eye
-			if(dummy in viewers(world.view, viewer))
+			var/visible = (dummy in viewers(world.view, viewer))
+			del dummy	//Alas, nameless creature
+			if(visible)
 				temp.Blend(get_icon(T),ICON_OVERLAY,32*(j-1-1),32 - 32*(i-1))
 			else
 				temp.Blend(black,ICON_OVERLAY,32*(j-1),64 - 32*(i-1))
 			mobs += get_mobs(T)
-			del dummy	//Alas, nameless creature
 			x_c++
 		y_c--
 		x_c = x_c - 3
