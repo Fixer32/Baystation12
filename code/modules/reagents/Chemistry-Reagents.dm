@@ -390,12 +390,13 @@ datum
 				if(!data) data = 1
 				switch(data)
 					if(10 to 20)
-						M.eye_blurry = max(M.eye_blurry, 10)
+						if(!M.eye_blurry) M.eye_blurry = 1
+						M.eye_blurry = max(M.eye_blurry + 1, 10)
 					if(20 to 30)
-						M.drowsyness  = max(M.drowsyness, 20)
+						M.drowsyness  = max(M.drowsyness + 1, 20)
 					if(30 to INFINITY)
 						M.Paralyse(20)
-						M.drowsyness  = max(M.drowsyness, 30)
+						M.drowsyness  = max(M.drowsyness + 1, 30)
 				data++
 				..()
 				return

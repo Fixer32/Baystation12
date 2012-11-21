@@ -528,7 +528,7 @@
 			if(!breath)
 				if(isobj(loc))
 					var/obj/location_as_object = loc
-					breath = location_as_object.handle_internal_lifeform(src, BREATH_VOLUME)
+					breath = location_as_object.handle_internal_lifeform(src, BREATH_MOLES)
 				else if(isturf(loc))
 					var/breath_moles = 0
 					/*if(environment.return_pressure() > ONE_ATMOSPHERE)
@@ -585,11 +585,10 @@
 			if (!wear_mask || !(wear_mask.flags & MASKINTERNALS) )
 				internal = null
 			if(internal)
-				return internal.remove_air_volume(volume_needed)
+				return internal.remove_air(volume_needed)
 			else if(internals)
 				internals.icon_state = "internal0"
 		return null
-
 
 	proc/handle_breath(datum/gas_mixture/breath)
 		if(nodamage || (REBREATHER in augmentations) || (mNobreath in mutations))
@@ -690,7 +689,6 @@
 				else if(SA_pp > 0.01)	// There is sleeping gas in their lungs, but only a little, so give them a bit of a warning
 					if(prob(20))
 						spawn(0) emote(pick("giggle", "laugh"))
-				SA.moles = 0
 
 		if( (abs(310.15 - breath.temperature) > 50) && !(COLD_RESISTANCE in mutations)) // Hot air hurts :(
 			if(breath.temperature < 260.15)

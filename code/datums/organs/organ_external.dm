@@ -7,7 +7,6 @@
 	var/body_part = null
 	var/icon_position = 0
 
-	var/dropped = 0
 	var/damage_state = "00"
 	var/brute_dam = 0
 	var/burn_dam = 0
@@ -360,6 +359,7 @@
 					H.pixel_x = -10
 					H.pixel_y = 6
 					H.name = "[owner.real_name]'s head"
+					H:brain_op_stage = owner.brain_op_stage
 
 					owner.u_equip(owner.glasses)
 					owner.u_equip(owner.head)
@@ -583,6 +583,36 @@
 	min_broken_damage = 40
 	body_part = HEAD
 	var/disfigured = 0
+	var/brain_explode = 0
+
+/datum/organ/external/head/process()
+	..()
+	if(brain_explode && !destspawn && !(status&ORGAN_DESTROYED))
+		status |= ORGAN_DESTROYED
+		destspawn = 1
+
+		var/atom/movable/overlay/animation = null
+		animation = new(owner.loc)
+		animation.icon_state = "blank"
+		animation.icon = 'icons/mob/mob.dmi'
+		animation.master = src
+		flick("gibbed-h", animation)
+		spawn(15)
+			if(animation)	del(animation)
+
+		owner.u_equip(owner.glasses)
+		owner.u_equip(owner.head)
+		owner.u_equip(owner.ears)
+		owner.u_equip(owner.wear_mask)
+		owner.regenerate_icons()
+		spawn(60)
+			owner.death()
+		owner << "Your brain decides it has had enough of you and leaves."
+		new /obj/effect/decal/cleanable/blood(owner.loc)
+		var/obj/item/brain/B = new(owner.loc)
+		B.transfer_identity(owner)
+		var/lol = pick(cardinal)
+		step(B,lol)
 
 /datum/organ/external/l_arm
 	name = "l_arm"

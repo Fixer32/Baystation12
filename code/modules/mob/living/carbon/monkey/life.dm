@@ -174,7 +174,7 @@
 			if(!breath)
 				if(istype(loc, /obj/))
 					var/obj/location_as_object = loc
-					breath = location_as_object.handle_internal_lifeform(src, BREATH_VOLUME)
+					breath = location_as_object.handle_internal_lifeform(src, BREATH_MOLES)
 				else if(istype(loc, /turf/))
 					var/breath_moles = environment.total_moles()*BREATH_PERCENTAGE
 					breath = loc.remove_air(breath_moles)

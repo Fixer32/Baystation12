@@ -109,6 +109,9 @@
 	var/name = input(user, message, title, default)
 	return sanitize_easy(html_encode_simple(name))
 
+/proc/strip_input(var/txt)
+	return sanitize_easy(html_encode_simple(txt))
+
 //Filters out undesirable characters from names
 /proc/reject_bad_name(var/t_in, var/allow_numbers=0, var/max_length=MAX_NAME_LEN)
 	if(!t_in || length(t_in) > max_length)

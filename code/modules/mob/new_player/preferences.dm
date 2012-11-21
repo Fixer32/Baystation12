@@ -696,7 +696,7 @@ datum/preferences
 
 				if(medmsg != null)
 					medmsg = copytext(medmsg, 1, MAX_PAPER_MESSAGE_LEN)
-					medmsg = html_encode(medmsg)
+					medmsg = strip_input(medmsg)
 
 					med_record = medmsg
 					SetRecords(user)
@@ -706,7 +706,7 @@ datum/preferences
 
 				if(secmsg != null)
 					secmsg = copytext(secmsg, 1, MAX_PAPER_MESSAGE_LEN)
-					secmsg = html_encode(secmsg)
+					secmsg = strip_input(secmsg)
 
 					sec_record = secmsg
 					SetRecords(user)
@@ -960,7 +960,7 @@ datum/preferences
 
 						if(msg != null)
 							msg = copytext(msg, 1, MAX_MESSAGE_LEN)
-							msg = html_encode(msg)
+							msg = strip_input(msg)
 
 							flavor_text = msg
 

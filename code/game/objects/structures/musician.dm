@@ -594,7 +594,7 @@
 		updateUsrDialog()
 
 	else if(href_list["name"])
-		var/input = html_encode(input(usr, "", "Rename", currentsong.name) as text|null)
+		var/input = strip_input(input(usr, "", "Rename", currentsong.name) as text|null)
 		if(isnull(input)) return
 
 		currentsong.name = copytext(input,1,30)
@@ -681,7 +681,7 @@
 			updateUsrDialog()
 
 		else if(href_list["import"])
-			var/input = html_encode(input(usr, "", "Import") as message|null)
+			var/input = strip_input(input(usr, "", "Import") as message|null)
 			if(isnull(input)) return
 
 			var/list/inputlist = dd_text2list(input, "\n")
@@ -725,7 +725,7 @@
 
 		else if(href_list["edit"])
 
-			var/input = html_encode(input(usr, "", "Edit", currentsong.sourcestring) as message|null)
+			var/input = strip_input(input(usr, "", "Edit", currentsong.sourcestring) as message|null)
 			if(isnull(input)) return
 
 			input = dd_replacetext(input, " ", "")

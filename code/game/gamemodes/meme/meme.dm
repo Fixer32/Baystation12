@@ -43,6 +43,17 @@
 	if(!..())
 		return 0
 
+	var/list/datum/mind/possible_memes = get_players_for_role(BE_MEME)
+
+	for(var/datum/mind/player in assigned_hosts)
+		for(var/job in restricted_jobs)//Removing robots from the list
+			if(player.assigned_role == job)
+				assigned_hosts -= player
+
+	if(possible_memes.len < 2)
+		log_admin("MODE FAILURE: MEME. NOT ENOUGH MEME CANDIDATES.")
+		return 0 // not enough candidates for meme
+
 	return 1
 
 /datum/game_mode/meme/pre_setup()

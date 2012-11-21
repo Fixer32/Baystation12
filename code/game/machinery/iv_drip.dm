@@ -68,7 +68,7 @@
 	set background = 1
 
 	..()
-	if(src.attached && src.beaker && src.beaker.volume > 0)
+	if(src.attached)
 		if(!(get_dist(src, src.attached) <= 1))
 			visible_message("The needle is ripped out of [src.attached], doesn't that hurt?")
 			src.attached:apply_damage(3, BRUTE, pick("r_arm", "l_arm"))
@@ -76,11 +76,12 @@
 			src.update_icon()
 			return
 
+	if(src.attached && src.beaker && src.beaker.volume > 0)
 		var/transfer_amount = REAGENTS_METABOLISM
 		if(istype(src.beaker, /obj/item/weapon/reagent_containers/blood))
 			// speed up transfer on blood packs
 			transfer_amount = 4
-		src.beaker.reagents.trans_to(src.attached, transfer_amount)
+		src.beaker.reagents.trans_to(src.attached, transfer_amount*0.5, 2.1)
 		update_icon()
 
 /obj/machinery/iv_drip/attack_hand(mob/user as mob)

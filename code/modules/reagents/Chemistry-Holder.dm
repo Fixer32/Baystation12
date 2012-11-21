@@ -297,7 +297,7 @@ datum
 			update_total()
 				total_volume = 0
 				for(var/datum/reagent/R in reagent_list)
-					if(R.volume < 0.1)
+					if(R.volume < 0.005)
 						del_reagent(R.id)
 					else
 						total_volume += R.volume
@@ -396,7 +396,6 @@ datum
 				return 1
 
 			remove_reagent(var/reagent, var/amount, var/safety)//Added a safety check for the trans_id_to
-
 				if(!isnum(amount)) return 1
 
 				for(var/A in reagent_list)

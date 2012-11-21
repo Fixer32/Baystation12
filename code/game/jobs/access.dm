@@ -245,8 +245,7 @@
 			return list(access_rd, access_heads, access_tox, access_genetics,
 			            access_tox_storage, access_teleporter,
 			            access_research, access_robotics, access_xenobiology,
-			            access_RC_announce, access_keycard_auth, access_tcomsat,
-			            access_chemistry, access_medical)
+			            access_RC_announce, access_keycard_auth, access_tcomsat)
 		if("Virologist")
 			return list(access_medical, access_virology)
 		if("Chief Medical Officer")

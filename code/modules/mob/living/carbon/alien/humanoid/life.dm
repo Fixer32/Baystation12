@@ -118,7 +118,7 @@
 			if(!breath)
 				if(istype(loc, /obj/))
 					var/obj/location_as_object = loc
-					breath = location_as_object.handle_internal_lifeform(src, BREATH_VOLUME)
+					breath = location_as_object.handle_internal_lifeform(src, BREATH_MOLES)
 				else if(istype(loc, /turf/))
 					var/breath_moles = 0
 					/*if(environment.return_pressure() > ONE_ATMOSPHERE)
@@ -160,7 +160,7 @@
 			if(internal)
 				if (internals)
 					internals.icon_state = "internal1"
-				return internal.remove_air_volume(volume_needed)
+				return internal.remove_air(volume_needed)
 			else
 				if (internals)
 					internals.icon_state = "internal0"

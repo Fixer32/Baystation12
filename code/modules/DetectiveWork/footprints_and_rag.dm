@@ -1,8 +1,7 @@
-/*
 obj/item/clothing/shoes/var
 	track_blood = 0
 	mob/living/carbon/human/track_blood_mob
-	track_blood_type*/
+	track_blood_type
 
 mob/var
 	bloody_hands = 0
@@ -14,7 +13,6 @@ obj/item/clothing/gloves/var
 	transfer_blood = 0
 	mob/living/carbon/human/bloody_hands_mob
 
-/*
 obj/effect/decal/cleanable/var
 	track_amt = 3
 	mob/blood_owner
@@ -24,7 +22,7 @@ turf/Exited(mob/living/carbon/human/M)
 		if(!istype(src, /turf/space))  // Bloody tracks code starts here
 			var/dofoot = 1
 			if(istype(M,/mob/living/simple_animal))
-				if(!(istype(M,/mob/living/simple_animal/cat) || istype(M,/mob/living/simple_animal/corgi) || istype(M,/mob/living/simple_animal/constructwraith)))
+				if(!(istype(M,/mob/living/simple_animal/cat) || istype(M,/mob/living/simple_animal/corgi) || istype(M,/mob/living/simple_animal/construct/wraith)))
 					dofoot = 0
 
 			if(dofoot)
@@ -44,7 +42,7 @@ turf/Entered(mob/living/carbon/human/M)
 	if(istype(M,/mob/living) && !istype(M,/mob/living/carbon/metroid))
 		var/dofoot = 1
 		if(istype(M,/mob/living/simple_animal))
-			if(!(istype(M,/mob/living/simple_animal/cat) || istype(M,/mob/living/simple_animal/corgi) || istype(M,/mob/living/simple_animal/constructwraith)))
+			if(!(istype(M,/mob/living/simple_animal/cat) || istype(M,/mob/living/simple_animal/corgi) || istype(M,/mob/living/simple_animal/construct/wraith)))
 				dofoot = 0
 
 		if(dofoot)
@@ -145,7 +143,7 @@ proc/get_tracks(mob/M)
 		else if(istype(M,/mob/living/carbon/alien/larva))
 			. = "small alien feet"
 		else
-			. = "an unknown creature"*/
+			. = "an unknown creature"
 
 
 proc/blood_incompatible(donor,receiver)

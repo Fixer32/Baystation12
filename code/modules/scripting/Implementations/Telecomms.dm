@@ -231,7 +231,7 @@ datum/signal
 		if((!message || message == "") && message != 0)
 			message = "*beep*"
 		if(!source)
-			source = "[html_encode(uppertext(S.id))]"
+			source = "[strip_input(uppertext(S.id))]"
 			hradio = new // sets the hradio as a radio intercom
 		if(!freq)
 			freq = 1459
@@ -246,7 +246,7 @@ datum/signal
 		if(source in S.stored_names)
 			newsign.data["name"] = source
 		else
-			newsign.data["name"] = "<i>[html_encode(uppertext(source))]<i>"
+			newsign.data["name"] = "<i>[strip_input(uppertext(source))]<i>"
 		newsign.data["realname"] = newsign.data["name"]
 		newsign.data["job"] = job
 		newsign.data["compression"] = 0

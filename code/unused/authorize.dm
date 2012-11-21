@@ -97,7 +97,7 @@
 			if (code == "ok" && account)
 				src.verbs -= /client/proc/goonauth
 				src.goon = account
-				src << "Key authorized: Hello [html_encode(account)]!"
+				src << "Key authorized: Hello [strip_input(account)]!"
 				src << "\blue[auth_motd]"
 				success = 1
 				goon_key(src.ckey, account)
