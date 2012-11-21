@@ -89,7 +89,8 @@ var/global/list/uneatable = list(
 
 
 /obj/machinery/singularity/process()
-	eat()
+	if(prob(50))
+		eat()
 	dissipate()
 	check_energy()
 	if(current_size >= 3)
@@ -115,7 +116,7 @@ var/global/list/uneatable = list(
 /obj/machinery/singularity/proc/dissipate()
 	if(!dissipate)
 		return
-	if(dissipate_track+dissipate_delay*20 <= world.time)
+	if(dissipate_track+dissipate_delay*10 <= world.time)
 		src.energy -= dissipate_strength
 		dissipate_track = world.time
 
@@ -144,7 +145,7 @@ var/global/list/uneatable = list(
 			pixel_y = -32
 			grav_pull = 6
 			consume_range = 1
-			dissipate_delay = 5
+			dissipate_delay = 10
 			dissipate_track = world.time
 			dissipate_strength = 5
 		if(5)
@@ -156,9 +157,9 @@ var/global/list/uneatable = list(
 				pixel_y = -64
 				grav_pull = 8
 				consume_range = 2
-				dissipate_delay = 5
+				dissipate_delay = 10
 				dissipate_track = world.time
-				dissipate_strength = 12.5
+				dissipate_strength = 10
 		if(7)
 			if((check_turfs_in(1,3))&&(check_turfs_in(2,3))&&(check_turfs_in(4,3))&&(check_turfs_in(8,3)))
 				current_size = 7

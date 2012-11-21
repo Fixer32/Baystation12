@@ -60,7 +60,7 @@ turf/Entered(mob/living/carbon/human/M)
 
 			for(var/obj/effect/decal/cleanable/B in src)
 				if(B:track_amt <= 0) continue
-				if(B.type != /obj/effect/decal/cleanable/blood/tracks)
+				if(B.type != /obj/effect/decal/cleanable/blood/tracks && B.type != /obj/effect/decal/cleanable/blood/drip)
 					if(istype(B, /obj/effect/decal/cleanable/xenoblood) || istype(B, /obj/effect/decal/cleanable/blood) || istype(B, /obj/effect/decal/cleanable/oil) || istype(B, /obj/effect/decal/cleanable/robot_debris))
 
 						var/track_type = "blood"
