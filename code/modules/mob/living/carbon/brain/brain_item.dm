@@ -66,7 +66,7 @@
 
 //since these people will be dead M != usr
 
-	if(M:brain_op_stage == 4.0)
+	if(M:op_stage.brain == 4.0)
 		for(var/mob/O in viewers(M, null))
 			if(O == (user || M))
 				continue
@@ -90,7 +90,7 @@
 		else
 			M.key = brainmob.key
 
-		M:brain_op_stage = 3.0
+		M:op_stage.brain = 3.0
 
 		del(src)
 	else

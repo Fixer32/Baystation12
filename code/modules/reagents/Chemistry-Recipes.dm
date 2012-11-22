@@ -52,14 +52,14 @@ datum
 				empulse(location, round(created_volume / 10), round(created_volume / 5), 1)
 				holder.clear_reagents()
 				return
-/*
+
 		silicate
 			name = "Silicate"
 			id = "silicate"
 			result = "silicate"
 			required_reagents = list("aluminum" = 1, "silicon" = 1, "oxygen" = 1)
 			result_amount = 3
-*/
+
 		stoxin
 			name = "Sleep Toxin"
 			id = "stoxin"
@@ -391,33 +391,6 @@ datum
 					spawn (0) target_tile.hotspot_expose(700, 400)
 				holder.del_reagent("napalm")
 				return
-
-		/*
-		smoke
-			name = "Smoke"
-			id = "smoke"
-			result = null
-			required_reagents = list("potassium" = 1, "sugar" = 1, "phosphorus" = 1 )
-			result_amount = null
-			secondary = 1
-			on_reaction(var/datum/reagents/holder, var/created_volume)
-				var/location = get_turf(holder.my_atom)
-				var/datum/effect/system/bad_smoke_spread/S = new /datum/effect/system/bad_smoke_spread
-				S.attach(location)
-				S.set_up(10, 0, location)
-				playsound(location, 'sound/effects/smoke.ogg', 50, 1, -3)
-				spawn(0)
-					S.start()
-					sleep(10)
-					S.start()
-					sleep(10)
-					S.start()
-					sleep(10)
-					S.start()
-					sleep(10)
-					S.start()
-				holder.clear_reagents()
-				return	*/
 
 		chemsmoke
 			name = "Chemsmoke"

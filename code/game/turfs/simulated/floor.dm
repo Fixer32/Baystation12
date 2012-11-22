@@ -438,6 +438,7 @@ turf/simulated/floor/proc/update_icon()
 				user << "\blue The lightbulb seems fine, no need to replace it."
 
 	if(istype(C, /obj/item/weapon/crowbar) && (!(is_plating())))
+		src.add_hiddenprint(user)
 		if(broken || burnt)
 			user << "\red You remove the broken plating."
 		else
@@ -445,7 +446,8 @@ turf/simulated/floor/proc/update_icon()
 				user << "\red You forcefully pry off the planks, destroying them in the process."
 			else
 				user << "\red You remove the [floor_tile.name]."
-				new floor_tile.type(src)
+				var/obj/FT = new floor_tile.type(src)
+				src.transfer_fingerprints_to(FT)
 
 		make_plating()
 		playsound(src.loc, 'sound/items/Crowbar.ogg', 80, 1)

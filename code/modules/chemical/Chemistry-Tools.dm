@@ -2501,7 +2501,7 @@ var/list/grind_products = list()
 		..()
 		reagents.add_reagent("toxin", 30)
 
-/*/obj/item/weapon/reagent_containers/glass/bottle/cyanide
+/obj/item/weapon/reagent_containers/glass/bottle/cyanide
 	name = "cyanide bottle"
 	desc = "A small bottle of cyanide. Bitter almonds?"
 	icon = 'chemical.dmi'
@@ -2509,7 +2509,7 @@ var/list/grind_products = list()
 
 	New()
 		..()
-		reagents.add_reagent("cyanide", 30)	*/
+		reagents.add_reagent("cyanide", 30)
 
 /obj/item/weapon/reagent_containers/glass/bottle/stoxin
 	name = "sleep-toxin bottle"

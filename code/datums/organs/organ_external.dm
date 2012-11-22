@@ -305,6 +305,9 @@
 			tbrute = 2
 		else
 			tbrute = 3
+
+		if(open!=3 && open>tbrute) tbrute = open
+
 		return "[tbrute][tburn]"
 
 
@@ -359,7 +362,7 @@
 					H.pixel_x = -10
 					H.pixel_y = 6
 					H.name = "[owner.real_name]'s head"
-					H:brain_op_stage = owner.brain_op_stage
+					H:brain_op_stage = owner.op_stage.brain
 
 					owner.u_equip(owner.glasses)
 					owner.u_equip(owner.head)

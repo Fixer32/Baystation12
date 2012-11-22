@@ -160,6 +160,7 @@
 
 	return
 
+/*
 /obj/machinery/driver_button/verb/ToggleAuto()
 	set name = "Set Auto Activate"
 	set category = "Object"
@@ -175,3 +176,4 @@
 		else
 			usr << "\blue Auto-dump mode deactivated."
 		src.attack_hand(usr)
+*/

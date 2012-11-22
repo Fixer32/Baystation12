@@ -46,6 +46,13 @@
 		for(var/mob/N in viewers(src, null))
 			if(N.client)
 				N.show_message(text("\red <B>[M] bursts out of [src]!</B>"), 2)
+	for(var/obj/O in src)
+		if(O in src.stomach_contents)
+			src.stomach_contents.Remove(O)
+		O.loc = src.loc
+		for(var/mob/N in viewers(src, null))
+			if(N.client)
+				N.show_message(text("\red <B>[O] falls out of [src]!</B>"), 2)
 	. = ..()
 
 /mob/living/carbon/attack_hand(mob/M as mob)

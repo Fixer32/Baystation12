@@ -36,35 +36,48 @@
 			if(!istype(affecting, /datum/organ/external) || affecting:burn_dam <= 0)
 				affecting = H.get_organ("head")
 
-		// If we're targetting arms or legs, also heal the respective hand/foot
-		if(affecting.name in list("l_arm","r_arm","l_leg","r_leg"))
-			var/datum/organ/external/child
-			if(affecting.name == "l_arm")
-				child = H.get_organ("l_hand")
-			else if(affecting.name == "r_arm")
-				child = H.get_organ("r_hand")
-			else if(affecting.name == "r_leg")
-				child = H.get_organ("r_foot")
-			else if(affecting.name == "l_leg")
-				child = H.get_organ("l_foot")
-
-			if(src.heal_brute)
-				if(!affecting.bandage() && !child.bandage())
-					user << "\red The wounds on this limb have already been bandaged."
-					return 1
-			else if(src.heal_burn)
-				if(!affecting.salve() && !child.salve())
-					user << "\red The wounds on this limb have already been salved."
-					return 1
+		if(istype(src,/obj/item/stack/medical/splint))
+			if(affecting.status & ORGAN_SPLINTED)
+				user << "\red This organ is already splinted."
+				return 1
+			else if(affecting.status & ORGAN_DESTROYED)
+				user << "\red This organ is not present."
+				return 1
+			else if(!(affecting.status & ORGAN_BROKEN))
+				user << "\red This organ is not broken."
+				return 1
+			else
+				affecting.status |= ORGAN_SPLINTED
 		else
-			if(src.heal_brute)
-				if(!affecting.bandage())
-					user << "\red The wounds on this limb have already been bandaged."
-					return 1
-			else if(src.heal_burn)
-				if(!affecting.salve())
-					user << "\red The wounds on this limb have already been salved."
-					return 1
+			// If we're targetting arms or legs, also heal the respective hand/foot
+			if(affecting.name in list("l_arm","r_arm","l_leg","r_leg"))
+				var/datum/organ/external/child
+				if(affecting.name == "l_arm")
+					child = H.get_organ("l_hand")
+				else if(affecting.name == "r_arm")
+					child = H.get_organ("r_hand")
+				else if(affecting.name == "r_leg")
+					child = H.get_organ("r_foot")
+				else if(affecting.name == "l_leg")
+					child = H.get_organ("l_foot")
+
+				if(src.heal_brute)
+					if(!affecting.bandage() && !child.bandage())
+						user << "\red The wounds on this limb have already been bandaged."
+						return 1
+				else if(src.heal_burn)
+					if(!affecting.salve() && !child.salve())
+						user << "\red The wounds on this limb have already been salved."
+						return 1
+			else
+				if(src.heal_brute)
+					if(!affecting.bandage())
+						user << "\red The wounds on this limb have already been bandaged."
+						return 1
+				else if(src.heal_burn)
+					if(!affecting.salve())
+						user << "\red The wounds on this limb have already been salved."
+						return 1
 
 		H.UpdateDamageIcon()
 		M.updatehealth()

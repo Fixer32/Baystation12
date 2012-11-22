@@ -307,7 +307,7 @@
 			blinded = 1
 			silent = 0
 		else				//ALIVE. LIGHTS ARE ON
-			if(health < config.health_threshold_dead || brain_op_stage == 4.0)
+			if(health < config.health_threshold_dead || op_stage.brain == 4.0)
 				death()
 				blinded = 1
 				stat = DEAD

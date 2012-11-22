@@ -10,7 +10,10 @@
 /datum/surgery_status/
 	var/eyes	=	0
 	var/face	=	0
-	var/appendix =	0
+	var/appendix	=	0
+	var/stomach	=	0
+	var/brain	=	0
+	var/ribcage	=	0
 
 /mob/living/carbon/var/datum/surgery_status/op_stage = new/datum/surgery_status
 
@@ -109,7 +112,8 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		affected.createwound(CUT, 1)
 		spread_germs_to_organ(affected, user)
 		if (target_zone == "head")
-			target.brain_op_stage = 1
+			target.op_stage.brain = 1
+		target.UpdateDamageIcon()
 
 	fail_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -181,6 +185,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		user.visible_message(msg, self_msg)
 		affected.open = 2
 		spread_germs_to_organ(affected, user)
+		target.UpdateDamageIcon()
 
 	fail_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -217,6 +222,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		affected.open = 0
 		affected.germ_level = 0
 		affected.status &= ~ORGAN_BLEEDING
+		target.UpdateDamageIcon()
 
 	fail_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -692,6 +698,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 			var/datum/organ/external/head/h = affected
 			h.disfigured = 0
 		target.op_stage.face = 0
+		target.UpdateDamageIcon()
 
 	fail_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -714,7 +721,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 	max_duration = 70
 
 	can_use(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		return ..() && target_zone == "head" && target.brain_op_stage == 1
+		return ..() && target_zone == "head" && target.op_stage.brain == 1
 
 	begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		user.visible_message("[user] begins to cut through [target]'s skull with \the [tool].", \
@@ -723,7 +730,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 	end_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		user.visible_message("\blue [user] has cut through [target]'s skull open with \the [tool].",		\
 		"\blue You have cut through [target]'s skull open with \the [tool].")
-		target.brain_op_stage = 2
+		target.op_stage.brain = 2
 
 	fail_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		user.visible_message("\red [user]'s hand slips, cracking [target]'s skull with \the [tool]!" , \
@@ -737,7 +744,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 	max_duration = 100
 
 	can_use(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		return ..() && target.brain_op_stage == 2
+		return ..() && target.op_stage.brain == 2
 
 	begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		user.visible_message("[user] starts separating connections to [target]'s brain with \the [tool].", \
@@ -746,7 +753,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 	end_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		user.visible_message("\blue [user] separates connections to [target]'s brain with \the [tool].",	\
 		"\blue You separate connections to [target]'s brain with \the [tool].")
-		target.brain_op_stage = 3
+		target.op_stage.brain = 3
 
 	fail_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		user.visible_message("\red [user]'s hand slips, cutting a vein in [target]'s brain with \the [tool]!", \
@@ -760,7 +767,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 	max_duration = 70
 
 	can_use(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		return ..() && target.brain_op_stage == 3
+		return ..() && target.op_stage.brain == 3
 
 	begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		user.visible_message("[user] starts separating [target]'s brain from \his spine with \the [tool].", \
@@ -780,7 +787,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		var/obj/item/brain/B = new(target.loc)
 		B.transfer_identity(target)
 
-		target:brain_op_stage = 4.0
+		target:op_stage.brain = 4.0
 		target.death()//You want them to die after the brain was transferred, so not to trigger client death() twice.
 
 	fail_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -804,7 +811,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 	max_duration = 50
 
 	can_use(mob/user, mob/living/carbon/metroid/target, target_zone, obj/item/tool)
-		return ..() && target.brain_op_stage == 0
+		return ..() && target.op_stage.brain == 0
 
 	begin_step(mob/user, mob/living/carbon/metroid/target, target_zone, obj/item/tool)
 		user.visible_message("[user] starts cutting [target]'s flesh with \the [tool].", \
@@ -813,7 +820,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 	end_step(mob/user, mob/living/carbon/metroid/target, target_zone, obj/item/tool)
 		user.visible_message("\blue [user] cuts [target]'s flesh with \the [tool].",	\
 		"\blue You cut [target]'s flesh with \the [tool], exposing the cores")
-		target.brain_op_stage = 1
+		target.op_stage.brain = 1
 
 	fail_step(mob/user, mob/living/carbon/metroid/target, target_zone, obj/item/tool)
 		user.visible_message("\red [user]'s hand slips, tearing [target]'s flesh with \the [tool]!", \
@@ -826,7 +833,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 	max_duration = 50
 
 	can_use(mob/user, mob/living/carbon/metroid/target, target_zone, obj/item/tool)
-		return ..() && target.brain_op_stage == 1
+		return ..() && target.op_stage.brain == 1
 
 	begin_step(mob/user, mob/living/carbon/metroid/target, target_zone, obj/item/tool)
 		user.visible_message("[user] starts cutting [target]'s silky innards apart with \the [tool].", \
@@ -835,7 +842,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 	end_step(mob/user, mob/living/carbon/metroid/target, target_zone, obj/item/tool)
 		user.visible_message("\blue [user] cuts [target]'s innards apart with \the [tool], exposing the cores",	\
 		"\blue You cut [target]'s innards apart with \the [tool], exposing the cores")
-		target.brain_op_stage = 2
+		target.op_stage.brain = 2
 
 	fail_step(mob/user, mob/living/carbon/metroid/target, target_zone, obj/item/tool)
 		user.visible_message("\red [user]'s hand slips, tearing [target]'s innards with \the [tool]!", \
@@ -848,7 +855,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 	max_duration = 70
 
 	can_use(mob/user, mob/living/carbon/metroid/target, target_zone, obj/item/tool)
-		return ..() && target.brain_op_stage == 2 && target.cores > 0
+		return ..() && target.op_stage.brain == 2 && target.cores > 0
 
 	begin_step(mob/user, mob/living/carbon/metroid/target, target_zone, obj/item/tool)
 		user.visible_message("[user] starts cutting out one of [target]'s cores with \the [tool].", \
@@ -1046,6 +1053,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		affected.amputated = 1
 		affected.setAmputatedTree()
 		affected.open = 0
+		target.UpdateDamageIcon()
 
 	fail_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -1097,7 +1105,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 
 /datum/surgery_step/ribcage
 	can_use(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		return target_zone == "chest" && hasorgans(target)
+		return target_zone == "chest" && hasorgans(target) && target.op_stage.stomach == 0
 
 /datum/surgery_step/ribcage/saw_ribcage
 	required_tool = /obj/item/weapon/circular_saw
@@ -1108,7 +1116,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 	can_use(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		if(!..()) return 0
 		var/datum/organ/external/affected = target.get_organ(target_zone)
-		return target.ribcage_op_stage == 0 && affected.open >= 2
+		return target.op_stage.ribcage == 0 && affected.open >= 2
 
 	begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		user.visible_message("[user] begins to cut through [target]'s ribcage with \the [tool].", \
@@ -1118,7 +1126,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 	end_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		user.visible_message("\blue [user] has cut through [target]'s ribcage open with \the [tool].",		\
 		"\blue You have cut through [target]'s ribcage open with \the [tool].")
-		target.ribcage_op_stage = 1
+		target.op_stage.ribcage = 1
 
 	fail_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		user.visible_message("\red [user]'s hand slips, cracking [target]'s ribcage with \the [tool]!" , \
@@ -1132,7 +1140,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 	max_duration = 40
 
 	can_use(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		return ..() && target.ribcage_op_stage == 1
+		return ..() && target.op_stage.ribcage == 1
 
 	begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/msg = "[user] starts to force open the ribcage in [target]'s torso with \the [tool]."
@@ -1144,7 +1152,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		var/msg = "\blue [user] forces open [target]'s ribcage with \the [tool]."
 		var/self_msg = "\blue You force open [target]'s ribcage with \the [tool]."
 		user.visible_message(msg, self_msg)
-		target.ribcage_op_stage = 2
+		target.op_stage.ribcage = 2
 
 		// Whoops!
 		if(prob(10))
@@ -1165,7 +1173,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 	max_duration = 40
 
 	can_use(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		return ..() && target.ribcage_op_stage == 2
+		return ..() && target.op_stage.ribcage == 2
 
 	begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/msg = "[user] starts bending [target]'s ribcage back into place with \the [tool]."
@@ -1178,7 +1186,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		var/self_msg = "You bends [target]'s ribcage back into place with \the [tool]."
 		user.visible_message(msg, self_msg)
 
-		target.ribcage_op_stage = 1
+		target.op_stage.ribcage = 1
 
 /datum/surgery_step/ribcage/mend_ribcage
 	required_tool = /obj/item/weapon/bonegel
@@ -1187,7 +1195,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 	max_duration = 40
 
 	can_use(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		return ..() && target.ribcage_op_stage == 1
+		return ..() && target.op_stage.ribcage == 1
 
 	begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/msg = "[user] starts applying \the [tool] to [target]'s ribcage."
@@ -1201,7 +1209,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		var/self_msg = "You applied \the [tool] to [target]'s ribcage."
 		user.visible_message(msg, self_msg)
 
-		target.ribcage_op_stage = 0
+		target.op_stage.ribcage = 0
 
 
 /datum/surgery_step/ribcage/remove_embryo
@@ -1215,7 +1223,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		for(var/datum/disease/alien_embryo/A in target.viruses)
 			embryo = 1
 			break
-		return ..() && embryo && target.ribcage_op_stage == 2
+		return ..() && embryo && target.op_stage.ribcage == 2
 
 	begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/msg = "[user] starts to pull something out from [target]'s ribcage with \the [tool]."
@@ -1259,3 +1267,70 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		"\red Your hand slips, slicing an artery inside [target]'s chest with \the [tool]!")
 		affected.createwound(CUT, 20)
 
+/datum/surgery_step/stomach
+	can_use(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+		return target_zone == "chest" && hasorgans(target) && target.op_stage.ribcage == 0
+
+/datum/surgery_step/stomach/cut_open
+	required_tool = /obj/item/weapon/scalpel
+
+	min_duration = 70
+	max_duration = 90
+
+	can_use(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+		return ..() && target.op_stage.stomach == 0
+
+	begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+		user.visible_message("[user] starts cutting [target]'s stomach with \the [tool].", \
+		"You start cutting [target]'s stomach with \the [tool]." )
+		target.custom_pain("The pain in your stomach is living hell!",1)
+
+	end_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+		user.visible_message("[user] cuts [target]'s stomach open with \the [tool].", \
+		"You cut [target]'s stomach open with \the [tool]." )
+		target.op_stage.stomach = 1
+		for(var/mob/M in target.stomach_contents)
+			target.stomach_contents.Remove(M)
+			M.loc = target.loc
+			user.visible_message("\red <B>[M] bursts out of [src]!</B>")
+		for(var/obj/O in target.stomach_contents)
+			target.stomach_contents.Remove(O)
+			O.loc = target.loc
+			user.visible_message("\red <B>[O] falls out of [src]!</B>")
+
+
+	fail_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+		var/datum/organ/external/chest/affected = target.get_organ("chest")
+		user.visible_message("\red [user]'s hand slips, slicing an artery inside [target]'s stomach with \the [tool]!", \
+		"\red Your hand slips, slicing an artery inside [target]'s stomach with \the [tool]!")
+		affected.createwound(CUT, 20)
+
+/datum/surgery_step/stomach/mend_closed
+	required_tool = /obj/item/weapon/hemostat
+
+	min_duration = 70
+	max_duration = 90
+
+	can_use(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+		return ..() && target.op_stage.stomach == 1
+
+	begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+		user.visible_message("[user] starts mending [target]'s stomach with \the [tool].", \
+		"You start mending [target]'s stomach with \the [tool]." )
+		target.custom_pain("The pain in your stomach is living hell!",1)
+
+	end_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+		user.visible_message("[user] mends [target]'s stomach with \the [tool].", \
+		"You mend [target]'s stomach with \the [tool]." )
+		target.op_stage.stomach = 0
+		var/turf/T = get_turf_loc(target)
+		for(var/obj/item/O in T)
+			if(istype(O) && O.w_class<=2)
+				target.stomach_contents.Add(O)
+				O.loc = target
+
+	fail_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+		var/datum/organ/external/chest/affected = target.get_organ("chest")
+		user.visible_message("\red [user]'s hand slips, leaving a small burn on [target]'s stomach with \the [tool]!", \
+		"\red Your hand slips, leaving a small burn on [target]'s stomach with \the [tool]!")
+		target.apply_damage(8, BURN, affected)

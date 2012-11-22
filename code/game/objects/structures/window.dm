@@ -18,7 +18,8 @@
 	health -= Proj.damage
 	..()
 	if(health <=0)
-		new /obj/item/weapon/shard( src.loc )
+		var/obj/O = new /obj/item/weapon/shard( src.loc )
+		src.transfer_fingerprints_to(O)
 		new /obj/item/stack/rods( src.loc )
 		src.density = 0
 		del(src)
@@ -30,22 +31,30 @@
 			del(src)
 			return
 		if(2.0)
-			new /obj/item/weapon/shard( src.loc )
-			if(reinf) new /obj/item/stack/rods( src.loc)
+			var/obj/O = new /obj/item/weapon/shard( src.loc )
+			src.transfer_fingerprints_to(O)
+			if(reinf)
+				O = new /obj/item/stack/rods( src.loc)
+				src.transfer_fingerprints_to(O)
 			//SN src = null
 			del(src)
 			return
 		if(3.0)
 			if (prob(50))
-				new /obj/item/weapon/shard( src.loc )
-				if(reinf) new /obj/item/stack/rods( src.loc)
+				var/obj/O = new /obj/item/weapon/shard( src.loc )
+				src.transfer_fingerprints_to(O)
+				if(reinf)
+					O = new /obj/item/stack/rods( src.loc)
+					src.transfer_fingerprints_to(O)
 
 				del(src)
 				return
 	return
 
 /obj/structure/window/blob_act()
-	if(reinf) new /obj/item/stack/rods( src.loc)
+	if(reinf)
+		var/obj/O = new /obj/item/stack/rods( src.loc)
+		src.transfer_fingerprints_to(O)
 	density = 0
 	del(src)
 
@@ -71,8 +80,11 @@
 	//*****RM
 //	log_adminwarn("glass at [x],[y],[z] meteor killed")
 	src.health = 0
-	new /obj/item/weapon/shard( src.loc )
-	if(reinf) new /obj/item/stack/rods( src.loc)
+	var/obj/O = new /obj/item/weapon/shard( src.loc )
+	src.transfer_fingerprints_to(O)
+	if(reinf)
+		O = new /obj/item/stack/rods( src.loc)
+		src.transfer_fingerprints_to(O)
 	src.density = 0
 
 
@@ -98,8 +110,11 @@
 		update_nearby_icons()
 		step(src, get_dir(AM, src))
 	if (src.health <= 0)
-		new /obj/item/weapon/shard( src.loc )
-		if(reinf) new /obj/item/stack/rods( src.loc)
+		var/obj/O = new /obj/item/weapon/shard( src.loc )
+		src.transfer_fingerprints_to(O)
+		if(reinf)
+			O = new /obj/item/stack/rods( src.loc)
+			src.transfer_fingerprints_to(O)
 		src.density = 0
 		del(src)
 		return
@@ -108,31 +123,25 @@
 
 //These all need to be rewritten to use visiblemessage()
 
-/obj/structure/window/attack_hand()
+/obj/structure/window/attack_hand(var/mob/user)
 	if (((HULK in usr.mutations) || (SUPRSTR in usr.augmentations)) && usr:a_intent=="hurt")
+		src.add_fingerprint(usr)
 		usr << "\blue You smash through the window."
 		for(var/mob/O in oviewers())
 			if ((O.client && !( O.blinded )))
 				O << "\red [usr] smashes through the window!"
 		src.health = 0
-		new /obj/item/weapon/shard( src.loc )
-		if(reinf) new /obj/item/stack/rods( src.loc)
+		var/obj/O = new /obj/item/weapon/shard( src.loc )
+		src.transfer_fingerprints_to(O)
+		if(reinf)
+			O = new /obj/item/stack/rods( src.loc)
+			src.transfer_fingerprints_to(O)
 		src.density = 0
 		del(src)
 	return
 
-/obj/structure/window/attack_paw()
-	if ((HULK in usr.mutations))
-		usr << "\blue You smash through the window."
-		for(var/mob/O in oviewers())
-			if ((O.client && !( O.blinded )))
-				O << "\red [usr] smashes through the window!"
-		src.health = 0
-		new /obj/item/weapon/shard( src.loc )
-		if(reinf) new /obj/item/stack/rods( src.loc)
-		src.density = 0
-		del(src)
-	return
+/obj/structure/window/attack_paw(var/mob/user)
+	attack_hand(user)
 
 /obj/structure/window/attack_alien()
 	if (istype(usr, /mob/living/carbon/alien/larva))//Safety check for larva. /N
@@ -149,9 +158,11 @@
 			if ((O.client && !( O.blinded )))
 				O << "\red [usr] smashes through the window!"
 		src.health = 0
-		new /obj/item/weapon/shard(src.loc)
+		var/obj/O = new /obj/item/weapon/shard( src.loc )
+		src.transfer_fingerprints_to(O)
 		if(reinf)
-			new /obj/item/stack/rods(src.loc)
+			O = new /obj/item/stack/rods( src.loc)
+			src.transfer_fingerprints_to(O)
 		src.density = 0
 		del(src)
 		return
@@ -173,9 +184,11 @@
 			if ((O.client && !( O.blinded )))
 				O << "\red [M] smashes through the window!"
 		src.health = 0
-		new /obj/item/weapon/shard(src.loc)
+		var/obj/O = new /obj/item/weapon/shard( src.loc )
+		src.transfer_fingerprints_to(O)
 		if(reinf)
-			new /obj/item/stack/rods(src.loc)
+			O = new /obj/item/stack/rods( src.loc)
+			src.transfer_fingerprints_to(O)
 		src.density = 0
 		del(src)
 		return
@@ -197,15 +210,18 @@
 			if ((O.client && !( O.blinded )))
 				O << "\red [usr] smashes through the window!"
 		src.health = 0
-		new /obj/item/weapon/shard(src.loc)
+		var/obj/O = new /obj/item/weapon/shard( src.loc )
+		src.transfer_fingerprints_to(O)
 		if(reinf)
-			new /obj/item/stack/rods(src.loc)
+			O = new /obj/item/stack/rods( src.loc)
+			src.transfer_fingerprints_to(O)
 		src.density = 0
 		del(src)
 		return
 	return
 
 /obj/structure/window/attackby(obj/item/weapon/W as obj, mob/user as mob)
+	src.add_hiddenprint(user)
 	if(!istype(W)) return//I really wish I did not need this
 	if (istype(W, /obj/item/weapon/screwdriver))
 		if(reinf && state >= 1)
@@ -249,12 +265,18 @@
 			var/index = null
 			index = 0
 			while(index < 2)
-				new /obj/item/weapon/shard( src.loc )
-				if(reinf) new /obj/item/stack/rods( src.loc)
+				var/obj/O = new /obj/item/weapon/shard( src.loc )
+				src.transfer_fingerprints_to(O)
+				if(reinf)
+					O = new /obj/item/stack/rods( src.loc)
+					src.transfer_fingerprints_to(O)
 				index++
 		else
-			new /obj/item/weapon/shard( src.loc )
-			if(reinf) new /obj/item/stack/rods( src.loc)
+			var/obj/O = new /obj/item/weapon/shard( src.loc )
+			src.transfer_fingerprints_to(O)
+			if(reinf)
+				O = new /obj/item/stack/rods( src.loc)
+				src.transfer_fingerprints_to(O)
 		src.density = 0
 		del(src)
 		return
@@ -301,7 +323,7 @@
 	return
 
 /obj/structure/window/proc/updateSilicate()
-	if(silicateIcon && silicate)
+	if(silicate)
 		src.icon = initial(icon)
 
 		var/icon/I = icon(icon,icon_state,dir)

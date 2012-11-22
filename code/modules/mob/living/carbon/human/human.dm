@@ -823,7 +823,7 @@
 /mob/living/carbon/human/proc/morph()
 	set name = "Morph"
 	set category = "Superpower"
-	
+
 	if(stat!=CONSCIOUS)
 		reset_view(0)
 		remoteview_target = null
@@ -974,7 +974,7 @@
 		gloves.germ_level += n
 	else
 		germ_level += n
-		
+
 /mob/living/carbon/human/revive()
 	for (var/datum/organ/external/O in organs)
 		O.status &= ~ORGAN_BROKEN
@@ -984,6 +984,10 @@
 		if (!O.amputated)
 			O.status &= ~ORGAN_DESTROYED
 		O.wounds.Cut()
+		if(istype(O,/datum/organ/external/chest))
+			O:ruptured_lungs = 0
+		if(istype(O,/datum/organ/external/head))
+			O:disfigured = 0
 
 	vessel.add_reagent("blood",560-vessel.total_volume)
 	fixblood()
@@ -1004,7 +1008,7 @@
 
 /mob/living/carbon/human/proc/rupture_lung()
 	var/datum/organ/external/chest/E = get_organ("chest")
-	
+
 	if(E.ruptured_lungs == 0)
 		src.custom_pain("You feel a stabbing pain in your chest!", 1)
 

@@ -49,6 +49,7 @@
 	user.visible_message("[user.name] kicks the [src.name].", \
 						"You kick the [src.name].", \
 						"You hear a noise")
+	src.add_fingerprint(user)
 	if(((HULK in usr.mutations) || (SUPRSTR in usr.augmentations)) && usr:a_intent=="hurt")
 		src.health -= 5
 	else if(!shock(user, 70))
@@ -104,6 +105,7 @@
 
 
 /obj/structure/grille/attackby(obj/item/weapon/W, mob/user)
+	add_hiddenprint(user)
 	if(iswirecutter(W))
 		if(!shock(user, 100))
 			playsound(src.loc, 'sound/items/Wirecutter.ogg', 100, 1)
