@@ -1345,7 +1345,7 @@ datum
 				M.setCloneLoss(0)
 				M.setOxyLoss(0)
 				M.radiation = 0
-				M.heal_organ_damage(5,5)
+				M.heal_organ_damage(5,5,1)
 				M.adjustToxLoss(-5)
 				if(holder.has_reagent("toxin"))
 					holder.remove_reagent("toxin", 5)

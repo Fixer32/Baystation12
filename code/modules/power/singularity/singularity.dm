@@ -421,7 +421,7 @@ var/global/list/uneatable = list(
 		if(istype(M,/mob/living/))
 			M.apply_effect(rand(radiationmin,radiation), IRRADIATE)
 			toxdamage = (toxdamage - (toxdamage*M.getarmor(null, "rad")))
-			M.apply_effect(toxdamage, TOX)
+			M.apply_damage(toxdamage, TOX)
 	return
 
 

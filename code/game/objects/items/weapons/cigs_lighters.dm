@@ -192,6 +192,7 @@ ZIPPO
 	if(src.lit == 1)
 		src.lit = -1
 		icon_state = src.butt_icon
+		item_state = "cigoff"
 		desc = "Old manky [src] butt."
 		name = "[src] butt"
 		attack_verb = list("poked")

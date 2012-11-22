@@ -38,6 +38,8 @@ datum/controller/game_controller
 	var/ticker_cost		= 0
 	var/total_cost		= 0
 
+	var/even = 1
+
 datum/controller/game_controller/New()
 	//There can be only one master_controller. Out with the old and in with the new.
 	if(master_controller != src)
@@ -128,6 +130,8 @@ datum/controller/game_controller/proc/process()
 				powernets_ready			= 0
 				ticker_ready			= 0
 
+				even = !even
+
 				vote.process()
 
 				spawn(0)
@@ -179,39 +183,48 @@ datum/controller/game_controller/proc/process()
 					powernets_cost = ((world.timeofday - start_time) / 10) - machines_cost
 				sleep(breather_ticks)
 
-				spawn(0)
-					sun.calc_position()
+				if(even)
+					spawn(0)
+						sun.calc_position()
+						sun_ready = 1
+						sun_cost = (world.timeofday - start_time) / 10
+					sleep(breather_ticks)
+				else
 					sun_ready = 1
-					sun_cost = (world.timeofday - start_time) / 10
-				sleep(breather_ticks)
 
-				spawn(0)
-					var/i = 1
-					while(i<=mob_list.len)
-						var/mob/M = mob_list[i]
-						if(M)
-							M.Life()
-							i++
-							continue
-						mob_list.Cut(i,i+1)
-//					for(var/mob/living/M in world)	//only living mobs have life processes
-//						M.Life()
+				if(even)
+					spawn(0)
+						var/i = 1
+						while(i<=mob_list.len)
+							var/mob/M = mob_list[i]
+							if(M)
+								M.Life()
+								i++
+								continue
+							mob_list.Cut(i,i+1)
+//						for(var/mob/living/M in world)	//only living mobs have life processes
+//							M.Life()
+						mobs_ready = 1
+						mobs_cost = (world.timeofday - start_time) / 10
+					sleep(breather_ticks)
+				else
 					mobs_ready = 1
-					mobs_cost = (world.timeofday - start_time) / 10
-				sleep(breather_ticks)
 
-				spawn(0)
-					var/i = 1
-					while(i<=active_diseases.len)
-						var/datum/disease/Disease = active_diseases[i]
-						if(Disease)
-							Disease.process()
-							i++
-							continue
-						active_diseases.Cut(i,i+1)
+				if(even)
+					spawn(0)
+						var/i = 1
+						while(i<=active_diseases.len)
+							var/datum/disease/Disease = active_diseases[i]
+							if(Disease)
+								Disease.process()
+								i++
+								continue
+							active_diseases.Cut(i,i+1)
+						diseases_ready = 1
+						diseases_cost = (world.timeofday - start_time) / 10
+					sleep(breather_ticks)
+				else
 					diseases_ready = 1
-					diseases_cost = (world.timeofday - start_time) / 10
-				sleep(breather_ticks)
 
 				spawn(0)
 					var/i = 1

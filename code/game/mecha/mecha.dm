@@ -1470,7 +1470,7 @@
 			send_byjax(src.occupant,"exosuit.browser","eq_list",src.get_equipment_list())
 		return
 	if (href_list["eject"])
-		src.eject()
+		src.go_out()
 		return
 	if(href_list["toggle_lights"])
 		src.toggle_lights()
