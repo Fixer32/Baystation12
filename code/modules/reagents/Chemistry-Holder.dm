@@ -347,8 +347,7 @@ datum
 				update_total()
 				if(total_volume + amount > maximum_volume) amount = (maximum_volume - total_volume) //Doesnt fit in. Make it disappear. Shouldnt happen. Will happen.
 
-				for(var/A in reagent_list)
-					var/datum/reagent/R = A
+				for(var/datum/reagent/R in reagent_list)
 					if (R.id == reagent)
 						R.volume += amount
 						update_total()
@@ -398,14 +397,24 @@ datum
 			remove_reagent(var/reagent, var/amount, var/safety)//Added a safety check for the trans_id_to
 				if(!isnum(amount)) return 1
 
-				for(var/A in reagent_list)
-					var/datum/reagent/R = A
-					var/datum/compare = chemical_reagents_list[reagent]
-					if(istype(R,compare))
-						var/amt = max(0,min(R.volume,amount))
-						R.volume -= amt
-						amount -= amt
-						if(amount<=0)
+				if(reagent=="ethanol")
+					for(var/datum/reagent/R in reagent_list)
+						var/datum/compare = chemical_reagents_list[reagent]
+						if(istype(R,compare))
+							var/amt = max(0,min(R.volume,amount))
+							R.volume -= amt
+							amount -= amt
+							if(amount<=0)
+								update_total()
+								if(!safety)//So it does not handle reactions when it need not to
+									handle_reactions()
+								if(my_atom)
+									my_atom.on_reagent_change()
+								return 0
+				else
+					for(var/datum/reagent/R in reagent_list)
+						if(R.id==reagent)
+							R.volume = max(0,R.volume-amount)
 							update_total()
 							if(!safety)//So it does not handle reactions when it need not to
 								handle_reactions()
@@ -416,27 +425,38 @@ datum
 				return 1
 
 			has_reagent(var/reagent, var/amount = -1)
-
-				for(var/A in reagent_list)
-					var/datum/reagent/R = A
-					var/datum/compare = chemical_reagents_list[reagent]
-					if(istype(R,compare))
-						if(!amount) return R
-						else
-							if(R.volume >= amount) return R
-							else return 0
+				if(reagent=="ethanol")
+					for(var/datum/reagent/R in reagent_list)
+						var/datum/compare = chemical_reagents_list[reagent]
+						if(istype(R,compare))
+							if(!amount) return R
+							else
+								if(R.volume >= amount) return R
+								else return 0
+				else
+					for(var/datum/reagent/R in reagent_list)
+						if(R.id==reagent)
+							if(!amount) return R
+							else
+								if(R.volume >= amount) return R
+								else return 0
 
 				return 0
 
 			get_reagent_amount(var/reagent)
-				var/amnt = 0
-				for(var/A in reagent_list)
-					var/datum/reagent/R = A
-					var/datum/compare = chemical_reagents_list[reagent]
-					if(istype(R,compare))
-						amnt += R.volume
+				if(reagent=="ethanol")
+					var/amnt = 0
+					for(var/datum/reagent/R in reagent_list)
+						var/datum/compare = chemical_reagents_list[reagent]
+						if(istype(R,compare))
+							amnt += R.volume
+					return amnt
+				else
+					for(var/datum/reagent/R in reagent_list)
+						if(R.id==reagent)
+							return R.volume
 
-				return amnt
+				return 0
 
 			get_reagents()
 				var/res = ""

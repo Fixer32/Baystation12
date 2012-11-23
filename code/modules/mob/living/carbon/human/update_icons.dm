@@ -199,6 +199,7 @@ proc/get_damage_icon_part(damage_state, body_part)
 	for(var/datum/organ/external/O in organs)
 		if(O.status & ORGAN_DESTROYED) damage_appearance += "d"
 		else
+			O.update_icon()
 			damage_appearance += O.damage_state
 
 	if(damage_appearance == previous_damage_appearance)
@@ -214,7 +215,6 @@ proc/get_damage_icon_part(damage_state, body_part)
 	if(!skeleton)
 		for(var/datum/organ/external/O in organs)
 			if(!(O.status & ORGAN_DESTROYED))
-				O.update_icon()
 				if(O.damage_state == "00") continue
 				var/icon/DI = get_damage_icon_part(O.damage_state, O.icon_name)
 				standing.Blend(DI, ICON_OVERLAY)

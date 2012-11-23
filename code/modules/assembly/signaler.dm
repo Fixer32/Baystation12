@@ -169,6 +169,9 @@
 		set src in usr
 		set name = "Threaten to push the button!"
 		set desc = "BOOOOM!"
-		deadman = 1
-		processing_objects.Add(src)
-		usr.visible_message("\red [usr] moves their finger over [src]'s signal button...")
+		deadman = !deadman
+		if(deadman)
+			processing_objects.Add(src)
+			usr.visible_message("\red [usr] moves their finger over [src]'s signal button...")
+		else
+			processing_objects.Remove(src)

@@ -428,6 +428,23 @@
 	else
 		stop_pulling()
 		. = ..()
+
+	var/open_body_parts = 0
+	for(var/name in organs_by_name)
+		var/datum/organ/external/e = organs_by_name[name]
+		if(!(e.status&ORGAN_DESTROYED) && e.open)
+			open_body_parts++
+	if(open_body_parts)
+		if(prob(25))
+			adjustBruteLoss(2*open_body_parts)
+			visible_message("\red \The [src] has problems with moving with \his intensines out!")
+			var/turf/location = loc
+			if (istype(location, /turf/simulated))
+				location.add_blood(src)
+				var/blood_volume = round(vessel.get_reagent_amount("blood"))
+				if(blood_volume > 0)
+					vessel.remove_reagent("blood",2*open_body_parts)
+
 	if ((s_active && !( s_active in contents ) ))
 		s_active.close(src)
 

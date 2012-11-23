@@ -306,7 +306,8 @@
 		else
 			tbrute = 3
 
-		if(open!=3 && open>tbrute) tbrute = open
+		if(open==1 && tbrute<1) tbrute = 1
+		else if(open==2 && tbrute<3) tbrute = 3
 
 		return "[tbrute][tburn]"
 
