@@ -860,8 +860,9 @@ steam.start() -- spawns the effect
 
 		F = new(T, metal)
 		F.amount = amount
-		F.create_reagents(reagents.maximum_volume)
-		neighbours++
+		if(!metal)
+			F.create_reagents(reagents.maximum_volume)
+			neighbours++
 
 	if(!metal && reagents)
 		var/transfer=reagents.total_volume/(1+neighbours)
@@ -928,17 +929,23 @@ steam.start() -- spawns the effect
 		else
 			location = get_turf(loca)
 
-		reagents = new/datum/reagents(carry.maximum_volume)
-		reagents.my_atom = carry.my_atom
-		carry.trans_to(src,carry.total_volume)
 		metal = metalfoam
+		if(metal)
+			reagents = new/datum/reagents(carry.maximum_volume)
+			reagents.my_atom = carry.my_atom
+			carry.trans_to(src,carry.total_volume)
 
 	start()
 		spawn(0)
-			var/obj/effect/effect/foam/F = locate() in location
-			if(F)
-				F.amount += amount
-				return
+			var/obj/effect/effect/foam/F
+			if(!metal)
+				F = locate() in location
+				if(F)
+					F.amount += amount
+					if(F.reagents.maximum_volume<F.reagents.total_volume+src.reagents.total_volume)
+						F.reagents.maximum_volume=F.reagents.total_volume+src.reagents.total_volume
+					reagents.trans_to(F,reagents.total_volume)
+					return
 
 			F = new(src.location, metal)
 			F.amount = amount
