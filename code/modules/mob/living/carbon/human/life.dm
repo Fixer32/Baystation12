@@ -579,6 +579,14 @@
 
 
 	proc/get_breath_from_internal(volume_needed)
+		if(istype(wear_suit, /obj/item/clothing/suit/powered))
+			var/obj/item/clothing/suit/powered/Suit = wear_suit
+			if(Suit.helm && istype(Suit.atmoseal,/obj/item/powerarmor/atmoseal/ironman) && !Suit.atmoseal:face_open)
+				var/datum/gas_mixture/GM = new
+				GM.volume = volume_needed
+				GM.temperature = T20C
+				GM.oxygen = (ONE_ATMOSPHERE)*GM.volume/(R_IDEAL_GAS_EQUATION*GM.temperature)
+				return GM
 		if(internal)
 			if (!contents.Find(internal))
 				internal = null
@@ -1540,12 +1548,28 @@
 					if(M.stat == 2)
 						M.death(1)
 						stomach_contents.Remove(M)
+						for(var/obj/item/I in M.contents)
+							I.loc = src
+							stomach_contents.Add(I)
 						del(M)
 						continue
 					if(air_master.current_cycle%3==1)
 						if(!M.nodamage)
 							M.adjustBruteLoss(5)
 						nutrition += 10
+			if(prob(5))
+				var/dmg = 0
+				for(var/obj/item/O in stomach_contents)
+					if(O.sharp && O.force)
+						var/d = rand(round(O.force / 4), O.force)
+						dmg += d
+				if(dmg)
+					var/datum/organ/external/organ = src.get_organ("chest")
+					if (istype(organ))
+						if(organ:take_damage(dmg, 0))
+							UpdateDamageIcon()
+					updatehealth()
+
 
 	proc/handle_changeling()
 		if(mind && mind.changeling)

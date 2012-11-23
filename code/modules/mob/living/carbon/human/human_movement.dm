@@ -50,6 +50,13 @@
 			return 1
 //		if(!check_drift && J.allow_thrust(0.01, src))
 //			return 1
+	if(istype(wear_suit, /obj/item/clothing/suit/powered))
+		var/obj/item/clothing/suit/powered/S = wear_suit
+		if(S.jetpack)
+			var/obj/item/powerarmor/jetpack/J = S.jetpack
+			if(((!check_drift) || (check_drift && J.stabilization_on)) && (!lying) && (J.allow_thrust(src)))
+				inertia_dir = 0
+				return 1
 
 	//If no working jetpack then use the other checks
 	if(..())	return 1
