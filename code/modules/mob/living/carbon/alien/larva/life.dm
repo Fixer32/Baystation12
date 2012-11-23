@@ -379,6 +379,9 @@
 					if(M.stat == 2)
 						M.death(1)
 						stomach_contents.Remove(M)
+						for(var/obj/item/I in M.contents)
+							I.loc = src
+							stomach_contents.Add(I)
 						del(M)
 						continue
 					if(air_master.current_cycle%3==1)

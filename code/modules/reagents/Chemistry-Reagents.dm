@@ -623,10 +623,11 @@ datum
 			id = "sugar"
 			description = "The organic compound commonly known as table sugar and sometimes called saccharose. This white, odorless, crystalline powder has a pleasing, sweet taste."
 			reagent_state = SOLID
+			nutriment_factor = 1 * REAGENTS_METABOLISM
 			color = "#808080" // rgb: 128, 128, 128
 
 			on_mob_life(var/mob/living/M as mob)
-				M.nutrition += 1
+				M.nutrition += nutriment_factor
 				..()
 				return
 

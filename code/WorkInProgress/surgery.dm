@@ -207,7 +207,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 	max_duration = 100
 
 	can_use(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		return ..() && affected.open && target_zone != "mouth"
+		return ..() && affected.open && target_zone != "mouth" && (target_zone != "chest" || !target.op_stage.stomach)
 
 	begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -1306,7 +1306,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		affected.createwound(CUT, 20)
 
 /datum/surgery_step/stomach/mend_closed
-	required_tool = /obj/item/weapon/hemostat
+	required_tool = /obj/item/weapon/cautery
 
 	min_duration = 70
 	max_duration = 90
@@ -1324,8 +1324,11 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		"You mend [target]'s stomach with \the [tool]." )
 		target.op_stage.stomach = 0
 		var/turf/T = get_turf_loc(target)
-		for(var/obj/item/O in T)
-			if(istype(O) && O.w_class<=2)
+		for(var/obj/item/O in T.contents)
+			if(istype(O,/obj/item/weapon/reagent_containers))
+				O.reagents.trans_to(src,O.reagents.total_volume)
+				del(O)
+			else if(istype(O) && O.w_class<=2)
 				target.stomach_contents.Add(O)
 				O.loc = target
 

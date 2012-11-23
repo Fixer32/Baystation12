@@ -86,6 +86,11 @@
 					stomach_contents.Remove(M)
 					M.loc = loc
 					Paralyse(10)
+			for(var/obj/item/M in src)
+				if(M in stomach_contents)
+					stomach_contents.Remove(M)
+					M.loc = loc
+					Paralyse(10)
 			for(var/mob/O in viewers(src, null))
 				O.show_message(text("\green <B>[src] hurls out the contents of their stomach!</B>"), 1)
 	return
