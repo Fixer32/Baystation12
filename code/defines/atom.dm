@@ -26,6 +26,9 @@
 	proc/remove_air(amount)
 		return null
 
+	proc/remove_air_volume(amount)
+		return null
+
 	proc/return_air()
 		if(loc)
 			return loc.return_air()

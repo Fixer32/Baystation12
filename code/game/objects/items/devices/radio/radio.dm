@@ -35,6 +35,7 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 	var/const/WIRE_SIGNAL = 1 //sends a signal, like to set off a bomb or electrocute someone
 	var/const/WIRE_RECEIVE = 2
 	var/const/WIRE_TRANSMIT = 4
+	var/const/WIRE_LOCK = 8
 	var/const/TRANSMISSION_DELAY = 5 // only 2/second/radio
 	var/const/FREQ_LISTENING = 1
 		//FREQ_BROADCASTING = 2
@@ -83,10 +84,10 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 
 	var/dat = "<html><head><title>[src]</title></head><body><TT>"
 
-	if(!istype(src, /obj/item/device/radio/headset)) //Headsets dont get a mic button
-		dat += "Microphone: [broadcasting ? "<A href='byond://?src=\ref[src];talk=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];talk=1'>Disengaged</A>"]<BR>"
-
-	dat += {"
+	if(!(wires&WIRE_LOCK))
+		if(!istype(src, /obj/item/device/radio/headset)) //Headsets dont get a mic button
+			dat += "Microphone: [broadcasting ? "<A href='byond://?src=\ref[src];talk=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];talk=1'>Disengaged</A>"]<BR>"
+		dat += {"
 				Speaker: [listening ? "<A href='byond://?src=\ref[src];listen=0'>Engaged</A>" : "<A href='byond://?src=\ref[src];listen=1'>Disengaged</A>"]<BR>
 				Frequency:
 				<A href='byond://?src=\ref[src];freq=-10'>-</A>
@@ -96,8 +97,9 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 				<A href='byond://?src=\ref[src];freq=10'>+</A><BR>
 				"}
 
-	for (var/ch_name in channels)
-		dat+=text_sec_channel(ch_name, channels[ch_name])
+		for (var/ch_name in channels)
+			dat+=text_sec_channel(ch_name, channels[ch_name])
+
 	dat+={"[text_wires()]</TT></body></html>"}
 	user << browse(dat, "window=radio")
 	onclose(user, "radio")
@@ -111,6 +113,7 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 			Green Wire: <A href='byond://?src=\ref[src];wires=4'>[(wires & 4) ? "Cut" : "Mend"] Wire</A><BR>
 			Red Wire:   <A href='byond://?src=\ref[src];wires=2'>[(wires & 2) ? "Cut" : "Mend"] Wire</A><BR>
 			Blue Wire:  <A href='byond://?src=\ref[src];wires=1'>[(wires & 1) ? "Cut" : "Mend"] Wire</A><BR>
+			Black Wire: <A href='byond://?src=\ref[src];wires=8'>[(wires & 8) ? "Mend" : "Cut"] Wire</A><BR>
 			"}
 
 
@@ -154,7 +157,7 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 
 		return
 
-	else if (href_list["freq"])
+	else if (href_list["freq"] && !(wires&WIRE_LOCK))
 		var/new_frequency = (frequency + text2num(href_list["freq"]))
 		if (!freerange || (frequency < 1200 || frequency > 1600))
 			new_frequency = sanitize_frequency(new_frequency, maxf)
@@ -164,9 +167,9 @@ var/GLOBAL_RADIO_TYPE = 1 // radio type to use
 				usr << browse(null, "window=radio")
 				return
 
-	else if (href_list["talk"])
+	else if (href_list["talk"] && !(wires&WIRE_LOCK))
 		broadcasting = text2num(href_list["talk"])
-	else if (href_list["listen"])
+	else if (href_list["listen"] && !(wires&WIRE_LOCK))
 		var/chan_name = href_list["ch_name"]
 		if (!chan_name)
 			listening = text2num(href_list["listen"])

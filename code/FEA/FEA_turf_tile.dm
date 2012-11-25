@@ -78,6 +78,21 @@ turf
 
 		return GM
 
+	remove_air_volume(amount as num)
+		var/datum/gas_mixture/GM = new
+		GM.volume=amount
+		GM.temperature = temperature
+
+		var/sum = oxygen + carbon_dioxide + nitrogen + toxins
+		if(sum>0)
+			var/rate = (ONE_ATMOSPHERE*GM.volume)/(R_IDEAL_GAS_EQUATION*GM.temperature)
+			GM.oxygen = (oxygen/sum)*rate
+			GM.carbon_dioxide = (carbon_dioxide/sum)*rate
+			GM.nitrogen = (nitrogen/sum)*rate
+			GM.toxins = (toxins/sum)*rate
+
+		return GM
+
 turf
 	var/pressure_difference = 0
 	var/pressure_direction = 0
@@ -280,6 +295,31 @@ turf
 			else
 				return ..()
 
+		remove_air_volume(amount as num)
+			if(air)
+				var/datum/gas_mixture/removed = null
+
+				if(parent&&parent.group_processing)
+					var/moles_needed = parent.air.return_pressure()*amount/(R_IDEAL_GAS_EQUATION*parent.air.temperature)
+					moles_needed = max(moles_needed,0)
+					removed = parent.air.check_then_remove(moles_needed)
+					if(!removed)
+						parent.suspend_group_processing()
+						removed = air.remove(amount)
+				else
+					var/moles_needed = air.return_pressure()*amount/(R_IDEAL_GAS_EQUATION*air.temperature)
+					moles_needed = max(moles_needed,0)
+					removed = air.remove(moles_needed)
+
+					if(!processing)
+						if(air.check_tile_graphic())
+							update_visuals(air)
+
+				return removed
+
+			else
+				return ..()
+
 		update_air_properties()//OPTIMIZE
 			air_check_directions = 0
 
@@ -340,6 +380,7 @@ turf
 				return 1
 			next_check += check_delay + rand(max(check_delay, 1)/2,check_delay)
 			check_delay++
+			if(check_delay>10) check_delay=0
 
 			var/turf/simulated/list/possible_fire_spreads = list()
 			if(processing)

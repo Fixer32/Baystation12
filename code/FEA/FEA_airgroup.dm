@@ -135,8 +135,10 @@ datum/air_group
 				var/result = air.check_gas_mixture(AG.air)
 				if(result == 1)
 					connection_difference = air.share(AG.air)
+					reset_delay()
 				else if(result == -1)
 					AG.suspend_group_processing()
+					AG.reset_delay()
 					connection_difference = air.share(enemy_border.air)
 				else
 					abort_group = 1
@@ -166,12 +168,15 @@ datum/air_group
 					if(enemy_tile:current_cycle < current_cycle)
 						if(air.check_gas_mixture(enemy_tile:air))
 							connection_difference = air.share(enemy_tile:air)
+							reset_delay()
+							enemy_tile:reset_delay()
 						else
 							abort_group = 1
 							break
 				else if(isturf(enemy_tile))
 					if(air.check_turf(enemy_tile))
 						connection_difference = air.mimic(enemy_tile)
+						reset_delay()
 					else
 						abort_group = 1
 						break
@@ -194,6 +199,7 @@ datum/air_group
 
 				if(air.check_turf(sample))
 					connection_difference = air.mimic(sample, length_space_border)
+					reset_delay()
 				else
 					abort_group = 1
 
@@ -280,3 +286,7 @@ datum/air_group
 			suspend_group_processing()
 
 		return
+
+	proc/reset_delay()
+		next_check=0
+		check_delay= -5 //negative numbers mean a mandatory quick-update period

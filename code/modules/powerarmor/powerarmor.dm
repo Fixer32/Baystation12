@@ -275,7 +275,7 @@
 /obj/item/clothing/head/powered/ironman
 	name = "Ironman head"
 //	item_state = "ironman"
-	icon_state = "ironman-open"
+	icon_state = "ironman"
 	var/closed_iconstate = "ironman"
 	var/opened_iconstate = "ironman-open"
 	flags = FPRINT | TABLEPASS | HEADCOVERSEYES | HEADCOVERSMOUTH | BLOCKHAIR

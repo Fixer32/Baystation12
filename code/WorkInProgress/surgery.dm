@@ -1292,11 +1292,11 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		for(var/mob/M in target.stomach_contents)
 			target.stomach_contents.Remove(M)
 			M.loc = target.loc
-			user.visible_message("\red <B>[M] bursts out of [src]!</B>")
+			user.visible_message("\red <B>[M] bursts out of [target]!</B>")
 		for(var/obj/O in target.stomach_contents)
 			target.stomach_contents.Remove(O)
 			O.loc = target.loc
-			user.visible_message("\red <B>[O] falls out of [src]!</B>")
+			user.visible_message("\red <B>[O] falls out of [target]!</B>")
 
 
 	fail_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)

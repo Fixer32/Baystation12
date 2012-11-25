@@ -26,6 +26,7 @@
 		set_ready_state(0)
 		playsound(chassis, fire_sound, 50, 1)
 		var/obj/item/projectile/A = new projectile(curloc)
+		A.firer = chassis.occupant
 		A.original = targloc
 		A.current = curloc
 		A.yo = targloc.y - curloc.y
@@ -208,6 +209,7 @@
 			playsound(chassis, fire_sound, 80, 1)
 			var/obj/item/projectile/A = new projectile(curloc)
 			src.projectiles--
+			A.firer = chassis.occupant
 			A.original = targloc
 			A.current = curloc
 			A.yo = targloc.y - curloc.y

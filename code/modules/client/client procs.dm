@@ -127,7 +127,30 @@
 	..()	//calls mob.Login()
 
 	if(holder)
+		message_admins("Admin login: [ckey]")
 		admin_memo_show()
+
+	//Multikey checks and logging
+	log_access("Login: [ckey] from [address ? address : "localhost"]-[computer_id] || BYOND v[byond_version]")
+	if(config.log_access)
+		for(var/client/C in client_list)
+			if(C == src)	continue
+			if( C.ckey && (C.ckey != ckey) )
+				var/matches
+				if( (C.address == src.address) )
+					matches += "IP ([src.address])"
+//					return
+				if( (C.computer_id == src.computer_id) )
+					if(matches)	matches += " and "
+					matches += "ID ([src.computer_id])"
+					spawn() alert("You have logged in already with another key this round, please log out of this one NOW or risk being banned!")
+				if(matches)
+//					if(M.client)
+					message_admins("<font color='red'><B>Notice: </B><font color='blue'><A href='?src=\ref[mob];priv_msg=\ref[mob]'>[key_name_admin(src)]</A> has the same [matches] as <A href='?src=\ref[mob];priv_msg=\ref[C.mob]'>[key_name_admin(C)]</A>.</font>", 1)
+					log_access("Notice: [ckey] has the same [matches] as [C.ckey].")
+//					else
+//						message_admins("<font color='red'><B>Notice: </B><font color='blue'><A href='?src=\ref[usr];priv_msg=\ref[src]'>[key_name_admin(src)]</A> has the same [matches] as [key_name_admin(M)] (no longer logged in). </font>", 1)
+//						log_access("Notice: [key_name(src)] has the same [matches] as [key_name(M)] (no longer logged in).")
 
 	log_client_to_db()
 

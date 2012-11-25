@@ -28,6 +28,12 @@
 	else
 		return null
 
+/obj/remove_air_volume(amount)
+	if(loc)
+		return loc.remove_air_volume(amount)
+	else
+		return null
+
 /obj/return_air()
 	if(loc)
 		return loc.return_air()
@@ -35,12 +41,13 @@
 		return null
 
 /obj/proc/handle_internal_lifeform(mob/lifeform_inside_me, breath_request)
+	//breath_request is Volume
 	//Return: (NONSTANDARD)
 	//		null if object handles breathing logic for lifeform
 	//		datum/air_group to tell lifeform to process using that breath return
 	//DEFAULT: Take air from turf to give to have mob process
 	if(breath_request>0)
-		return remove_air(breath_request)
+		return remove_air_volume(breath_request)
 	else
 		return null
 

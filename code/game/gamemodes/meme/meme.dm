@@ -45,11 +45,6 @@
 
 	var/list/datum/mind/possible_memes = get_players_for_role(BE_MEME)
 
-	for(var/datum/mind/player in assigned_hosts)
-		for(var/job in restricted_jobs)//Removing robots from the list
-			if(player.assigned_role == job)
-				assigned_hosts -= player
-
 	if(possible_memes.len < 2)
 		log_admin("MODE FAILURE: MEME. NOT ENOUGH MEME CANDIDATES.")
 		return 0 // not enough candidates for meme
@@ -66,15 +61,11 @@
 
 	var/list/datum/mind/possible_memes = get_players_for_role(BE_MEME)
 
-	for(var/datum/mind/player in assigned_hosts)
-		for(var/job in restricted_jobs)//Removing robots from the list
-			if(player.assigned_role == job)
-				assigned_hosts -= player
-
 	if(possible_memes.len < 2)
 		log_admin("MODE FAILURE: MEME. NOT ENOUGH MEME CANDIDATES.")
 		return 0 // not enough candidates for meme
 
+	log_admin("Meme mode presetup memes=[memes.len].")
 	// for each 2 possible memes, add one meme and one host
 	while(possible_memes.len >= 2)
 		var/datum/mind/meme = pick(possible_memes)
@@ -90,6 +81,7 @@
 
 		// so that we can later know which host belongs to which meme
 		assigned_hosts[meme.key] = first_host
+		log_admin("Pairs: meme=[meme.key] host=[first_host.key].")
 
 		meme.assigned_role = "MODE" //So they aren't chosen for other jobs.
 		meme.special_role = "Meme"
@@ -104,6 +96,7 @@
 
 /datum/game_mode/meme/post_setup()
 	// create a meme and enter it
+	log_admin("Meme mode memes=[memes.len].")
 	for(var/datum/mind/meme in memes)
 		var/mob/living/parasite/meme/M = new
 		var/mob/original = meme.current
@@ -113,11 +106,14 @@
 		// this is a redundant check, but I don't think the above works..
 		// if picking hosts works with this method, remove the method above
 		if(!first_host)
+			log_admin("Meme host is null.")
 			first_host = pick(first_hosts)
 			first_hosts.Remove(first_host)
 		if(!ishuman(first_host))
+			log_admin("Meme host is not human.")
 			first_host = pick(first_hosts)
 			if(!ishuman(first_host))
+				log_admin("Meme host still is not human.")
 				del meme
 				continue
 

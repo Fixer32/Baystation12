@@ -533,7 +533,7 @@
 			if(has_fat_guy && prob(2)) // chance of becoming stuck per segment if contains a fat guy
 				active = 0
 				// find the fat guys
-				for(var/mob/living/carbon/human/H in src)
+//				for(var/mob/living/carbon/human/H in src)
 
 				break
 			sleep(1)		// was 1

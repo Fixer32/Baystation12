@@ -23,9 +23,9 @@
 
 		//First, resolve location and get a breath
 
-		if(air_master.current_cycle%4==2)
-			//Only try to take a breath every 4 seconds, unless suffocating
-			spawn(0) breathe()
+		if(breath_cycle%2 == 0) 	//First, resolve location and get a breath
+			breathe() 				//Only try to take a breath every 4 ticks, unless suffocating
+			breath_cycle = 2
 
 		else //Still give containing object the chance to interact
 			if(istype(loc, /obj/))
@@ -97,7 +97,6 @@
 			if(reagents.has_reagent("lexorin")) return
 		if(istype(loc, /obj/machinery/atmospherics/unary/cryo_cell)) return
 
-		var/datum/gas_mixture/environment = loc.return_air()
 		var/datum/gas_mixture/breath
 		// HACK NEED CHANGING LATER
 		if(health < 0)
@@ -118,17 +117,9 @@
 			if(!breath)
 				if(istype(loc, /obj/))
 					var/obj/location_as_object = loc
-					breath = location_as_object.handle_internal_lifeform(src, BREATH_MOLES)
+					breath = location_as_object.handle_internal_lifeform(src, BREATH_VOLUME)
 				else if(istype(loc, /turf/))
-					var/breath_moles = 0
-					/*if(environment.return_pressure() > ONE_ATMOSPHERE)
-						// Loads of air around (pressure effect will be handled elsewhere), so lets just take a enough to fill our lungs at normal atmos pressure (using n = Pv/RT)
-						breath_moles = (ONE_ATMOSPHERE*BREATH_VOLUME/R_IDEAL_GAS_EQUATION*environment.temperature)
-					else*/
-						// Not enough air around, take a percentage of what's there to model this properly
-					breath_moles = environment.total_moles()*BREATH_PERCENTAGE
-
-					breath = loc.remove_air(breath_moles)
+					breath = loc.remove_air_volume(BREATH_VOLUME)
 
 					// Handle chem smoke effect  -- Doohl
 					for(var/obj/effect/effect/chem_smoke/smoke in view(1, src))
@@ -160,7 +151,7 @@
 			if(internal)
 				if (internals)
 					internals.icon_state = "internal1"
-				return internal.remove_air(volume_needed)
+				return internal.remove_air_volume(volume_needed)
 			else
 				if (internals)
 					internals.icon_state = "internal0"

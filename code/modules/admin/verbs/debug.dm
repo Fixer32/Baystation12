@@ -153,6 +153,17 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 	t+= "Oxygen : [env.oxygen]\n"
 	t+= "Plasma : [env.toxins]\n"
 	t+= "CO2: [env.carbon_dioxide]\n"
+	if(istype(T,/turf/simulated) && T:parent)
+		if(T:parent in air_master.air_groups)
+			t+= "Treated as zone\n"
+		if(T:parent.group_processing)
+			t+= "Zone is processing\n"
+	if(T in air_master.active_singletons)
+		t+= "Treated as singleton\n"
+		if(T:processing)
+			t+= "It is processing\n"
+	if(T in air_master.tiles_to_update)
+		t+= "Pending update\n"
 
 	usr.show_message(t, 1)
 	feedback_add_details("admin_verb","ASL") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!

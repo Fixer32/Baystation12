@@ -123,11 +123,14 @@ datum/computer/file/embedded_program/airlock_controller
 
 		if(int_ext == INTERNAL)
 			needed_pressure = int_sensor_pressure
-		else	
+		else
 			needed_pressure = ext_sensor_pressure
 
 		if(int_ext == INTERNAL && abs(needed_pressure-sensor_pressure)<5) return 1
 		if(int_ext == EXTERNAL && abs(needed_pressure-sensor_pressure)<(sanitize_external?1:5)) return 1
+
+		if(needed_pressure>=max(ext_sensor_pressure,int_sensor_pressure) && sensor_pressure>=max(ext_sensor_pressure,int_sensor_pressure)) return 1
+		if(needed_pressure<=min(ext_sensor_pressure,int_sensor_pressure) && sensor_pressure<=min(ext_sensor_pressure,int_sensor_pressure)) return 1
 
 		if(needed_pressure>sensor_pressure)
 			var/datum/signal/signal = new
@@ -138,6 +141,7 @@ datum/computer/file/embedded_program/airlock_controller
 			)
 			if(memory["pump_status"] == "siphon")
 				signal.data["set_external_pressure"] = 1.1*max(int_sensor_pressure,ext_sensor_pressure)
+				signal.data["set_internal_pressure"] = 0.5*max(int_sensor_pressure,ext_sensor_pressure)
 				signal.data["stabalize"] = 1
 			else if(memory["pump_status"] != "release")
 				signal.data["power"] = 1
@@ -151,13 +155,32 @@ datum/computer/file/embedded_program/airlock_controller
 			)
 			if(memory["pump_status"] == "release")
 				signal.data["purge"] = 1
+				signal.data["set_internal_pressure"] = 250
+				signal.data["checks"]=2
 			else if(memory["pump_status"] != "siphon")
 				signal.data["power"] = 1
 			post_signal(signal)
 			return 0
 		return 1
 
+	proc/ping(var/t)
+		var/datum/signal/signal = new
+		signal.data = list(
+			"tag" = t,
+			"sigtype"="command",
+			"command"="ping",
+			"status" = 1
+		)
+		post_signal(signal)
+
 	process()
+		if(!memory["exterior_status"])
+			ping(exterior_door_tag)
+		if(!memory["interior_status"])
+			ping(interior_door_tag)
+		if(!memory["pump_status"])
+			ping(airpump_tag)
+
 		var/process_again = 1
 		while(process_again)
 			process_again = 0
@@ -332,12 +355,12 @@ obj/machinery/embedded_controller/radio/airlock_controller
 		var/pump_status = "----"
 		if(program)
 			state = program.state
-			sensor_pressure = program.memory["sensor_pressure"]
-			int_sensor_pressure = program.memory["int_sensor_pressure"]
-			ext_sensor_pressure = program.memory["ext_sensor_pressure"]
-			exterior_status = program.memory["exterior_status"]
-			interior_status = program.memory["interior_status"]
-			pump_status = program.memory["pump_status"]
+			if(program.memory["sensor_pressure"]) sensor_pressure = program.memory["sensor_pressure"]
+			if(program.memory["int_sensor_pressure"]) int_sensor_pressure = program.memory["int_sensor_pressure"]
+			if(program.memory["ext_sensor_pressure"]) ext_sensor_pressure = program.memory["ext_sensor_pressure"]
+			if(program.memory["exterior_status"]) exterior_status = program.memory["exterior_status"]
+			if(program.memory["interior_status"]) interior_status = program.memory["interior_status"]
+			if(program.memory["pump_status"]) pump_status = program.memory["pump_status"]
 
 		switch(state)
 			if(AIRLOCK_STATE_INOPEN)

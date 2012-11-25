@@ -836,6 +836,20 @@
 			return T.remove_air(amount)
 	return
 
+/obj/mecha/remove_air_volume(amount)
+	if(use_internal_tank)
+		if(!cabin_air)
+			return null
+		var/moles_needed = cabin_air.return_pressure()*amount/(R_IDEAL_GAS_EQUATION*cabin_air.temperature)
+		moles_needed = max(moles_needed,0)
+
+		return cabin_air.remove(moles_needed)
+	else
+		var/turf/T = get_turf(src)
+		if(T)
+			return T.remove_air_volume(amount)
+	return
+
 /obj/mecha/return_air()
 	if(use_internal_tank)
 		return cabin_air

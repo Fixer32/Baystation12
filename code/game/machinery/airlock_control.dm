@@ -12,7 +12,9 @@ obj/machinery/door/airlock
 obj/machinery/door/airlock/receive_signal(datum/signal/signal)
 	if(!signal || signal.encryption) return
 
+//	world << "signal [id_tag]==[signal.data["tag"]] && [signal.data["command"]]"
 	if(id_tag != signal.data["tag"] || !signal.data["command"]) return
+//	world << "it's me [src] \ref[src]"
 
 	switch(signal.data["command"])
 		if("open")

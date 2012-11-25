@@ -47,6 +47,7 @@
 		var/obj/item/weapon/tank/jetpack/J = back
 		if(((!check_drift) || (check_drift && J.stabilization_on)) && (!lying) && (J.allow_thrust(0.01, src)))
 			inertia_dir = 0
+			throwing = 0
 			return 1
 //		if(!check_drift && J.allow_thrust(0.01, src))
 //			return 1
@@ -56,6 +57,7 @@
 			var/obj/item/powerarmor/jetpack/J = S.jetpack
 			if(((!check_drift) || (check_drift && J.stabilization_on)) && (!lying) && (J.allow_thrust(src)))
 				inertia_dir = 0
+				throwing = 0
 				return 1
 
 	//If no working jetpack then use the other checks

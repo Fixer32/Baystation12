@@ -191,7 +191,7 @@
 	check_status()
 	return 1
 
-/obj/item/weapon/tank/proc/remove_air_volume(volume_to_return)
+/obj/item/weapon/tank/remove_air_volume(volume_to_return)
 	if(!air_contents)
 		return null
 
@@ -200,6 +200,7 @@
 		distribute_pressure = tank_pressure
 
 	var/moles_needed = distribute_pressure*volume_to_return/(R_IDEAL_GAS_EQUATION*air_contents.temperature)
+	moles_needed = max(moles_needed,0)
 
 	return remove_air(moles_needed)
 

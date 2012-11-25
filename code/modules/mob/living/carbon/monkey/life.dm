@@ -19,10 +19,9 @@
 		environment = loc.return_air()
 
 	if (stat != DEAD) //still breathing
-		//First, resolve location and get a breath
-		if(air_master.current_cycle%4==2)
-			//Only try to take a breath every 4 seconds, unless suffocating
-			breathe()
+		if(breath_cycle%2 == 0) 	//First, resolve location and get a breath
+			breathe() 				//Only try to take a breath every 4 ticks, unless suffocating
+			breath_cycle = 0
 		else //Still give containing object the chance to interact
 			if(istype(loc, /obj/))
 				var/obj/location_as_object = loc
@@ -156,7 +155,6 @@
 
 		if(!loc) return //probably ought to make a proper fix for this, but :effort: --NeoFite
 
-		var/datum/gas_mixture/environment = loc.return_air()
 		var/datum/gas_mixture/breath
 
 		if(losebreath>0) //Suffocating so do not take a breath
@@ -168,16 +166,15 @@
 				location_as_object.handle_internal_lifeform(src, 0)
 		else
 			//First, check for air from internal atmosphere (using an air tank and mask generally)
-			breath = get_breath_from_internal(BREATH_MOLES)
+			breath = get_breath_from_internal(BREATH_VOLUME)
 
 			//No breath from internal atmosphere so get breath from location
 			if(!breath)
 				if(istype(loc, /obj/))
 					var/obj/location_as_object = loc
-					breath = location_as_object.handle_internal_lifeform(src, BREATH_MOLES)
+					breath = location_as_object.handle_internal_lifeform(src, BREATH_VOLUME)
 				else if(istype(loc, /turf/))
-					var/breath_moles = environment.total_moles()*BREATH_PERCENTAGE
-					breath = loc.remove_air(breath_moles)
+					breath = loc.remove_air_volume(BREATH_VOLUME)
 
 					// Handle chem smoke effect  -- Doohl
 					var/block = 0

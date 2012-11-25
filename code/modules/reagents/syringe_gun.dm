@@ -51,6 +51,7 @@
 				var/obj/item/weapon/reagent_containers/syringe/S = syringes[1]
 				if((!S) || (!S.reagents))	//ho boy! wot runtimes!
 					return
+				D.reagents.maximum_volume = S.reagents.total_volume
 				S.reagents.trans_to(D, S.reagents.total_volume)
 				syringes -= S
 				del(S)
@@ -89,8 +90,8 @@
 								msg_admin_attack("ATTACK: UNKNOWN shot [M] ([M.ckey]) with a <b>syringegun</b> ([R])") //BS12 EDIT ALG
 
 							if(D.reagents)
-								D.reagents.trans_to(M, 15)
-							M.take_organ_damage(5)
+								D.reagents.trans_to(M, D.reagents.total_volume)
+							M.take_organ_damage(rand(2,5))
 							for(var/mob/O in viewers(world.view, D))
 								O.show_message("\red [M.name] is hit by the syringe!", 1)
 
@@ -118,6 +119,8 @@
 	desc = ""
 	icon = 'icons/obj/chemical.dmi'
 	icon_state = "null"
+	flags = FPRINT | TABLEPASS
+	pass_flags = PASSTABLE
 	anchored = 1
 	density = 0
 

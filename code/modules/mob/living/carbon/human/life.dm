@@ -60,9 +60,10 @@
 
 	//No need to update all of these procs if the guy is dead.
 	if(stat != DEAD)
-		if(air_master.current_cycle%4==2 || failed_last_breath) 	//First, resolve location and get a breath
+		breath_cycle++
+		if(breath_cycle%2 == 0 || failed_last_breath) 	//First, resolve location and get a breath
 			breathe() 				//Only try to take a breath every 4 ticks, unless suffocating
-
+			breath_cycle = 0
 		else //Still give containing object the chance to interact
 			if(istype(loc, /obj/))
 				var/obj/location_as_object = loc
@@ -504,7 +505,6 @@
 			spawn emote("me", 1, "coughs up blood!")
 			src.drip(10)
 
-		var/datum/gas_mixture/environment = loc.return_air()
 		var/datum/gas_mixture/breath
 		// HACK NEED CHANGING LATER
 		if(health < 0)
@@ -521,24 +521,16 @@
 				location_as_object.handle_internal_lifeform(src, 0)
 		else
 			//First, check for air from internal atmosphere (using an air tank and mask generally)
-			breath = get_breath_from_internal(BREATH_MOLES) // Super hacky -- TLE
+			breath = get_breath_from_internal(BREATH_VOLUME) // Super hacky -- TLE
 			//breath = get_breath_from_internal(0.5) // Manually setting to old BREATH_VOLUME amount -- TLE
 
 			//No breath from internal atmosphere so get breath from location
 			if(!breath)
 				if(isobj(loc))
 					var/obj/location_as_object = loc
-					breath = location_as_object.handle_internal_lifeform(src, BREATH_MOLES)
+					breath = location_as_object.handle_internal_lifeform(src, BREATH_VOLUME)
 				else if(isturf(loc))
-					var/breath_moles = 0
-					/*if(environment.return_pressure() > ONE_ATMOSPHERE)
-						// Loads of air around (pressure effect will be handled elsewhere), so lets just take a enough to fill our lungs at normal atmos pressure (using n = Pv/RT)
-						breath_moles = (ONE_ATMOSPHERE*BREATH_VOLUME/R_IDEAL_GAS_EQUATION*environment.temperature)
-					else*/
-						// Not enough air around, take a percentage of what's there to model this properly
-					breath_moles = environment.total_moles()*BREATH_PERCENTAGE
-
-					breath = loc.remove_air(breath_moles)
+					breath = loc.remove_air_volume(BREATH_VOLUME)
 					// Handle chem smoke effect  -- Doohl
 					var/block = 0
 					if(wear_mask)
@@ -561,16 +553,14 @@
 										smoke.reagents.copy_to(src, 10) // I dunno, maybe the reagents enter the blood stream through the lungs?
 								break // If they breathe in the nasty stuff once, no need to continue checking
 
+				if(!lung_ruptured && breath)
+					if(breath.total_moles() < BREATH_MOLES / 8 || breath.total_moles() > BREATH_MOLES * 5)
+						if(prob(5))
+							rupture_lung()
 			else //Still give containing object the chance to interact
 				if(istype(loc, /obj/))
 					var/obj/location_as_object = loc
 					location_as_object.handle_internal_lifeform(src, 0)
-
-
-		if(!lung_ruptured && breath)
-			if(breath.total_moles() < BREATH_MOLES / 5 || breath.total_moles() > BREATH_MOLES * 5)
-				if(prob(5))
-					rupture_lung()
 
 		handle_breath(breath)
 
@@ -585,7 +575,7 @@
 				var/datum/gas_mixture/GM = new
 				GM.volume = volume_needed
 				GM.temperature = T20C
-				GM.oxygen = (ONE_ATMOSPHERE)*GM.volume/(R_IDEAL_GAS_EQUATION*GM.temperature)
+				GM.oxygen = (ONE_ATMOSPHERE*GM.volume)/(R_IDEAL_GAS_EQUATION*GM.temperature)
 				return GM
 		if(internal)
 			if (!contents.Find(internal))
@@ -593,7 +583,7 @@
 			if (!wear_mask || !(wear_mask.flags & MASKINTERNALS) )
 				internal = null
 			if(internal)
-				return internal.remove_air(volume_needed)
+				return internal.remove_air_volume(volume_needed)
 			else if(internals)
 				internals.icon_state = "internal0"
 		return null
@@ -638,6 +628,7 @@
 		var/CO2_pp = (breath.carbon_dioxide/breath.total_moles())*breath_pressure // Tweaking to fit the hacky bullshit I've done with atmo -- TLE
 		//var/CO2_pp = (breath.carbon_dioxide/breath.total_moles())*0.5 // The default pressure value
 
+//		world << "Oxy: [O2_pp] = [breath.oxygen]/[breath.total_moles()]*[breath_pressure] < [safe_oxygen_min]"
 		if(O2_pp < safe_oxygen_min) 			// Too little oxygen
 			if(prob(20))
 				spawn(0) emote("gasp")

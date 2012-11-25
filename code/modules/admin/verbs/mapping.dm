@@ -145,9 +145,34 @@ var/intercom_range_display_status = 0
 	src.verbs += /client/proc/kaboom
 	src.verbs += /client/proc/splash
 	src.verbs += /client/proc/cmd_admin_areatest
+	src.verbs += /client/proc/disable_debug_verbs
 	//src.verbs += /client/proc/cmd_admin_rejuvenate
 
 	feedback_add_details("admin_verb","mDV") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+/client/proc/disable_debug_verbs()
+	set category = "Debug"
+	set name = "Debug verbs Off"
+	src.verbs -= /client/proc/do_not_use_these 			//-errorage
+	src.verbs -= /client/proc/camera_view 				//-errorage
+	src.verbs -= /client/proc/sec_camera_report 		//-errorage
+	src.verbs -= /client/proc/intercom_view 			//-errorage
+	src.verbs -= /client/proc/air_status //Air things
+	src.verbs -= /client/proc/Cell //More air things
+	src.verbs -= /client/proc/atmosscan //check plumbing
+	src.verbs -= /client/proc/powerdebug //check power
+	src.verbs -= /client/proc/count_objects_on_z_level
+	src.verbs -= /client/proc/count_objects_all
+	src.verbs -= /client/proc/cmd_assume_direct_control	//-errorage
+	src.verbs -= /client/proc/jump_to_dead_group
+	src.verbs -= /client/proc/startSinglo
+	src.verbs -= /client/proc/ticklag	//allows you to set the ticklag.
+	src.verbs -= /client/proc/cmd_admin_grantfullaccess
+	src.verbs -= /client/proc/kaboom
+	src.verbs -= /client/proc/splash
+	src.verbs -= /client/proc/cmd_admin_areatest
+	src.verbs -= /client/proc/disable_debug_verbs
+
+	feedback_add_details("admin_verb","mDV2") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
 /client/proc/count_objects_on_z_level()
 	set category = "Mapping"

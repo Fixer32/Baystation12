@@ -767,6 +767,10 @@ Traitors and the like can also be revived with the previous role mostly intact.
 		src << "Only administrators may use this command."
 		return
 
+	if(emergency_shuttle.deny_shuttle)
+		src << "Denied!"
+		return
+
 	var/confirm = alert(src, "You sure?", "Confirm", "Yes", "No")
 	if(confirm != "Yes") return
 
