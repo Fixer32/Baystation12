@@ -1272,7 +1272,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 	max_duration = 90
 
 	can_use(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		return ..() && target.is_lung_ruptured() && target.ribcage_op_stage == 2
+		return ..() && target.is_lung_ruptured() && target.op_stage.ribcage == 2
 
 	begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		user.visible_message("[user] starts mending the rupture in [target]'s lungs with \the [tool].", \
