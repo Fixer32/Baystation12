@@ -119,6 +119,7 @@
 /mob/proc/Life()
 //	if(organStructure)
 //		organStructure.ProcessOrgans()
+	update_shadows()
 	return
 
 
@@ -926,3 +927,40 @@ note dizziness decrements automatically in the mob's Life() proc.
 
 /mob/proc/flash_weak_pain()
 	flick("weak_pain",pain)
+
+/client/var/list/shadowmap_l[] = list()
+/client/var/list/shadowmap_img[] = list()
+/mob/proc/update_shadows()
+	if(client)
+		client.update_shadows()
+
+/client/proc/update_shadows()
+	if(!eye) return
+
+	var/mob_loc = get_turf_loc(eye)
+	var/list/all = view(view,eye) | range(eye:see_in_dark+1,eye)
+	for(var/turf/T in all)
+		if(istype(T))
+			update_shadow_turf(T,mob_loc)
+
+	for(var/ref in shadowmap_l)
+		var/list/l = dd_text2list(shadowmap_l[ref],":")
+		if(l.len==2)
+			if(get_dist_rect(mob_loc,text2num(l[1]),text2num(l[2]))>view*2)
+				shadowmap_l.Remove(ref)
+				shadowmap_img.Remove(ref)
+
+/client/proc/update_shadow_turf(var/turf/T,var/mob_loc = get_turf_loc(eye))
+	var/ref = "[T.x]:[T.y]"
+	var/llevel = (get_dist_rect(mob_loc,T)>=eye:see_in_dark ? T._light : max(T._light,2))
+	if(shadowmap_l[ref])
+		if(shadowmap_l[ref] == llevel+1)
+			return
+		if(shadowmap_img[ref])
+			images -= shadowmap_img[ref]
+	var/image/img = null
+	if(llevel<7 && !istype(src,/mob/dead/observer))
+		img = image('icons/effects/ss13_dark_alpha7.dmi',T.Shadow,num2text(llevel),10)
+		images += img
+	shadowmap_l[ref] = llevel+1
+	shadowmap_img[ref] = img
