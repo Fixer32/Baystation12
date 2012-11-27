@@ -75,6 +75,12 @@
 	icon = 'custom_items.dmi'
 	icon_state = "fancypen"
 
+/obj/item/weapon/pen/fluff/fountainpen //paththegreat: Eli Stevens
+	name = "Engraved Fountain Pen"
+	desc = "An expensive looking pen with the initials E.S. engraved into the side."
+	icon = 'custom_items.dmi'
+	icon_state = "fountainpen"
+
 /obj/item/fluff/victor_kaminsky_1 //chinsky: Victor Kaminski
 	name = "golden detective's badge"
 	desc = "NanoTrasen Security Department detective's badge, made from gold. Badge number is 564."
@@ -137,6 +143,14 @@
 	icon_on = "gonzozippoon"
 	icon_off = "gonzozippo"
 
+/obj/item/weapon/lighter/zippo/fluff/naples_1 //naples: Russell Vierson
+	name = "Engraved zippo"
+	desc = "A intricately engraved Zippo lighter."
+	icon = 'custom_items.dmi'
+	icon_state = "engravedzippo"
+	icon_on = "engravedzippoon"
+	icon_off = "engravedzippo"
+
 /obj/item/weapon/fluff/cado_keppel_1 //sparklysheep: Cado Keppel
 	name = "purple comb"
 	desc = "A pristine purple comb made from flexible plastic. It has a small K etched into its side."
@@ -176,6 +190,21 @@
 	icon = 'custom_items.dmi'
 	icon_state = "shinyflask"
 	volume = 50
+
+/obj/item/weapon/reagent_containers/food/drinks/flask/fluff/lithiumflask //mcgulliver: Wox Derax
+	name = "Lithium Flask"
+	desc = "A flask with a Lithium Atom symbol on it."
+	icon = 'custom_items.dmi'
+	icon_state = "lithiumflask"
+	volume = 50
+
+/obj/item/weapon/reagent_containers/glass/beaker/large/fluff/nashida_bishara_1 //rukral:Nashida Bisha'ra
+	name = "Nashida's Etched Beaker"
+	desc = "The message: 'Please do not be removing this beaker from the chemistry lab. If lost, return to Nashida Bisha'ra' can be seen etched into the side of this 100 unit beaker."
+	icon = 'icons/obj/chemical.dmi'
+	icon_state = "beakerlarge"
+	g_amt = 5000
+	volume = 100
 
 /obj/item/weapon/storage/pill_bottle/fluff/listermedbottle //compactninja: Lister Black
 	name = "Pill bottle (anti-depressants)"
@@ -324,6 +353,12 @@
 	item_state = "bluegloves"
 	color="blue"
 
+/obj/item/clothing/gloves/fluff/chal_appara_1 //furlucis: Chal Appara
+	name = "Left Black Glove"
+	desc = "The left one of a pair of black gloves. Wonder where the other one went..."
+	icon = 'custom_items.dmi'
+	icon_state = "chal_appara_1"
+
 //////////// Eye Wear ////////////
 
 /obj/item/clothing/glasses/meson/fluff/book_berner_1 //asanadas: Book Berner
@@ -337,6 +372,12 @@
 	desc = "A heads-up display with limited connectivity to the NanoTrasen Extranet, capable of displaying information from official NanoTrasen records."
 	icon = 'custom_items.dmi'
 	icon_state = "serithi_artalis_1"
+
+/obj/item/clothing/glasses/fluff/uzenwa_sissra_1 //sparklysheep: Uzenwa Sissra
+	name = "Scanning Goggles"
+	desc = "A very oddly shaped pair of goggles with bits of wire poking out the sides. A soft humming sound emanates from it."
+	icon = 'custom_items.dmi'
+	icon_state = "uzenwa_sissra_1"
 
 //////////// Hats ////////////
 //Removed by request

@@ -131,7 +131,7 @@
 
 	proc/handle_blood()
 		// take care of blood and blood loss
-		if(stat < 2)
+		if(stat < 2 && bodytemperature >= 170)
 			var/blood_volume = round(vessel.get_reagent_amount("blood"))
 			if(blood_volume < 560 && blood_volume)
 				var/datum/reagent/blood/B = locate() in vessel.reagent_list //Grab some blood
@@ -188,6 +188,10 @@
 						var/word = pick("dizzy","woosey","faint")
 						src << "\red You feel extremely [word]"
 				if(0 to 122)
+					// There currently is a strange bug here. If the mob is not below -100 health
+					// when death() is called, apparently they will be just fine, and this way it'll
+					// spam deathgasp. Adjusting toxloss ensures the mob will stay dead.
+					toxloss += 300 // just to be safe!
 					death()
 
 

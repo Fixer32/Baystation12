@@ -312,15 +312,15 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 	end_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		user.visible_message("\blue [user] has removed [target]'s appendix with \the [tool].", \
 		"\blue You have removed [target]'s appendix with \the [tool].")
-		var/datum/disease/appendicitis/app = null
+		var/app = 0
 		for(var/datum/disease/appendicitis/appendicitis in target.viruses)
-			app = appendicitis
+			app = 1
 			appendicitis.cure()
+			target.resistances += appendicitis
 		if (app)
 			new /obj/item/weapon/reagent_containers/food/snacks/appendix/inflamed(get_turf(target))
 		else
 			new /obj/item/weapon/reagent_containers/food/snacks/appendix(get_turf(target))
-		target.resistances += app
 		target.op_stage.appendix = 2
 
 	fail_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -353,9 +353,8 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 
 	begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
-		if (affected.stage == 0)
-			user.visible_message("[user] starts patching the damaged vein in [target]'s [affected.display_name] with \the [tool]." , \
-			"You start patching the damaged vein in [target]'s [affected.display_name] with \the [tool].")
+		user.visible_message("[user] starts patching the damaged vein in [target]'s [affected.display_name] with \the [tool]." , \
+		"You start patching the damaged vein in [target]'s [affected.display_name] with \the [tool].")
 		target.custom_pain("The pain in [affected.display_name] is unbearable!",1)
 
 	end_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -1207,8 +1206,8 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		target.custom_pain("Something hurts horribly in your chest!",1)
 
 	end_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		var/msg = "[user] bends [target]'s ribcage back into place with \the [tool]."
-		var/self_msg = "You bends [target]'s ribcage back into place with \the [tool]."
+		var/msg = "\blue [user] bends [target]'s ribcage back into place with \the [tool]."
+		var/self_msg = "\blue You bend [target]'s ribcage back into place with \the [tool]."
 		user.visible_message(msg, self_msg)
 
 		target.op_stage.ribcage = 1
@@ -1230,8 +1229,8 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 
 
 	end_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		var/msg = "[user] applied \the [tool] to [target]'s ribcage."
-		var/self_msg = "You applied \the [tool] to [target]'s ribcage."
+		var/msg = "\blue [user] applied \the [tool] to [target]'s ribcage."
+		var/self_msg = "\blue You applied \the [tool] to [target]'s ribcage."
 		user.visible_message(msg, self_msg)
 
 		target.op_stage.ribcage = 0
@@ -1273,7 +1272,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 	max_duration = 90
 
 	can_use(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
-		return ..() && target.is_lung_ruptured()
+		return ..() && target.is_lung_ruptured() && target.ribcage_op_stage == 2
 
 	begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		user.visible_message("[user] starts mending the rupture in [target]'s lungs with \the [tool].", \
@@ -1282,8 +1281,8 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 
 	end_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/chest/affected = target.get_organ("chest")
-		user.visible_message("[user] mends the rupture in [target]'s lungs with \the [tool].", \
-		"You mend the rupture in [target]'s lungs with \the [tool]." )
+		user.visible_message("\blue [user] mends the rupture in [target]'s lungs with \the [tool].", \
+		"\blue You mend the rupture in [target]'s lungs with \the [tool]." )
 		affected.ruptured_lungs = 0
 
 	fail_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
