@@ -109,13 +109,20 @@
 			log_admin("Meme host is null.")
 			first_host = pick(first_hosts)
 			first_hosts.Remove(first_host)
-		if(!ishuman(first_host))
+		if(!ishuman(first_host.current))
 			log_admin("Meme host is not human.")
 			first_host = pick(first_hosts)
-			if(!ishuman(first_host))
+			if(!ishuman(first_host.current))
 				log_admin("Meme host still is not human.")
-				del meme
-				continue
+				var/list/potential_hosts = list()
+				for(var/datum/mind/Mind in ticker.minds)
+					if(!(Mind in memes) && ishuman(Mind.current))
+						potential_hosts += Mind
+				first_host = pick(potential_hosts)
+				if(!ishuman(first_host.current))
+					log_admin("Meme host still is not human even in that case.")
+					del meme
+					continue
 
 		meme.transfer_to(M)
 		M.clearHUD()

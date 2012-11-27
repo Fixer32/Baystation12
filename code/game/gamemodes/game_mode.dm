@@ -259,6 +259,7 @@ Whitespace:Seperator;
 	// Goodbye antag dante
 	players = shuffle(players)
 
+	log_admin("Searching players for role [role]")
 	for(var/mob/new_player/player in players)
 		if(player.client && player.ready)
 			if(player.preferences.be_special & role)
@@ -319,6 +320,11 @@ Whitespace:Seperator;
 
 		else												// Not enough scrubs, ABORT ABORT ABORT
 			break
+
+	var/pllist = ""
+	for(var/datum/mind/M in candidates)
+		pllist+=" [M.name]([M.assigned_role])"
+	log_admin("Found:[pllist]")
 
 	return candidates		// Returns: The number of people who had the antagonist role set to yes, regardless of recomended_enemies, if that number is greater than recommended_enemies
 							//			recommended_enemies if the number of people with that role set to yes is less than recomended_enemies,

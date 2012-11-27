@@ -143,8 +143,8 @@ proc/hasorgans(A)
 			zone = "l_leg"
 		if("r_foot")
 			zone = "r_leg"
-		if("groin")
-			zone = "chest"
+//		if("groin")
+//			zone = "chest"
 	return zone
 
 

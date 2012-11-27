@@ -145,3 +145,8 @@
 	if (bot.connected_ai == ai)
 		return 1
 	return 0
+
+/mob/living/silicon/temperature_expose(datum/gas_mixture/air, exposed_temperature, exposed_volume)
+	if(exposed_temperature > T0C+2000)
+		adjustFireLoss(log(1+exposed_temperature-(T0C+2000),10))
+	return

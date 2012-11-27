@@ -158,6 +158,7 @@
 			verbs += /client/proc/toggle_hear_deadcast
 			verbs += /client/proc/toggle_hear_radio
 			verbs += /client/proc/toggle_hear_logs
+			verbs += /client/proc/toggle_hear_atk_logs
 			verbs += /client/proc/deadmin_self
 			verbs += /datum/admins/proc/announce
 			verbs += /datum/admins/proc/startnow
@@ -413,6 +414,7 @@
 		/client/proc/toggle_hear_deadcast,
 		/client/proc/toggle_hear_radio,
 		/client/proc/toggle_hear_logs,
+		/client/proc/toggle_hear_atk_logs,
 		/client/proc/player_panel_new,
 		/client/proc/toggle_gravity_on,
 		/client/proc/toggle_gravity_off,
@@ -960,3 +962,12 @@
 	STFU_log = !STFU_log
 	usr << "You will now [STFU_log ? "not hear" : "hear"] logs"
 	feedback_add_details("admin_verb","THLOGS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+/client/proc/toggle_hear_atk_logs()
+	set name = "Toggle Hear Attack Logs"
+	set category = "Admin"
+
+	if(!holder) return
+	STFU_atklog = !STFU_atklog
+	usr << "You will now [STFU_atklog ? "not hear" : "hear"] attack logs"
+	feedback_add_details("admin_verb","THALOGS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!

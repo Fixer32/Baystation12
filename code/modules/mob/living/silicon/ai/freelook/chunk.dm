@@ -1,4 +1,4 @@
-#define UPDATE_BUFFER 20 // 2 seconds
+#define UPDATE_BUFFER 10 // 2 seconds
 
 // CAMERA CHUNK
 //

@@ -40,7 +40,7 @@
 	if (src.occupant)
 		usr << "\blue <B>The scanner is already occupied!</B>"
 		return
-	if (usr.abiotic())
+	if (usr.abiotic(1))
 		usr << "\blue <B>Subject cannot have abiotic items on.</B>"
 		return
 	usr.pulling = null
@@ -76,7 +76,7 @@
 	if (src.occupant)
 		user << "\blue <B>The scanner is already occupied!</B>"
 		return
-	if (G.affecting.abiotic())
+	if (G.affecting.abiotic(1))
 		user << "\blue <B>Subject cannot have abiotic items on.</B>"
 		return
 	var/mob/M = G.affecting

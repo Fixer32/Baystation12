@@ -860,7 +860,7 @@ steam.start() -- spawns the effect
 
 		F = new(T, metal)
 		F.amount = amount
-		if(!metal)
+		if(!metal && reagents)
 			F.create_reagents(reagents.maximum_volume)
 			neighbours++
 

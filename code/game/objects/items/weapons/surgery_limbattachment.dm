@@ -23,7 +23,7 @@
 		return ..()
 
 	var/mob/living/carbon/human/H = M
-	var/datum/organ/external/S = H.organs[user.zone_sel.selecting]
+	var/datum/organ/external/S = H.organs_by_name[user.zone_sel.selecting]
 	if(S.status & ORGAN_DESTROYED)
 		if(!(S.status & ORGAN_ATTACHABLE))
 			user << "\red The wound is not ready for a replacement!"

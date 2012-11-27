@@ -89,9 +89,10 @@
 		if(air_group)
 			return (get_dir(src.loc,target)&(NORTH|WEST)>0)
 //			return 0
-		if(istype(mover) && mover.checkpass(PASSGLASS))
-			return !opacity
-		return !density
+		if(istype(mover))
+			return (mover.checkpass(PASSGLASS) && (!opacity)) || (!density)
+		var/dir = get_dir(src.loc,target)
+		return (dir&NORTH) || (dir&WEST) || !density
 
 
 	bumpopen(mob/user as mob)

@@ -211,7 +211,7 @@
 	if (occupant)
 		usr << "\red <B>The cryo cell is already occupied!</B>"
 		return
-	if (M.abiotic())
+	if (M.abiotic(1))
 		usr << "\red Subject may not have abiotic items on."
 		return
 	if(!node)

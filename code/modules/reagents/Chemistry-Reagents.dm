@@ -16,6 +16,7 @@ datum
 		var/data = null
 		var/volume = 0
 		var/nutriment_factor = 0
+		var/metabolism_ratio = 1
 		//var/list/viruses = list()
 		var/color = "#000000" // rgb: 0, 0, 0 (does not support alpha channels - yet!)
 
@@ -65,7 +66,7 @@ datum
 			on_mob_life(var/mob/living/M as mob)
 				if(!istype(M, /mob/living))
 					return //Noticed runtime errors from pacid trying to damage ghosts, this should fix. --NEO
-				holder.remove_reagent(src.id, REAGENTS_METABOLISM) //By default it slowly disappears.
+				holder.remove_reagent(src.id, REAGENTS_METABOLISM*metabolism_ratio) //By default it slowly disappears.
 				return
 
 			on_move(var/mob/M)
@@ -407,6 +408,7 @@ datum
 			description = "Put people to sleep, and heals them."
 			reagent_state = LIQUID
 			color = "#C8A5DC" // rgb: 200, 165, 220
+			metabolism_ratio = 2
 
 			on_mob_life(var/mob/living/M as mob)
 				if(!M) M = holder.my_atom
@@ -414,7 +416,6 @@ datum
 				data++
 				if(M.losebreath >= 10)
 					M.losebreath = max(10, M.losebreath-10)
-				holder.remove_reagent(src.id, 0.2)
 				switch(data)
 					if(1 to 15)
 						M.eye_blurry = max(M.eye_blurry, 10)
@@ -440,12 +441,13 @@ datum
 			description = "Inaprovaline is a synaptic stimulant and cardiostimulant. Commonly used to stabilize patients."
 			reagent_state = LIQUID
 			color = "#C8A5DC" // rgb: 200, 165, 220
+			metabolism_ratio = 0.5
 
 			on_mob_life(var/mob/living/M as mob)
 				if(!M) M = holder.my_atom
 				if(M.losebreath >= 10)
 					M.losebreath = max(10, M.losebreath-5)
-				holder.remove_reagent(src.id, 0.2)
+				..()
 				return
 
 		space_drugs
@@ -462,7 +464,7 @@ datum
 					if(M.canmove)
 						if(prob(10)) step(M, pick(cardinal))
 				if(prob(7)) M.emote(pick("twitch","drool","moan","giggle"))
-				holder.remove_reagent(src.id, 0.2)
+				..()
 				return
 
 		serotrotium
@@ -475,7 +477,7 @@ datum
 			on_mob_life(var/mob/living/M as mob)
 				if(ishuman(M))
 					if(prob(7)) M.emote(pick("twitch","drool","moan","gasp"))
-					holder.remove_reagent(src.id, 0.1)
+				..()
 				return
 
 		silicate
@@ -977,7 +979,7 @@ datum
 					if(M.virus.stage <= 0)
 						M.resistances += M.virus.type
 						M.virus = null
-				holder.remove_reagent(src.id, 0.2)
+				..()
 				return
 */
 
@@ -1205,13 +1207,13 @@ datum
 			description = "Cryptobiolin causes confusion and dizzyness."
 			reagent_state = LIQUID
 			color = "#C8A5DC" // rgb: 200, 165, 220
+			metabolism_ratio = 2
 
 			on_mob_life(var/mob/living/M as mob)
 				if(!M) M = holder.my_atom
 				M.make_dizzy(1)
 				if(!M.confused) M.confused = 1
 				M.confused = max(M.confused, 20)
-				holder.remove_reagent(src.id, 0.2)
 				..()
 				return
 
@@ -1498,11 +1500,11 @@ datum
 			description = "Hyperzine is a highly effective, long lasting, muscle stimulant."
 			reagent_state = LIQUID
 			color = "#C8A5DC" // rgb: 200, 165, 220
+			metabolism_ratio = 2
 
 			on_mob_life(var/mob/living/M as mob)
 				if(!M) M = holder.my_atom
 				if(prob(5)) M.emote(pick("twitch","blink_r","shiver"))
-				holder.remove_reagent(src.id, 0.2)
 				..()
 				return
 
@@ -1547,9 +1549,9 @@ datum
 			description = "An all-purpose antiviral agent."
 			reagent_state = LIQUID
 			color = "#C8A5DC" // rgb: 200, 165, 220
+			metabolism_ratio = 2
 
 			on_mob_life(var/mob/living/M as mob)//no more mr. panacea
-				holder.remove_reagent(src.id, 0.2)
 				..()
 				return
 
@@ -1884,6 +1886,7 @@ datum
 			id = "psilocybin"
 			description = "A strong psycotropic derived from certain species of mushroom."
 			color = "#E700E7" // rgb: 231, 0, 231
+			metabolism_ratio = 2
 
 			on_mob_life(var/mob/living/M as mob)
 				if(!M) M = holder.my_atom
@@ -1906,7 +1909,6 @@ datum
 						M.make_dizzy(20)
 						M.druggy = max(M.druggy, 40)
 						if(prob(30)) M.emote(pick("twitch","giggle"))
-				holder.remove_reagent(src.id, 0.2)
 				data++
 				..()
 				return
@@ -2123,50 +2125,6 @@ datum
 				..()
 				return
 
-		amatoxin
-			name = "Amatoxin"
-			id = "amatoxin"
-			description = "A powerful poison derived from certain species of mushroom."
-			color = "#792300" // rgb: 121, 35, 0
-
-			on_mob_life(var/mob/living/M as mob)
-				if(!M) M = holder.my_atom
-				M.adjustToxLoss(1)
-				..()
-				return
-
-		psilocybin
-			name = "Psilocybin"
-			id = "psilocybin"
-			description = "A strong psycotropic derived from certain species of mushroom."
-			color = "#E700E7" // rgb: 231, 0, 231
-
-			on_mob_life(var/mob/living/M as mob)
-				if(!M) M = holder.my_atom
-				M.druggy = max(M.druggy, 30)
-				if(!data) data = 1
-				switch(data)
-					if(1 to 5)
-						if (!M.stuttering) M.stuttering = 1
-						M.make_dizzy(5)
-						if(prob(10)) M.emote(pick("twitch","giggle"))
-					if(5 to 10)
-						if (!M.stuttering) M.stuttering = 1
-						M.make_jittery(10)
-						M.make_dizzy(10)
-						M.druggy = max(M.druggy, 35)
-						if(prob(20)) M.emote(pick("twitch","giggle"))
-					if (10 to INFINITY)
-						if (!M.stuttering) M.stuttering = 1
-						M.make_jittery(20)
-						M.make_dizzy(20)
-						M.druggy = max(M.druggy, 40)
-						if(prob(30)) M.emote(pick("twitch","giggle"))
-				holder.remove_reagent(src.id, 0.2)
-				data++
-				..()
-				return
-
 		sprinkles
 			name = "Sprinkles"
 			id = "sprinkles"
@@ -2176,13 +2134,12 @@ datum
 
 			on_mob_life(var/mob/living/M as mob)
 				M.nutrition += nutriment_factor
+				..()
 				if(istype(M, /mob/living/carbon/human) && M.job in list("Security Officer", "Head of Security", "Detective", "Warden"))
 					if(!M) M = holder.my_atom
 					M.heal_organ_damage(1,1)
 					M.nutrition += nutriment_factor
-					..()
 					return
-				..()
 /*	//removed because of meta bullshit. this is why we can't have nice things.
 		syndicream
 			name = "Cream filling"
@@ -2658,6 +2615,7 @@ datum
 			description = "You just don't get it maaaan."
 			reagent_state = LIQUID
 			color = "#664300" // rgb: 102, 67, 0
+			metabolism_ratio = 2
 
 			on_mob_life(var/mob/living/M as mob)
 				if(!M) M = holder.my_atom
@@ -2680,7 +2638,6 @@ datum
 						M.make_dizzy(40)
 						M.druggy = max(M.druggy, 60)
 						if(prob(30)) M.emote(pick("twitch","giggle"))
-				holder.remove_reagent(src.id, 0.2)
 				data++
 				..()
 				return
@@ -2700,6 +2657,7 @@ datum
 			var/confused_start = 130	//amount absorbed after which mob starts confusing directions
 			var/blur_start = 260	//amount absorbed after which mob starts getting blurred vision
 			var/pass_out = 325	//amount absorbed after which mob starts passing out
+			metabolism_ratio = 3
 
 			on_mob_life(var/mob/living/M as mob)
 				M:nutrition += nutriment_factor
@@ -2726,7 +2684,6 @@ datum
 					M:paralysis = max(M:paralysis, 20)
 					M:drowsyness  = max(M:drowsyness, 30)
 
-				holder.remove_reagent(src.id, 0.4)
 				..()
 				return
 

@@ -195,7 +195,7 @@
 					if(istype(src, S.required_tool) || (S.allowed_tools && src.type in S.allowed_tools ))
 						if(S.can_use(user, M, user.zone_sel.selecting, src))	//is this step possible?
 							S.begin_step(user, M, user.zone_sel.selecting, src)
-							if(do_mob(user, M, rand(S.min_duration, S.max_duration)))
+							if(do_mob(user, M, rand(S.min_duration, S.max_duration)) && S.can_use(user, M, user.zone_sel.selecting, src))
 								S.end_step(user, M, user.zone_sel.selecting, src)
 							else
 								S.fail_step(user, M, user.zone_sel.selecting, src)

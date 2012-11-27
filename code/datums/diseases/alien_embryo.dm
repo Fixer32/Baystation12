@@ -86,7 +86,8 @@
 				var/mob/living/carbon/alien/larva/new_xeno = new(affected_mob.loc)
 				var/list/candidates = list() //List of candidate KEYS to assume control of the new larva ~Carn
 				var/i = 0
-				while(candidates.len <= 0 && i < 5)
+				affected_mob.death(1)
+				while(candidates.len <= 0 && i < 10)
 					for(var/mob/dead/observer/G in player_list)
 						if(G.client.be_alien)
 							if(((G.client.inactivity/10)/60) <= ALIEN_SELECT_AFK_BUFFER + i) // the most active players are more likely to become an alien

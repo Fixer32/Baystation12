@@ -47,20 +47,22 @@
 			m_type = 1
 
 		if ("custom")
-			var/input = copytext(sanitize(input("Choose an emote to display.") as text|null),1,MAX_MESSAGE_LEN)
-			if (!input)
-				return
-			var/input2 = input("Is this a visible or hearable emote?") in list("Visible","Hearable")
-			if (input2 == "Visible")
-				m_type = 1
-			else if (input2 == "Hearable")
-				if (src.miming)
+			if(!param)
+				var/input = copytext(sanitize(input("Choose an emote to display.") as text|null),1,MAX_MESSAGE_LEN)
+				if (!input)
 					return
-				m_type = 2
-			else
-				alert("Unable to use this emote, must be either hearable or visible.")
-				return
-			message = "<B>[src]</B> [input]"
+				var/input2 = input("Is this a visible or hearable emote?") in list("Visible","Hearable")
+				if (input2 == "Visible")
+					m_type = 1
+				else if (input2 == "Hearable")
+					if (src.miming)
+						return
+					m_type = 2
+				else
+					alert("Unable to use this emote, must be either hearable or visible.")
+					return
+				param = input
+			message = "<B>[src]</B> [param]"
 
 		if ("me")
 			if(silent)

@@ -180,6 +180,10 @@
 				usr << "[G.affecting.name] will not fit into the sleeper because they have a Metroid latched onto their head."
 				return
 
+		if(!iscarbon(G.affecting))
+			usr << "[G.affecting.name] will not fit into the sleeper because sleepers not made for those species."
+			return
+
 		visible_message("[user] starts putting [G.affecting.name] into the sleeper.", 3)
 
 		if(do_after(user, 20))

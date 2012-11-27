@@ -1,6 +1,7 @@
 //Lallander was here
 /mob/living/carbon/human/whisper(message as text)
-	message = trim(copytext(strip_html_simple(message), 1, MAX_MESSAGE_LEN))
+	message = trim(copytext(sanitize(message), 1, MAX_MESSAGE_LEN))
+//	message = trim(copytext(strip_html_simple(message), 1, MAX_MESSAGE_LEN))
 
 	if (!message || silent || miming)
 		return

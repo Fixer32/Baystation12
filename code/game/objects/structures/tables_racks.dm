@@ -317,6 +317,11 @@
 
 
 /obj/structure/table/MouseDrop_T(obj/O as obj, mob/user as mob)
+	if(O == user)
+		user.loc = src.loc
+		user.Weaken(5)
+		visible_message("\red [user] lies down on the table.")
+		return
 
 	if ((!( istype(O, /obj/item/weapon) ) || user.get_active_hand() != O))
 		return
