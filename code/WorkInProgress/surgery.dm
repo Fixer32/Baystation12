@@ -91,6 +91,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 
 /datum/surgery_step/generic/cut_open
 	required_tool = /obj/item/weapon/scalpel
+	allowed_tools = list(/obj/item/weapon/kitchenknife,/obj/item/weapon/kitchen/utensil/knife,/obj/item/weapon/butch,/obj/item/weapon/shard)
 
 	min_duration = 90
 	max_duration = 110
@@ -109,7 +110,10 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		user.visible_message("\blue [user] has made an incision on [target]'s [affected.display_name] with \the [tool].", \
 		"\blue You have made an incision on [target]'s [affected.display_name] with \the [tool].",)
 		affected.open = 1
-		affected.createwound(CUT, 1)
+		if(tool in allowed_tools)
+			affected.createwound(CUT, 8)
+		else
+			affected.createwound(CUT, 1)
 		spread_germs_to_organ(affected, user)
 		if (target_zone == "head")
 			target.op_stage.brain = 1
@@ -119,10 +123,14 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
 		user.visible_message("\red [user]'s hand slips, slicing open [target]'s [affected.display_name] in a wrong spot with \the [tool]!", \
 		"\red Your hand slips, slicing open [target]'s [affected.display_name] in a wrong spot with \the [tool]!")
-		affected.createwound(CUT, 10)
+		if(tool in allowed_tools)
+			affected.createwound(CUT, 20)
+		else
+			affected.createwound(CUT, 10)
 
 /datum/surgery_step/generic/clamp_bleeders
 	required_tool = /obj/item/weapon/hemostat
+	allowed_tools = list(/obj/item/stack/medical/bruise_pack,/obj/item/stack/medical/advanced/bruise_pack)
 
 	min_duration = 40
 	max_duration = 60
@@ -148,10 +156,14 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
 		user.visible_message("\red [user]'s hand slips, tearing blood vessals and causing massive bleeding in [target]'s [affected.display_name] with the \[tool]!",	\
 		"\red Your hand slips, tearing blood vessels and causing massive bleeding in [target]'s [affected.display_name] with \the [tool]!",)
-		affected.createwound(CUT, 10)
+		if(tool in allowed_tools)
+			affected.createwound(CUT, 15)
+		else
+			affected.createwound(CUT, 10)
 
 /datum/surgery_step/generic/retract_skin
 	required_tool = /obj/item/weapon/retractor
+	allowed_tools = list(/obj/item/weapon/kitchen/utensil/fork,/obj/item/weapon/wirecutters,/obj/item/weapon/pen)
 
 	min_duration = 30
 	max_duration = 40
@@ -184,6 +196,8 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 			self_msg = "\blue You keep the incision open on [target]'s lower abdomen with \the [tool]."
 		user.visible_message(msg, self_msg)
 		affected.open = 2
+		if(tool in allowed_tools)
+			target.apply_damage(10, BRUTE, affected)
 		spread_germs_to_organ(affected, user)
 		target.UpdateDamageIcon()
 
@@ -198,15 +212,20 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 			msg = "\red [user]'s hand slips, damaging several organs [target]'s lower abdomen with \the [tool]"
 			self_msg = "\red Your hand slips, damaging several organs [target]'s lower abdomen with \the [tool]!"
 		user.visible_message(msg, self_msg)
-		target.apply_damage(12, BRUTE, affected)
+		if(tool in allowed_tools)
+			target.apply_damage(20, BRUTE, affected)
+		else
+			target.apply_damage(12, BRUTE, affected)
 
 /datum/surgery_step/generic/cauterize
 	required_tool = /obj/item/weapon/cautery
+	allowed_tools = list(/obj/item/weapon/match,/obj/item/weapon/lighter,/obj/item/clothing/mask/cigarette,/obj/item/weapon/weldingtool)
 
 	min_duration = 70
 	max_duration = 100
 
 	can_use(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
+		if((tool in allowed_tools) && !is_hot(tool)) return 0
 		return ..() && affected.open && target_zone != "mouth" && (target_zone != "chest" || !target.op_stage.stomach)
 
 	begin_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
@@ -222,13 +241,18 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		affected.open = 0
 		affected.germ_level = 0
 		affected.status &= ~ORGAN_BLEEDING
+		if(tool in allowed_tools)
+			target.apply_damage(8, BURN, affected)
 		target.UpdateDamageIcon()
 
 	fail_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
 		user.visible_message("\red [user]'s hand slips, leaving a small burn on [target]'s [affected.display_name] with \the [tool]!", \
 		"\red Your hand slips, leaving a small burn on [target]'s [affected.display_name] with \the [tool]!")
-		target.apply_damage(3, BURN, affected)
+		if(tool in allowed_tools)
+			target.apply_damage(15, BURN, affected)
+		else
+			target.apply_damage(3, BURN, affected)
 
 //////////////////////////////////////////////////////////////////
 //						APPENDECTOMY							//
@@ -956,6 +980,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		"\blue You cut away flesh where [target]'s [affected.display_name] used to be with \the [tool].")
 		affected.status |= ORGAN_DESTROYED
 		affected.status |= ORGAN_CUT_AWAY
+		affected.open = 1
 
 	fail_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
@@ -1273,6 +1298,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 
 /datum/surgery_step/stomach/cut_open
 	required_tool = /obj/item/weapon/scalpel
+	allowed_tools = list(/obj/item/weapon/kitchenknife,/obj/item/weapon/kitchen/utensil/knife,/obj/item/weapon/butch,/obj/item/weapon/shard)
 
 	min_duration = 70
 	max_duration = 90
@@ -1289,6 +1315,9 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		user.visible_message("[user] cuts [target]'s stomach open with \the [tool].", \
 		"You cut [target]'s stomach open with \the [tool]." )
 		target.op_stage.stomach = 1
+		if(tool in allowed_tools)
+			var/datum/organ/external/chest/affected = target.get_organ("chest")
+			affected.createwound(CUT, 10)
 		for(var/mob/M in target.stomach_contents)
 			target.stomach_contents.Remove(M)
 			M.loc = target.loc
@@ -1303,10 +1332,14 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		var/datum/organ/external/chest/affected = target.get_organ("chest")
 		user.visible_message("\red [user]'s hand slips, slicing an artery inside [target]'s stomach with \the [tool]!", \
 		"\red Your hand slips, slicing an artery inside [target]'s stomach with \the [tool]!")
-		affected.createwound(CUT, 20)
+		if(tool in allowed_tools)
+			affected.createwound(CUT, 30)
+		else
+			affected.createwound(CUT, 20)
 
 /datum/surgery_step/stomach/mend_closed
 	required_tool = /obj/item/weapon/cautery
+	allowed_tools = list(/obj/item/weapon/match,/obj/item/weapon/lighter,/obj/item/clothing/mask/cigarette,/obj/item/weapon/weldingtool)
 
 	min_duration = 70
 	max_duration = 90
@@ -1322,6 +1355,9 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 	end_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		user.visible_message("[user] mends [target]'s stomach with \the [tool].", \
 		"You mend [target]'s stomach with \the [tool]." )
+		if(tool in allowed_tools)
+			var/datum/organ/external/chest/affected = target.get_organ("chest")
+			target.apply_damage(10, BURN, affected)
 		target.op_stage.stomach = 0
 		var/turf/T = get_turf_loc(target)
 		for(var/obj/item/O in T.contents)
@@ -1336,4 +1372,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		var/datum/organ/external/chest/affected = target.get_organ("chest")
 		user.visible_message("\red [user]'s hand slips, leaving a small burn on [target]'s stomach with \the [tool]!", \
 		"\red Your hand slips, leaving a small burn on [target]'s stomach with \the [tool]!")
-		target.apply_damage(8, BURN, affected)
+		if(tool in allowed_tools)
+			target.apply_damage(20, BURN, affected)
+		else
+			target.apply_damage(8, BURN, affected)
