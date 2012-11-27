@@ -132,8 +132,6 @@ atom
 //TODO: lag reduction
 turf/New()
 	..()
-	Shadow = new(src)
-	Shadow.mouse_opacity = 0
 	if(opacity)
 		UpdateAffectingLights()
 	if(luminosity)
@@ -227,8 +225,6 @@ atom/proc/UpdateAffectingLights()
 turf
 	var/lighting_lumcount = 0
 	var/lighting_changed = 0
-	var/_light = 0
-	var/obj/effect/Shadow
 
 turf/space
 	lighting_lumcount = 4		//starlight
@@ -240,9 +236,6 @@ turf/proc/update_lumcount(amount)
 	if(!lighting_changed)
 		lighting_controller.changed_turfs += src
 		lighting_changed = 1
-		if(_light!=light)
-			update_shadows_turf()
-		_light = lighting_lumcount
 
 turf/proc/shift_to_subarea()
 	lighting_changed = 0
@@ -253,10 +246,7 @@ turf/proc/shift_to_subarea()
 	// change the turf's area depending on its brightness
 	// restrict light to valid levels
 	var/light = min(max(round(lighting_lumcount,1),0),lighting_controller.lighting_states)
-	if(_light!=light)
-		update_shadows_turf()
-	_light = light
-/*	var/new_tag = "[Area.type]sd_L[light]"
+	var/new_tag = "[Area.type]sd_L[light]"
 
 	if(Area.tag!=new_tag)	//skip if already in this area
 		var/area/A = locate(new_tag)	// find an appropriate area
@@ -276,18 +266,11 @@ turf/proc/shift_to_subarea()
 			Area.related += A
 
 		A.contents += src	// move the turf into the area
-*/
-
-turf/proc/update_shadows_turf()
-	for(var/mob/M in range(8,src))
-		if(M.client)
-			M.client.update_shadow_turf(src)
 
 area
 	var/lighting_use_dynamic = 1	//Turn this flag off to prevent sd_DynamicAreaLighting from affecting this area
-/*	var/image/lighting_overlay		//tracks the darkness image of the area for easy removal
+	var/image/lighting_overlay		//tracks the darkness image of the area for easy removal
 	var/lighting_subarea = 0		//tracks whether we're a lighting sub-area
-	var/_light = 4
 
 	proc/SetLightLevel(light)
 		if(!src) return
@@ -299,7 +282,6 @@ area
 				light = lighting_controller.lighting_states
 			luminosity = 1
 
-		_light = light
 		if(lighting_overlay)
 			overlays -= lighting_overlay
 			lighting_overlay.icon_state = "[light]"
@@ -314,7 +296,7 @@ area
 			if(!lighting_subarea)	// see if this is a lighting subarea already
 			//show the dark overlay so areas, not yet in a lighting subarea, won't be bright as day and look silly.
 				SetLightLevel(4)
-*/
+
 
 #undef LIGHTING_MAX_LUMINOSITY
 #undef LIGHTING_MAX_LUMINOSITY_MOB

@@ -268,8 +268,6 @@
 	if((istype(mob.loc, /turf/space)) || (mob.lastarea.has_gravity == 0))
 		if(!mob.Process_Spacemove(0))	return 0
 
-	update_shadows()
-
 	if(isobj(mob.loc) || ismob(mob.loc))//Inside an object, tell it we moved
 		var/atom/O = mob.loc
 		return O.relaymove(mob, direct)
@@ -328,7 +326,6 @@
 					for(var/mob/M in L)
 						spawn( 0 )
 							step(M, direct)
-							update_shadows()
 							return
 						spawn( 1 )
 							M.other_mobs = null
@@ -337,10 +334,8 @@
 
 		else if(mob.confused)
 			step(mob, pick(cardinal))
-			update_shadows()
 		else
 			. = ..()
-			update_shadows()
 
 		moving = 0
 
