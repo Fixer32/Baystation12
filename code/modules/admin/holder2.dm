@@ -275,7 +275,7 @@ var/list/admin_datums = list()
 					newmeme.mind.transfer_to(M)
 					message_admins("Failed to find host for meme [M.key]. Aborting.")
 
-				ticker.mode.memes += newmeme
+				ticker.mode.memes += newmeme.mind
 
 				if(delmob)
 					del(M)
