@@ -236,6 +236,7 @@ turf/proc/update_lumcount(amount)
 	if(!lighting_changed)
 		lighting_controller.changed_turfs += src
 		lighting_changed = 1
+		visibilityChanged()
 
 turf/proc/shift_to_subarea()
 	lighting_changed = 0

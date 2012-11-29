@@ -913,6 +913,7 @@
 	src.occupant.adjustOxyLoss(malf.getOxyLoss())
 	if(!findtext(src.occupant.name," Copy"))
 		src.occupant.name = "[malf.name] Copy"
+	src.occupant.real_name = malf.real_name
 	if(malf.parent)
 		src.occupant.parent = malf.parent
 	else
@@ -921,6 +922,9 @@
 	if(malf.parent)
 		del(malf)
 	src.occupant.verbs += /mob/living/silicon/ai/proc/corereturn
+	src.occupant.holo_icon = malf.holo_icon
+	src.occupant.aiPDA = malf.aiPDA
+	src.occupant.aiMulti = malf.aiPDA
 	src.occupant.cancel_camera()
 
 /obj/machinery/power/apc/proc/malfvacate(var/forced)

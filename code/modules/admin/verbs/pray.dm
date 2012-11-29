@@ -20,6 +20,9 @@
 	for (var/client/C in admin_list)
 		if (C.seeprayers)
 			C << "\blue \icon[cross] <b><font color=purple>PRAY: </font>[key_name(src, C)] (<A HREF='?src=\ref[C.holder];adminmoreinfo=\ref[src]'>?</A>) (<A HREF='?src=\ref[C.holder];adminplayeropts=\ref[src]'>PP</A>) (<A HREF='?src=\ref[C.holder];adminplayervars=\ref[src]'>VV</A>) (<A HREF='?src=\ref[C.holder];adminplayersubtlemessage=\ref[src]'>SM</A>) (<A HREF='?src=\ref[C.holder];adminplayerobservejump=\ref[src]'>JMP</A>) (<A HREF='?src=\ref[C.holder];secretsadmin=check_antagonist'>CA</A>) (<A HREF='?src=\ref[C.holder];adminspawncookie=\ref[src]'>SC</a>):</b> [msg]"
+	if(ishuman(usr))
+		var/mob/living/carbon/human/H = usr
+		H.emote("custom-prays, [msg]")
 
 	usr << "Your prayers have been received by the gods."
 	feedback_add_details("admin_verb","PR") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!

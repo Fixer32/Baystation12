@@ -97,12 +97,22 @@
 	if(air_group || (height==0)) return 1
 	if(istype(mover) && mover.checkpass(PASSGRILLE))
 		return 1
+	else if(istype(mover,/obj/structure/window))
+		if(mover.dir == SOUTHWEST || mover.dir == SOUTHEAST || mover.dir == NORTHWEST || mover.dir == NORTHEAST)
+			return 0
+		return (get_dir(target,mover) != mover.dir)
 	else
 		if (istype(mover, /obj/item/projectile))
 			return prob(30)
 		else
 			return !src.density
 
+/*
+/obj/structure/grille/CheckExit(atom/movable/O as mob|obj, target as turf)
+	if(istype(O,/obj/structure/window))
+		return (get_dir(O,target) != O.dir)
+	return ..(O, target)
+*/
 
 /obj/structure/grille/attackby(obj/item/weapon/W, mob/user)
 	add_hiddenprint(user)

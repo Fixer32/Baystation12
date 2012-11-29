@@ -255,6 +255,8 @@
 		if(!air_master) return 0
 
 		var/turf/simulated/source = loc
+		if(istype(loc,/mob))
+			source = get_turf_loc(loc)
 		var/turf/simulated/north = get_step(source,NORTH)
 		var/turf/simulated/south = get_step(source,SOUTH)
 		var/turf/simulated/east = get_step(source,EAST)

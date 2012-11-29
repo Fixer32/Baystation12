@@ -151,7 +151,6 @@
 						//At this point, we dun care which blood we are adding to, as long as they get more blood.
 						B.volume = B.volume + 0.1 // regenerate blood VERY slowly
 
-
 			switch(blood_volume)
 				if(501 to 10000)
 					if(pale)

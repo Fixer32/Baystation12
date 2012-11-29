@@ -84,6 +84,17 @@
 	if(ismob(loc) && on)
 		var/mob/M = loc
 		var/turf/T = M.loc
+		if(isliving(M))
+			var/mob/living/L = M
+			if(L.stat == DEAD)
+				var/suff = min(L.getOxyLoss(), 25)
+				L.adjustOxyLoss(-suff)
+				L.updatehealth()
+				if(L.health>config.health_threshold_dead)
+					L.stat = UNCONSCIOUS
+			else
+				L.adjustFireLoss(20)
+		
 		if(istype(T, /turf))
 			if(!M.moved_recently && M.last_move)
 				M.moved_recently = 1

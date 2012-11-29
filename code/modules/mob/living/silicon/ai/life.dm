@@ -4,6 +4,7 @@
 	else //I'm not removing that shitton of tabs, unneeded as they are. -- Urist
 		//Being dead doesn't mean your temperature never changes
 		var/turf/T = get_turf(src)
+		lying = 0
 
 		if (src.stat!=0)
 			src.cameraFollow = null
@@ -51,7 +52,7 @@
 					src.sight |= SEE_TURFS
 					src.sight |= SEE_MOBS
 					src.sight |= SEE_OBJS
-					src.see_in_dark = 8
+//					src.see_in_dark = 8
 					src.see_invisible = SEE_INVISIBLE_LEVEL_TWO
 
 					var/area/home = get_area(src)

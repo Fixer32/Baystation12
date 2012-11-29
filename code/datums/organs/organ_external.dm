@@ -185,6 +185,9 @@
 			if(W.damage == 0 && W.created + 10 * 10 * 60 <= world.time)
 				wounds -= W
 				// let the GC handle the deletion of the wound
+			if(status & ORGAN_ROBOT)
+				continue
+
 			if(W.internal && !W.is_treated() && owner.bodytemperature >= 170)
 				// internal wounds get worse over time
 				W.open_wound(0.1 * wound_update_accuracy)
@@ -438,7 +441,12 @@
 				"\red <b>Your [display_name] explodes!</b>",\
 				"You hear an explosion followed by a scream!")
 				if(!no_explode)
-					explosion(get_turf(owner),-1,-1,2,3)
+					if(prob(30))
+						explosion(get_turf(owner),-1,-1,2,3)
+					else if(prob(30))
+						explosion(get_turf(owner),-1,-1,1,2)
+					else if(prob(30))
+						explosion(get_turf(owner),-1,-1,0,1)
 					var/datum/effect/effect/system/spark_spread/spark_system = new /datum/effect/effect/system/spark_spread()
 					spark_system.set_up(5, 0, owner)
 					spark_system.attach(owner)

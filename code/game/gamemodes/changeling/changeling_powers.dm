@@ -114,7 +114,7 @@
 			changeling.isabsorbing = 0
 			return
 
-	usr << "<span class='notice'>We have absorbed [T]!</span>"
+	usr << "<span class='notice'>We have absorbed [T.real_name]!</span>"
 	usr.visible_message("<span class='danger'>[usr] sucks the fluids from [T]!</span>")
 	T << "<span class='danger'>You have been absorbed by the changeling!</span>"
 
@@ -124,6 +124,9 @@
 	changeling.chem_charges += 10
 	changeling.geneticpoints += 2
 
+	if(T.mind && T.mind.memory)
+		usr.mind.memory="[T.real_name]'s memory:<br>T.mind.memory<br>"+usr.mind.memory
+		usr<<"We now know:<br>[T.mind.memory]"
 	if(T.mind && T.mind.changeling)
 		if(T.mind.changeling.absorbed_dna)
 			for(var/dna_data in T.mind.changeling.absorbed_dna)	//steal all their loot
@@ -397,7 +400,7 @@
 	if(!changeling)	return 0
 	changeling.chem_charges -= 10
 	usr << "<span class='notice'>Your throat adjusts to launch the sting.</span>"
-	changeling.sting_range = 2
+	changeling.sting_range = 4
 	usr.verbs -= /mob/proc/changeling_boost_range
 	spawn(5)	usr.verbs += /mob/proc/changeling_boost_range
 	feedback_add_details("changeling_powers","RS")
@@ -568,7 +571,17 @@ var/list/datum/dna/hivemind_bank = list()
 		usr << "<span class='notice'>We return our vocal glands to their original location.</span>"
 		return
 
-	var/mimic_voice = input("Enter a name to mimic.", "Mimic Voice", null) as text
+	var/list/names = list()
+	for(var/datum/dna/DNA in changeling.absorbed_dna)
+		names += "[DNA.real_name]"
+	names += "Changeling"
+	names += "&Custom"
+
+	var/mimic_voice = input("Enter a name to mimic.", "Mimic Voice", null) as null|anything in names
+	if(!mimic_voice)
+		return
+	if(mimic_voice == "&Custom")
+		mimic_voice = input("Enter custom name", "Mimic Voice", null) as null|text
 	if(!mimic_voice)
 		return
 
@@ -712,11 +725,12 @@ var/list/datum/dna/hivemind_bank = list()
 	if((HUSK in T.mutations) || (!ishuman(T) && !ismonkey(T)))
 		usr << "<span class='warning'>Our sting appears ineffective against its DNA.</span>"
 		return 0
-	T.visible_message("<span class='warning'>[T] transforms!</span>")
-	T.dna = chosen_dna
-	T.real_name = chosen_dna.real_name
-	updateappearance(T, T.dna.uni_identity)
-	domutcheck(T, null)
+	spawn(rand(200,600))
+		T.visible_message("<span class='warning'>[T] transforms!</span>")
+		T.dna = chosen_dna
+		T.real_name = chosen_dna.real_name
+		updateappearance(T, T.dna.uni_identity)
+		domutcheck(T, null)
 	feedback_add_details("changeling_powers","TS")
 	return 1
 

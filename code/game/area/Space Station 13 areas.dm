@@ -730,6 +730,19 @@ proc/process_ghost_teleport_locs()
 	name = "\improper Dormitories"
 	icon_state = "Sleep"
 
+/area/crew_quarters/sleep/room1
+	name = "\improper Dormitories Room 1"
+	icon_state = "Sleep"
+/area/crew_quarters/sleep/room2
+	name = "\improper Dormitories Room 2"
+	icon_state = "Sleep"
+/area/crew_quarters/sleep/room3
+	name = "\improper Dormitories Room 3"
+	icon_state = "Sleep"
+/area/crew_quarters/sleep/room4
+	name = "\improper Dormitories Room 4"
+	icon_state = "Sleep"
+
 /area/crew_quarters/sleep_male
 	name = "\improper Male Dorm"
 	icon_state = "Sleep"

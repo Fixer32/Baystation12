@@ -385,7 +385,7 @@
 		/client/proc/cmd_admin_add_random_ai_law,
 		/client/proc/secrets,
 		/client/proc/check_antagonists,
-		/client/proc/play_sound,
+//		/client/proc/play_sound,
 		/client/proc/stealth,
 		/client/proc/cmd_admin_check_contents,
 		/client/proc/cmd_admin_create_centcom_report,

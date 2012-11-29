@@ -950,7 +950,7 @@ steam.start() -- spawns the effect
 			F = new(src.location, metal)
 			F.amount = amount
 
-			if(!metal)			// don't carry other chemicals if a metal foam
+			if(!metal && reagents)			// don't carry other chemicals if a metal foam
 				F.create_reagents(reagents.maximum_volume)
 				reagents.trans_to(F,reagents.total_volume)
 

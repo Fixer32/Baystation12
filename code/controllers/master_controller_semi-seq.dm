@@ -106,6 +106,9 @@ datum/controller/game_controller/proc/setup_objects()
 
 datum/controller/game_controller/proc/process()
 	set background = 1
+
+	var/air_cycle_override_count = 0
+	var/air_cycle_override_skip = 0
 	processing = 1
 	spawn(0)
 		while(1)	//far more efficient than recursively calling ourself
@@ -119,7 +122,6 @@ datum/controller/game_controller/proc/process()
 				var/start_time = world.timeofday
 				controller_iteration++
 
-				air_master_ready		= 0
 				tension_master_ready	= 0
 				sun_ready				= 0
 				mobs_ready				= 0
@@ -134,20 +136,31 @@ datum/controller/game_controller/proc/process()
 
 				vote.process()
 
-				spawn(0)
-					if(!kill_air)
-						air_master.current_cycle++
-						var/success = air_master.process() //Changed so that a runtime does not crash the ticker.
-						if(!success) //Runtimed.
-							log_adminwarn("ZASALERT: air_system/tick() failed: [air_master.tick_progress]")
-							air_master.failed_ticks++
-							if(air_master.failed_ticks > 5)
-								world << "<font color='red'><b>RUNTIMES IN ATMOS TICKER.  Killing air simulation!</font></b>"
-								kill_air = 1
-								air_master.failed_ticks = 0
-//					air_master.process()
-					air_master_ready = 1
-					air_cost = (world.timeofday - start_time) / 10
+				if(air_master_ready!=2)
+					air_master_ready = air_cycle_override_skip*2
+					spawn(0)
+						var/air_start = start_time
+						if(!kill_air && !(air_cycle_override_skip && air_master_ready==3))
+							air_master.current_cycle++
+							var/success = air_master.process() //Changed so that a runtime does not crash the ticker.
+							if(!success) //Runtimed.
+								log_adminwarn("ZASALERT: air_system/tick() failed: [air_master.tick_progress]")
+								air_master.failed_ticks++
+								if(air_master.failed_ticks > 5)
+									world << "<font color='red'><b>RUNTIMES IN ATMOS TICKER.  Killing air simulation!</font></b>"
+									kill_air = 1
+									air_master.failed_ticks = 0
+						if((world.timeofday - air_start)>minimum_ticks)
+							air_cycle_override_count+=2
+						else if(air_cycle_override_count>0)
+							air_cycle_override_count--
+						if(air_cycle_override_count>50)
+							air_cycle_override_skip = 1
+						else if(air_cycle_override_count==0)
+							air_cycle_override_skip = 0
+//						air_master.process()
+						air_cost = (world.timeofday - air_start) / 10
+						air_master_ready = 1+air_cycle_override_skip*2
 				sleep(breather_ticks)
 
 //				spawn(0)
@@ -262,7 +275,7 @@ datum/controller/game_controller/proc/process()
 				sleep( minimum_ticks - max(world.timeofday-start_time,0) )	//to prevent long delays happening at midnight
 
 				var/IL_check = 0 //Infinite loop check (To report when the master controller breaks.)
-				while(!air_master_ready || !tension_master_ready || !sun_ready || !mobs_ready || !diseases_ready || !machines_ready || !objects_ready || !networks_ready || !powernets_ready || !ticker_ready)
+				while((!air_master_ready && !air_cycle_override_skip) || !tension_master_ready || !sun_ready || !mobs_ready || !diseases_ready || !machines_ready || !objects_ready || !networks_ready || !powernets_ready || !ticker_ready)
 					IL_check++
 					if(IL_check > 200)
 						var/MC_report = "air_master_ready = [air_master_ready]; tension_master_ready = [tension_master_ready]; sun_ready = [sun_ready]; mobs_ready = [mobs_ready]; diseases_ready = [diseases_ready]; machines_ready = [machines_ready]; objects_ready = [objects_ready]; networks_ready = [networks_ready]; powernets_ready = [powernets_ready]; ticker_ready = [ticker_ready];"

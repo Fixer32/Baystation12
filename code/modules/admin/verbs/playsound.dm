@@ -13,7 +13,8 @@
 		log_admin("[key_name(src)] played sound [S]")
 		message_admins("[key_name_admin(src)] played sound [S]", 1)
 		for(var/mob/M in player_list)
-			if(M.client.midis)
+//			if(M.client.midis)
+			if(M.z == src.mob.z)
 				M << uploaded_sound
 	else
 		if(usr.client.canplaysound)

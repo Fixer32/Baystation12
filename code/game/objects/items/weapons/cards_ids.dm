@@ -65,6 +65,49 @@
 	usr << "The fingerprint hash on the card is [fingerprint_hash]."
 	return
 
+/obj/item/weapon/card/id/syndicate/var/list/scanned_ids = list()
+/obj/item/weapon/card/id/syndicate/verb/change()
+	set name = "Change ID"
+	set category = "Object"
+	set src in usr
+
+	if(!scanned_ids.len)
+		scanned_ids["&Custom"] = "Custom"
+
+	var/selected = input("Select stored ID","ID selection") as null|anything in scanned_ids
+	if(!selected) return null
+
+	if(selected == "&Custom")
+		var t = copytext(sanitize(input(usr, "What name would you like to put on this card?", "Agent card name", ishuman(usr) ? usr.real_name : usr.name)),1,26)
+		if(!t || t == "Unknown" || t == "floor" || t == "wall" || t == "r-wall") //Same as mob/new_player/prefrences.dm
+			alert("Invalid name.")
+			return
+		src.registered_name = t
+
+		var u = copytext(sanitize(input(usr, "What occupation would you like to put on this card?\nNote: This will not grant any access levels other than Maintenance.", "Agent card job assignment", "Assistant")),1,MAX_MESSAGE_LEN)
+		if(!u)
+			alert("Invalid assignment.")
+			src.registered_name = ""
+			return
+		src.assignment = u
+		src.name = "[src.registered_name]'s ID Card ([src.assignment])"
+		usr << "\blue You successfully forge the ID card."
+		return
+
+	src.registered_name = selected
+	src.assignment = scanned_ids[selected]
+	src.name = "[src.registered_name]'s ID Card ([src.assignment])"
+	usr << "You resetted ID card to record '[src.registered_name] - [src.assignment]'"
+
+/obj/item/weapon/card/id/syndicate/attackby(O as obj, user as mob)
+	if(istype(O, /obj/item/weapon/card/id))
+		if(!scanned_ids.len)
+			scanned_ids["&Custom"] = "Custom"
+		var/obj/item/weapon/card/id/idcard = O
+		scanned_ids[idcard.registered_name] = idcard.assignment
+		src.access |= idcard.access
+		usr << "scanned ID card '[idcard.registered_name] - [idcard.assignment]'"
+/*
 /obj/item/weapon/card/id/syndicate/attack_self(mob/user as mob)
 	if(!src.registered_name)
 		//Stop giving the players unsanitized unputs! You are giving ways for players to intentionally crash clients! -Nodrak
@@ -84,7 +127,7 @@
 		user << "\blue You successfully forge the ID card."
 	else
 		..()
-
+*/
 
 /*
  * FINGERPRINT HOLDER

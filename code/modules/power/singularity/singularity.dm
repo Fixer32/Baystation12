@@ -209,30 +209,33 @@ var/global/list/uneatable = list(
 		expand()
 	return 1
 
-
+/obj/machinery/singularity/var/eating = 0
 /obj/machinery/singularity/proc/eat()
 	set background = 1
 	if(defer_powernet_rebuild != 2)
 		defer_powernet_rebuild = 1
-	// Let's just make this one loop.
-	for(var/atom/X in orange(grav_pull,src))
-		var/dist = get_dist(X, src)
-		// Movable atoms only
-		if(dist > consume_range && istype(X, /atom/movable))
-			if(is_type_in_list(X, uneatable))	continue
-			if(((X) &&(!X:anchored) && (!istype(X,/mob/living/carbon/human)))|| (src.current_size >= 9))
-				step_towards(X,src)
-			else if(istype(X,/mob/living/carbon/human))
-				var/mob/living/carbon/human/H = X
-				if(istype(H.shoes,/obj/item/clothing/shoes/magboots))
-					var/obj/item/clothing/shoes/magboots/M = H.shoes
-					if(M.magpulse)
-						continue
-				step_towards(H,src)
-		// Turf and movable atoms
-		else if(dist <= consume_range && (isturf(X) || istype(X, /atom/movable)))
-			consume(X)
-
+	if(!eating)
+		spawn(0)
+			eating = 1
+			// Let's just make this one loop.
+			for(var/atom/X in orange(grav_pull,src))
+				var/dist = get_dist(X, src)
+				// Movable atoms only
+				if(dist > consume_range && istype(X, /atom/movable))
+					if(is_type_in_list(X, uneatable))	continue
+					if(((X) &&(!X:anchored) && (!istype(X,/mob/living/carbon/human)))|| (src.current_size >= 9))
+						step_towards(X,src)
+					else if(istype(X,/mob/living/carbon/human))
+						var/mob/living/carbon/human/H = X
+						if(istype(H.shoes,/obj/item/clothing/shoes/magboots))
+							var/obj/item/clothing/shoes/magboots/M = H.shoes
+							if(M.magpulse)
+								continue
+						step_towards(H,src)
+				// Turf and movable atoms
+				else if(dist <= consume_range && (isturf(X) || istype(X, /atom/movable)))
+					consume(X)
+			eating = 0
 	if(defer_powernet_rebuild != 2)
 		defer_powernet_rebuild = 0
 	return

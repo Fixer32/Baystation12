@@ -180,6 +180,7 @@
 /obj/machinery/camera/proc/deactivate(user as mob, var/choice = 1)
 	if(choice==1)
 		status = !( src.status )
+		cameranet.updateVisibility(src,0)
 		if (!(src.status))
 			for(var/mob/O in viewers(user, null))
 				O.show_message(text("\red [] has deactivated []!", user, src), 1)
@@ -212,7 +213,7 @@
 /obj/machinery/camera/proc/cancelCameraAlarm()
 	alarm_on = 0
 	for(var/mob/living/silicon/S in mob_list)
-		S.cancelAlarm("Camera", get_area(src), list(src), src)
+		S.cancelAlarm("Camera", get_area(src), src)
 
 /obj/machinery/camera/proc/can_use()
 	if(!status)
@@ -227,7 +228,10 @@
 	if(isXRay())
 		see = range(view_range, pos)
 	else
-		see = hear(view_range, pos)
+		see = view(view_range, pos)
+		for(var/atom/V in see)
+			if(!check_see(src,V,view_range))
+				see-=V
 	return see
 
 /atom/proc/auto_turn()

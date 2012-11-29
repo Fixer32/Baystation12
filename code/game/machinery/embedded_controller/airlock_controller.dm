@@ -141,7 +141,7 @@ datum/computer/file/embedded_program/airlock_controller
 			)
 			if(memory["pump_status"] == "siphon")
 				signal.data["set_external_pressure"] = 1.1*max(int_sensor_pressure,ext_sensor_pressure)
-				signal.data["set_internal_pressure"] = 0.5*max(int_sensor_pressure,ext_sensor_pressure)
+				signal.data["set_internal_pressure"] = 0.1*max(int_sensor_pressure,ext_sensor_pressure)
 				signal.data["stabalize"] = 1
 			else if(memory["pump_status"] != "release")
 				signal.data["power"] = 1

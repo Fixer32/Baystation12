@@ -484,7 +484,7 @@
 				// BUG: For some reason, the memes themselves aren't showing up, even though the list isn't empty
 				// and the "Meme" header is displayed
 				var/mob/living/parasite/meme/M = meme.current
-				if(meme)
+				if(M)
 					dat += "<tr><td><a href='?src=\ref[src];adminplayeropts=\ref[M]'>[M.key]</a>[M.client ? "" : " <i>(logged out)</i>"][M.stat == 2 ? " <b><font color=red>(DEAD)</font></b>" : ""]</td>"
 					dat += "<td><A href='?src=\ref[usr];priv_msg=\ref[M]'>PM</A></td>"
 					dat += "<td><A HREF='?src=\ref[src];traitor=\ref[M]'>Show Objective</A></td></tr>"

@@ -93,9 +93,25 @@ datum
 						src.remove_reagent(current_reagent.id, current_reagent_transfer)
 					else if(current_reagent.id == "blood" && ishuman(target)) // can never be sure
 						var/mob/living/carbon/human/H = target
-						H.vessel.add_reagent(current_reagent.id, (current_reagent_transfer * multiplier), trans_data)
+						
+						var/datum/reagent/blood/HisBlood = locate() in H.vessel.reagent_list //Grab some blood
+						if(HisBlood) // Make sure there's some blood at all
+							if(HisBlood.data["donor"] != H) //If it's not theirs, then we look for theirs
+								for(var/datum/reagent/blood/D in H.vessel.reagent_list)
+									if(D.data["donor"] == H)
+										HisBlood = D
+										break
+						if(HisBlood && HisBlood.data && trans_data)
+							if(blood_incompatible(HisBlood.data["blood_type"],trans_data["blood_type"]))
+								current_reagent_transfer*=0.5
+								H.reagents.add_reagent("toxin",(current_reagent_transfer * multiplier))
+								H.reagents.update_total()
+							H.vessel.add_reagent(current_reagent.id, (current_reagent_transfer * multiplier), trans_data)
+							H.vessel.update_total()
+						else
+							H.vessel.add_reagent(current_reagent.id, (current_reagent_transfer * multiplier), trans_data)
+							H.vessel.update_total()
 						src.remove_reagent(current_reagent.id, current_reagent_transfer)
-						H.vessel.update_total()
 				src.update_total()
 				R.update_total()
 				R.handle_reactions()
