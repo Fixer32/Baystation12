@@ -182,6 +182,10 @@
 	proc/update_wounds()
 		for(var/datum/wound/W in wounds)
 			// wounds can disappear after 10 minutes at the earliest
+			if(status & ORGAN_DESTROYED)
+				wounds -= W
+				continue
+
 			if(W.damage == 0 && W.created + 10 * 10 * 60 <= world.time)
 				wounds -= W
 				// let the GC handle the deletion of the wound
@@ -463,6 +467,8 @@
 
 	proc/createwound(var/type = CUT, var/damage)
 		if(hasorgans(owner))
+			if(type == CUT && status&ORGAN_ROBOT)
+				type = BRUISE
 			var/wound_type
 			var/size = min( max( 1, damage/10 ) , 6)
 
@@ -505,7 +511,7 @@
 
 			// Possibly trigger an internal wound, too.
 			var/local_damage = brute_dam + burn_dam + damage
-			if(damage > 10 && type != BURN && local_damage > 20 && prob(damage))
+			if(damage > 10 && type != BURN && local_damage > 20 && prob(damage) && !(status&ORGAN_ROBOT))
 				var/datum/wound/internal_bleeding/I = new (15)
 				wounds += I
 				owner.custom_pain("You feel something rip in your [display_name]!", 1)

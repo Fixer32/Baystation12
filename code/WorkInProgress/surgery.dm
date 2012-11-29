@@ -985,6 +985,7 @@ proc/spread_germs_to_organ(datum/organ/external/E, mob/living/carbon/human/user)
 		affected.status |= ORGAN_DESTROYED
 		affected.status |= ORGAN_CUT_AWAY
 		affected.open = 1
+		affected.createwound(CUT, 1)
 
 	fail_step(mob/user, mob/living/carbon/human/target, target_zone, obj/item/tool)
 		var/datum/organ/external/affected = target.get_organ(target_zone)
