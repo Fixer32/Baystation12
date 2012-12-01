@@ -543,8 +543,8 @@
 			animation.icon = 'icons/mob/mob.dmi'
 			animation.master = src
 			flick("h2monkey", animation)
-			sleep(48)
-			del(animation)
+			spawn(48)
+				del(animation)
 
 		var/mob/living/carbon/monkey/O = new(src)
 
@@ -610,8 +610,8 @@
 			animation.icon = 'icons/mob/mob.dmi'
 			animation.master = src
 			flick("monkey2h", animation)
-			sleep(48)
-			del(animation)
+			spawn(48)
+				del(animation)
 
 		var/mob/living/carbon/human/O = new( src )
 		if (isblockon(getblock(M.dna.uni_identity, 11,3),11))

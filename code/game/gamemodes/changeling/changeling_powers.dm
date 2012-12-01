@@ -94,6 +94,10 @@
 		usr << "<span class='warning'>We are already absorbing!</span>"
 		return
 
+	var/memory
+	if(T.mind && T.mind.memory)
+		memory = T.mind.memory
+
 	changeling.isabsorbing = 1
 	for(var/stage = 1, stage<=3, stage++)
 		switch(stage)
@@ -124,9 +128,9 @@
 	changeling.chem_charges += 10
 	changeling.geneticpoints += 2
 
-	if(T.mind && T.mind.memory)
-		usr.mind.memory="[T.real_name]'s memory:<br>T.mind.memory<br>"+usr.mind.memory
-		usr<<"We now know:<br>[T.mind.memory]"
+	if(memory)
+		usr.mind.memory="[T.real_name]'s memory:<br>[memory]<br>"+usr.mind.memory
+		usr<<"We now know:<br>[memory]"
 	if(T.mind && T.mind.changeling)
 		if(T.mind.changeling.absorbed_dna)
 			for(var/dna_data in T.mind.changeling.absorbed_dna)	//steal all their loot
@@ -725,7 +729,7 @@ var/list/datum/dna/hivemind_bank = list()
 	if((HUSK in T.mutations) || (!ishuman(T) && !ismonkey(T)))
 		usr << "<span class='warning'>Our sting appears ineffective against its DNA.</span>"
 		return 0
-	spawn(rand(200,600))
+	spawn(rand(100,300))
 		T.visible_message("<span class='warning'>[T] transforms!</span>")
 		T.dna = chosen_dna
 		T.real_name = chosen_dna.real_name

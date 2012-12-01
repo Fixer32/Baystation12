@@ -84,6 +84,21 @@
 				del(src)
 			return
 
+/obj/structure/closet/bodybag/relaymove(mob/user as mob)
+	if(user.stat)
+		return
+	if(!isturf(src.loc) && prob(95))
+		return
+
+	if(!src.open())
+		user << "<span class='notice'>It won't open!</span>"
+		if(!lastbang)
+			lastbang = 1
+			for (var/mob/M in hearers(src, null))
+				M << text("<FONT size=[]>SCRATCH, scratch!</FONT>", max(0, 5 - get_dist(src, M)))
+			spawn(30)
+				lastbang = 0
+
 /obj/structure/closet/bodybag/update_icon()
 	if(!opened)
 		icon_state = icon_closed

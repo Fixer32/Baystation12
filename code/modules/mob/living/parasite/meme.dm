@@ -62,6 +62,7 @@ mob/living/parasite/proc/exit_host()
 // Memes use points for many actions
 mob/living/parasite/meme/var/meme_points = 100
 mob/living/parasite/meme/var/dormant = 0
+mob/living/parasite/meme/immune_to_ssd = 1
 
 // Memes have a list of indoctrinated hosts
 mob/living/parasite/meme/var/list/indoctrinated = list()
@@ -82,7 +83,7 @@ mob/living/parasite/meme/Life()
 	meme_points = min(meme_points + gain, MAXIMUM_MEME_POINTS)
 
 	// if there are sleep toxins in the host's body, that's bad
-	if(host.reagents.has_reagent("stoxin"))
+	if(host.reagents.has_reagent("stoxin",20))
 		src << "\red <b>Something in your host's blood makes you lose consciousness.. you fade away..</b>"
 		src.death()
 		return
@@ -595,7 +596,7 @@ mob/living/parasite/meme/verb/Show_Points()
 		stat(null, "([x], [y], [z])")
 
 	if (client && client.statpanel == "Status")
-		stat(null, "Meme Points: [src.meme_points]")
+		stat("Meme Points:","[src.meme_points]")
 
 // Game mode helpers, used for theft objectives
 // --------------------------------------------

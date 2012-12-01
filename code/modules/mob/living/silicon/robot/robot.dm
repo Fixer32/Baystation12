@@ -246,7 +246,7 @@
 		if(emergency_shuttle.online && emergency_shuttle.location < 2)
 			var/timeleft = emergency_shuttle.timeleft()
 			if (timeleft)
-				stat(null, "ETA-[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
+				stat("ETA","[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
 
 		if(ticker.mode.name == "AI malfunction")
 			var/datum/game_mode/malfunction/malf = ticker.mode
@@ -256,12 +256,12 @@
 						if(malf.apcs >= 3)
 							stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)] seconds")
 				else if(ticker.mode:malf_mode_declared)
-					stat(null, "Time left: [max(ticker.mode:AI_win_timeleft/(ticker.mode:apcs/3), 0)]")
+					stat("Time left:","[max(ticker.mode:AI_win_timeleft/(ticker.mode:apcs/3), 0)]")
 
 		if(cell)
-			stat(null, text("Charge Left: [cell.charge]/[cell.maxcharge]"))
+			stat("Charge Left:","[cell.charge]/[cell.maxcharge]")
 		else
-			stat(null, text("No Cell Inserted!"))
+			stat("No Cell Inserted!")
 
 		if(module)
 			internal = locate(/obj/item/weapon/tank/jetpack) in module.modules
@@ -398,9 +398,10 @@
 	if (istype(W, /obj/item/weapon/handcuffs)) // fuck i don't even know why isrobot() in handcuff code isn't working so this will have to do
 		return
 
-	if (istype(W, /obj/item/weapon/weldingtool) && user!=src)
+	if (istype(W, /obj/item/weapon/weldingtool))
+		if(user==src) return
 		var/obj/item/weapon/weldingtool/WT = W
-		if (WT.remove_fuel(0))
+		if (WT.remove_fuel(1))
 			adjustBruteLoss(-30)
 			updatehealth()
 			add_fingerprint(user)
@@ -722,11 +723,18 @@
 			user << "You remove \the [cell]."
 			cell = null
 			updateicon()
+			return
 
 	if(ishuman(user))
 		if(istype(user:gloves, /obj/item/clothing/gloves/space_ninja)&&user:gloves:candrain&&!user:gloves:draining)
 			call(/obj/item/clothing/gloves/space_ninja/proc/drain)("CYBORG",src,user:wear_suit)
 			return
+
+	if(user.a_intent == "help")
+		if (health > 0)
+			for(var/mob/O in viewers(src, null))
+				if ((O.client && !( O.blinded )))
+					O.show_message("\blue [user] pets the [src]")
 
 /mob/living/silicon/robot/proc/allowed(mob/M)
 	//check if it doesn't require any access at all

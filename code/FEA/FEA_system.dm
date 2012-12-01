@@ -269,9 +269,12 @@ datum
 				if(tiles_to_update.len > 0) process_update_tiles()
 
 				process_groups()
+				sleep(-1)
 				process_singletons()
+				sleep(-1)
 
 				process_super_conductivity()
+				sleep(-1)
 				process_high_pressure_delta()
 
 				if(current_cycle%10==5) //Check for groups of tiles to resume group processing every 10 cycles
@@ -323,12 +326,22 @@ datum
 				groups_to_rebuild.len = 0
 
 			process_groups()
+				var/i=0
 				for(var/datum/air_group/AG in air_groups)
 					AG.process_group()
+					i++
+					if(i==100)
+						sleep(-1)
+						i=0
 
 			process_singletons()
+				var/i=0
 				for(var/item in active_singletons)
 					item:process_cell()
+					i++
+					if(i==100)
+						sleep(-1)
+						i=0
 
 			process_super_conductivity()
 				for(var/turf/simulated/hot_potato in active_super_conductivity)

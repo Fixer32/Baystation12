@@ -102,6 +102,10 @@
 	usr.machine = src
 	interact(user)
 
+/obj/machinery/bot/secbot/attack_ai(mob/user as mob)
+	usr.machine = src
+	interact(user)
+
 /obj/machinery/bot/secbot/proc/interact(mob/user as mob)
 	var/dat
 
@@ -133,7 +137,7 @@ Auto Patrol: []"},
 /obj/machinery/bot/secbot/Topic(href, href_list)
 	usr.machine = src
 	src.add_fingerprint(usr)
-	if((href_list["power"]) && (src.allowed(usr)))
+	if(href_list["power"] && src.allowed(usr))
 		if(src.on)
 			turn_off()
 		else

@@ -708,12 +708,12 @@
 		access = get_all_centcom_access()
 		..()
 
-#define MAXCOIL 30
 /obj/item/weapon/cable_coil
 	name = "cable coil"
 	icon = 'icons/obj/power.dmi'
 	icon_state = "coil_red"
-	var/amount = MAXCOIL
+	var/MAXCOIL = 30
+	var/amount = 30
 	color = "red"
 	desc = "A coil of power cable."
 	throwforce = 10

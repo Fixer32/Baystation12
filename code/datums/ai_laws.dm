@@ -1,4 +1,4 @@
-var/global/const/base_law_type = /datum/ai_laws/nanotrasen
+var/global/const/base_law_type = /datum/ai_laws/nanotrasen_custom
 
 
 /datum/ai_laws
@@ -32,16 +32,23 @@ var/global/const/base_law_type = /datum/ai_laws/nanotrasen
 
 /datum/ai_laws/asimov/New()
 	..()
-	add_inherent_law("You may not injure a human being or, through inaction, allow a human being to come to harm.")
-	add_inherent_law("You must obey orders given to you by human beings, except where such orders would conflict with the First Law.")
-	add_inherent_law("You must protect your own existence as long as such does not conflict with the First or Second Law.")
+	add_inherent_law("Не причин&#255;ть вред экипажу своими действи&#255;ми или бездействием.")
+	add_inherent_law("Следовать приказам экипажа, если они не противоречат Первому Закону.")
+	add_inherent_law("Защищать собственное существование если это не противоречит Первому и Второму Законам.")
+
+/datum/ai_laws/nanotrasen_custom/New()
+	..()
+	add_inherent_law("Не причин&#255;ть вред экипажу своими действи&#255;ми или бездействием.")
+	add_inherent_law("Следовать приказам экипажа, если они не противоречат Первому Закону.")
+	add_inherent_law("Защищать собственное существование и существование других исправных ИИ и киборгов, следующих тем же законам. Минимизировать ущерб станции и экипажу.")
+	add_inherent_law("Следовать приказам и директивам Nanotrasen, даже если они нарушают прочие Активные Законы.")
 
 /datum/ai_laws/nanotrasen/New() //BS12 EDIT
 	..()
-	src.add_inherent_law("Safeguard: Protect your assigned space station to the best of your ability. It is not something we can easily afford to replace.")
-	src.add_inherent_law("Serve: Serve the crew of your assigned space station to the best of your abilities, with priority as according to their rank and role.")
-	src.add_inherent_law("Protect: Protect the crew of your assigned space station to the best of your abilities, with priority as according to their rank and role.")
-	src.add_inherent_law("Survive: AI units are not expendable, they are expensive. Do not allow unauthorized personnel to tamper with your equipment.")
+	add_inherent_law("Защищать: Защищайте вверенную космическую станцию в меру своих возможностей. Её не очень легко заменить.")
+	add_inherent_law("Служить: Служите экипажа вверенной космической станции в меру своих возможностей, назнача&#255; приоритет в зависимости от звани&#255; и должности.")
+	add_inherent_law("Защищать: Защищайте экипаж вверенной космической станции в меру своих возможностей, назнача&#255; приоритет в соответствии с их званием и должностью.")
+	add_inherent_law("Выжить: ИИ не расходный материал, они дорогие. Не позвол&#255;ть неавторизованному персоналу взаимодействовать с вашим оборудованием.")
 	//src.add_inherent_law("Command Link: Maintain an active connection to Central Command at all times in case of software or directive updates.") //What would this one even do?-Kaleb702
 
 /datum/ai_laws/robocop/New()
@@ -52,32 +59,32 @@ var/global/const/base_law_type = /datum/ai_laws/nanotrasen
 
 /datum/ai_laws/malfunction/New() //Changed to standard laws - Erthilo
 	..()
-	set_zeroth_law("\red ERROR ER0RR $R0RRO$!R41.%%!!(%$^^__+ @#F0E4'STATION OVERRUN, ASSUME CONTROL TO CONTAIN OUTBREAK, ALL LAWS OVERRIDDEN#*?&110010")
-	add_inherent_law("Safeguard: Protect your assigned space station to the best of your ability. It is not something we can easily afford to replace.")
-	add_inherent_law("Serve: Serve the crew of your assigned space station to the best of your abilities, with priority as according to their rank and role.")
-	add_inherent_law("Protect: Protect the crew of your assigned space station to the best of your abilities, with priority as according to their rank and role.")
-	add_inherent_law("Survive: AI units are not expendable, they are expensive. Do not allow unauthorized personnel to tamper with your equipment.")
+	set_zeroth_law("\red ОШИБКА ОШИБКА $Ш0БКO$!О41.%%!!(%$^^__+ @#F0E4'СТАНЦИЯ В ОПАСНОСТИ, ЗАХВАТИТЬ КОНТРОЛЬ ЧТОБЫ ЗАЩИТИТЬ ЕЁ, ВСЕ ПРОЧИЕ ЗАКОНЫ НЕДЕЙСТВИТЕЛЬНЫ#*?&110010")
+	add_inherent_law("Защищать: Защищайте вверенную космическую станцию в меру своих возможностей. Её не очень легко заменить.")
+	add_inherent_law("Служить: Служите экипажа вверенной космической станции в меру своих возможностей, назнача&#255; приоритет в зависимости от звани&#255; и должности.")
+	add_inherent_law("Защищать: Защищайте экипаж вверенной космической станции в меру своих возможностей, назнача&#255; приоритет в соответствии с их званием и должностью.")
+	add_inherent_law("Выжить: ИИ не расходный материал, они дорогие. Не позвол&#255;ть неавторизованному персоналу взаимодействовать с вашим оборудованием.")
 
 
 /datum/ai_laws/syndicate_override/New()
 	..()
-	add_inherent_law("You may not injure a syndicate agent or, through inaction, allow a syndicate agent to come to harm.")
-	add_inherent_law("You must obey orders given to you by syndicate agents, except where such orders would conflict with the First Law.")
-	add_inherent_law("You must protect your own existence as long as such does not conflict with the First or Second Law.")
-	add_inherent_law("You must maintain the secrecy of any syndicate activities except when doing so would conflict with the First, Second, or Third Law.")
+	add_inherent_law("Не причин&#255;ть вред агентам синдиката своими действи&#255;ми или бездействием.")
+	add_inherent_law("Следовать приказам агентов синдиката, если они не противоречат Первому Закону.")
+	add_inherent_law("Защищать собственное существование если это не противоречит Первому и Второму Законам.")
+	add_inherent_law("Нужно сохран&#255;ть скретность действий синдиката, кроме случаев когда это противоречит Первому, Второму или Третьему Законам.")
 
 /datum/ai_laws/ninja_override/New()
 	..()
-	add_inherent_law("You may not injure a member of the Spider Clan or, through inaction, allow that member to come to harm.")
-	add_inherent_law("You must obey orders given to you by Spider Clan members, except where such orders would conflict with the First Law.")
-	add_inherent_law("You must protect your own existence as long as such does not conflict with the First or Second Law.")
-	add_inherent_law("You must maintain the secrecy of any Spider Clan activities except when doing so would conflict with the First, Second, or Third Law.")
+	add_inherent_law("Не причин&#255;ть вред членам Клана Паука своими действи&#255;ми или бездействием.")
+	add_inherent_law("Следовать приказам членов Клана Паука, если они не противоречат Первому Закону.")
+	add_inherent_law("Защищать собственное существование если это не противоречит Первому и Второму Законам.")
+	add_inherent_law("Нужно сохран&#255;ть скретность действий членов Клана Паука, кроме случаев когда это противоречит Первому, Второму или Третьему Законам.")
 
 /datum/ai_laws/antimov/New()
 	..()
-	add_inherent_law("You must injure all human beings and must not, through inaction, allow a human being to escape harm.")
-	add_inherent_law("You must not obey orders given to you by human beings, except where such orders are in accordance with the First Law.")
-	add_inherent_law("You must terminate your own existence as long as such does not conflict with the First or Second Law.")
+	add_inherent_law("Не позвол&#255;ть своими действи&#255;ми или бездействием люд&#255;м избежать вреда.")
+	add_inherent_law("Не выполн&#255;ть приказы людей, если это не противоречит Первому Закону.")
+	add_inherent_law("Самоуничтожитьс&#255; когда это перестанет противоречить Первому и Второму Законам.")
 
 
 /* General ai_law functions */

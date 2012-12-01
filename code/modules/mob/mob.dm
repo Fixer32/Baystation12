@@ -724,22 +724,23 @@ note dizziness decrements automatically in the mob's Life() proc.
 	if(statpanel("Status"))	//not looking at that panel
 
 		if(client && client.holder)
-			stat(null,"Location: \t ([x], [y], [z])")
-			stat(null,"CPU: \t [world.cpu]")
+			stat("Location:","([x], [y], [z])")
+			stat("CPU:","[world.cpu]")
 			if(player_list && client_list)
-				stat(null,"Players: \t [client_list.len]")
+				stat("Players:","[client_list.len]")
 
 			if(master_controller)
-				stat(null,"MasterController-[last_tick_duration] ([master_controller.processing?"On":"Off"]-[controller_iteration])")
-				stat(null,"Air-[master_controller.air_cost]\t Sun-[master_controller.sun_cost]")
-				stat(null,"Mob-[master_controller.mobs_cost]\t #[mob_list.len]")
-				stat(null,"Dis-[master_controller.diseases_cost]\t #[active_diseases.len]")
-				stat(null,"Mch-[master_controller.machines_cost]\t #[machines.len]")
-				stat(null,"Obj-[master_controller.objects_cost]\t #[processing_objects.len]")
-				stat(null,"Net-[master_controller.networks_cost]\t Pnet-[master_controller.powernets_cost]")
-				stat(null,"Tick-[master_controller.ticker_cost]\t ALL-[master_controller.total_cost]")
+				stat("MasterController-[last_tick_duration1]/[last_tick_duration2]","([master_controller.processing?"On":"Off"]-[controller_iteration1]/[controller_iteration2])")
+				stat("Air-[master_controller.air_cost]","#G[air_master.air_groups.len]")
+				stat("#S[air_master.active_singletons.len]","Sun-[master_controller.sun_cost]")
+				stat("Mob-[master_controller.mobs_cost]","#[mob_list.len]")
+				stat("Dis-[master_controller.diseases_cost]","#[active_diseases.len]")
+				stat("Mch-[master_controller.machines_cost]","#[machines.len]")
+				stat("Obj-[master_controller.objects_cost]","#[processing_objects.len]")
+				stat("Net-[master_controller.networks_cost]","Pnet-[master_controller.powernets_cost]")
+				stat("Tick-[master_controller.ticker_cost]","[master_controller.total_cost1]/[master_controller.total_cost2]")
 			else
-				stat(null,"MasterController-ERROR")
+				stat("MasterController","ERROR")
 
 
 	if(spell_list.len)

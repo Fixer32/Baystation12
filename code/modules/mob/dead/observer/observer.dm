@@ -66,7 +66,7 @@ Works together with spawning an observer, noted above.
 	if(key)
 		var/mob/dead/observer/ghost = new(src)	//Transfer safety to observer spawning proc.
 		ghost.can_reenter_corpse = can_reenter_corpse
-		ghost.timeofdeath = timeofdeath //BS12 EDIT
+		ghost.timeofdeath = world.time
 		ghost.key = key
 		return ghost
 
@@ -119,19 +119,19 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 	..()
 	statpanel("Status")
 	if (client.statpanel == "Status")
-		stat(null, "Station Time: [worldtime2text()]")
+		stat("Station Time:","[worldtime2text()]")
 		if(ticker)
 			if(ticker.mode)
 				//world << "DEBUG: ticker not null"
 				if(ticker.mode.name == "AI malfunction")
 					//world << "DEBUG: malf mode ticker test"
 					if(ticker.mode:malf_mode_declared)
-						stat(null, "Time left: [max(ticker.mode:AI_win_timeleft/(ticker.mode:apcs/3), 0)]")
+						stat("Time left:","[max(ticker.mode:AI_win_timeleft/(ticker.mode:apcs/3), 0)]")
 		if(emergency_shuttle)
 			if(emergency_shuttle.online && emergency_shuttle.location < 2)
 				var/timeleft = emergency_shuttle.timeleft()
 				if (timeleft)
-					stat(null, "ETA-[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
+					stat("ETA","[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
 
 /mob/dead/observer/verb/reenter_corpse()
 	set category = "Ghost"

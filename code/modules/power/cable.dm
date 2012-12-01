@@ -253,11 +253,11 @@
 
 	else if( istype(W, /obj/item/weapon/cable_coil) )
 		var/obj/item/weapon/cable_coil/C = W
-		if(C.amount == MAXCOIL)
+		if(C.amount == src.MAXCOIL)
 			user << "The coil is too long, you cannot add any more cable to it."
 			return
 
-		if( (C.amount + src.amount <= MAXCOIL) )
+		if( (C.amount + src.amount <= src.MAXCOIL) )
 			C.amount += src.amount
 			user << "You join the cable coils together."
 			C.updateicon()
@@ -265,7 +265,7 @@
 			return
 
 		else
-			user << "You transfer [MAXCOIL - src.amount ] length\s of cable from one coil to the other."
+			user << "You transfer [src.MAXCOIL - src.amount ] length\s of cable from one coil to the other."
 			src.amount -= (MAXCOIL-C.amount)
 			src.updateicon()
 			C.amount = MAXCOIL
@@ -530,7 +530,7 @@ obj/structure/cable/proc/cableColor(var/colorC)
 		var/datum/organ/external/S = M:get_organ(user.zone_sel.selecting)
 		if(!(S.status & ORGAN_ROBOT) || user.a_intent != "help")
 			return ..()
-		if(S.burn_dam > 0)
+		if(S.burn_dam > 0 && use(1))
 			S.heal_damage(0,15,0,1)
 			if(user != M)
 				user.visible_message("\red \The [user] repairs some burn damage on their [S.display_name] with \the [src]",\
@@ -544,3 +544,18 @@ obj/structure/cable/proc/cableColor(var/colorC)
 			user << "Nothing to fix!"
 	else
 		return ..()
+
+/obj/item/weapon/cable_coil/cyborg
+	name = "Cyborg Coil"
+	amount = 50
+	MAXCOIL = 50
+	
+	use(var/used)
+		if(src.amount < used)
+			return 0
+		else if (src.amount == used)
+			return 1
+		else
+			amount -= used
+			updateicon()
+			return 1

@@ -110,6 +110,9 @@
 	src.icon_state = "[lasercolor]ed209[src.on]"
 	src.updateUsrDialog()
 
+/obj/machinery/bot/ed209/attack_ai(mob/user as mob)
+	attack_hand(user)
+
 /obj/machinery/bot/ed209/attack_hand(mob/user as mob)
 	. = ..()
 	if (.)
@@ -158,7 +161,7 @@ Auto Patrol: []"},
 			return
 		else if((lasercolor == "r") && (istype(H.wear_suit, /obj/item/clothing/suit/bluetag)))
 			return
-	if ((href_list["power"]) && (src.allowed(usr)))
+	if (href_list["power"] && src.allowed(usr))
 		if (src.on)
 			turn_off()
 		else

@@ -9,7 +9,8 @@
 
 	log_game("[usr]([usr.key]) used station map L[z] in [src.loc.loc]")
 
-	src.drawmap(usr)
+	spawn(0)
+		src.drawmap(usr)
 
 /obj/machinery/computer/security/proc/drawmap(var/mob/user as mob)
 

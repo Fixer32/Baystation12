@@ -1,3 +1,7 @@
+//
+
+var/icon/LeakSmokeEffectIcon
+
 obj/machinery/atmospherics/pipe
 
 	var/datum/gas_mixture/air_temporary //used when reconstructing a pipeline that broke
@@ -47,6 +51,32 @@ obj/machinery/atmospherics/pipe
 			parent.build_pipeline(src)
 
 		return parent.return_network(reference)
+
+	proc/leak(var/ldir = 0)
+		if(!LeakSmokeEffectIcon)
+			LeakSmokeEffectIcon = new/icon('icons/effects/effects.dmi',"extinguish")
+			LeakSmokeEffectIcon.GrayScale()
+		if(parent && ldir)
+			var/datum/gas_mixture/locair = loc.return_air()
+			if(parent.air.return_pressure()-locair.return_pressure()>15)
+				for(var/direction in cardinal)
+					if(direction&ldir)
+						var/obj/effect/effect/smoke/SE = new /obj/effect/effect/smoke(src.loc)
+						SE.icon = LeakSmokeEffectIcon
+						SE.icon_state=""
+						SE.opacity = 0
+						step(SE,ldir)
+						spawn(5)
+							del(SE)
+			if(abs(parent.air.return_pressure()-locair.return_pressure())>1)
+				parent.mingle_with_turf(loc, volume)
+		else if(parent)
+			stopleak()
+		if(!(src in machines))
+			machines += src
+
+	proc/stopleak()
+		machines.Remove(src)
 
 	Del()
 		del(parent)
@@ -105,23 +135,22 @@ obj/machinery/atmospherics/pipe
 		process()
 			if(!parent) //This should cut back on the overhead calling build_network thousands of times per cycle
 				..()
+				return
+//			else
+//				. = PROCESS_KILL
+
+			var/ldir = initialize_directions
+			if(node1)
+				ldir&=~get_dir(src,node1)
+			if(node2)
+				ldir&=~get_dir(src,node2)
+
+			if(ldir)
+				leak(ldir)
 			else
-				. = PROCESS_KILL
+				stopleak()
 
-			/*if(!node1)
-				parent.mingle_with_turf(loc, volume)
-				if(!nodealert)
-					//world << "Missing node from [src] at [src.x],[src.y],[src.z]"
-					nodealert = 1
-
-			else if(!node2)
-				parent.mingle_with_turf(loc, volume)
-				if(!nodealert)
-					//world << "Missing node from [src] at [src.x],[src.y],[src.z]"
-					nodealert = 1
-			else if (nodealert)
-				nodealert = 0
-
+			/*
 
 			else if(parent)
 				var/environment_temperature = 0
@@ -160,9 +189,7 @@ obj/machinery/atmospherics/pipe
 		proc/burst()
 			src.visible_message("\red \bold [src] bursts!");
 			playsound(src.loc, 'sound/effects/bang.ogg', 25, 1)
-			var/datum/effect/effect/system/harmless_smoke_spread/smoke = new
-			smoke.set_up(1,0, src.loc, 0)
-			smoke.start()
+			leak()
 			del(src)
 
 		proc/normalize_dir()
@@ -200,8 +227,8 @@ obj/machinery/atmospherics/pipe
 				//dir = node1_direction|node2_direction
 
 			else
-				if(!node1&&!node2)
-					del(src) //TODO: silent deleting looks weird
+//				if(!node1&&!node2)
+//					del(src) //TODO: silent deleting looks weird
 				var/have_node1 = node1?1:0
 				var/have_node2 = node2?1:0
 				icon_state = "exposed[have_node1][have_node2][invisibility ? "-f" : "" ]"
@@ -246,6 +273,7 @@ obj/machinery/atmospherics/pipe
 				node2 = null
 
 			update_icon()
+			leak()
 
 			return null
 
@@ -351,8 +379,13 @@ obj/machinery/atmospherics/pipe
 		process()
 			if(!parent)
 				..()
+				return
+
+			if(!node1)
+				leak(dir)
 			else
-				. = PROCESS_KILL
+				stopleak()
+
 /*			if(!node1)
 				parent.mingle_with_turf(loc, 200)
 				if(!nodealert)
@@ -478,6 +511,7 @@ obj/machinery/atmospherics/pipe
 				node1 = null
 
 			update_icon()
+			leak()
 
 			return null
 
@@ -526,7 +560,7 @@ obj/machinery/atmospherics/pipe
 		var/build_killswitch = 1
 
 		var/obj/machinery/atmospherics/node1
-		New()		
+		New()
 			initialize_directions = dir
 			..()
 
@@ -642,8 +676,22 @@ obj/machinery/atmospherics/pipe
 		process()
 			if(!parent)
 				..()
+				return
+//			else
+//				. = PROCESS_KILL
+
+			var/ldir = 15&(~dir)
+			if(node1)
+				ldir&=~get_dir(src,node1)
+			if(node2)
+				ldir&=~get_dir(src,node2)
+			if(node3)
+				ldir&=~get_dir(src,node3)
+
+			if(ldir)
+				leak(ldir)
 			else
-				. = PROCESS_KILL
+				stopleak()
 /*
 			if(!node1)
 				parent.mingle_with_turf(loc, 70)
@@ -690,10 +738,12 @@ obj/machinery/atmospherics/pipe
 				node3 = null
 
 			update_icon()
+			leak()
 
 			..()
 
 		update_icon()
+			overlays = new()
 			if(node1&&node2&&node3)
 				var/C = ""
 				switch(color)
@@ -706,23 +756,18 @@ obj/machinery/atmospherics/pipe
 				icon_state = "manifold[C][invisibility ? "-f" : ""]"
 
 			else
-				var/connected = 0
-				var/unconnected = 0
-				var/connect_directions = (NORTH|SOUTH|EAST|WEST)&(~dir)
+				icon_state = "manifold3w_ex"
+				var/icon/con = new/icon('pipe_manifold.dmi',"manifold4w_con")
 
 				if(node1)
-					connected |= get_dir(src, node1)
+					overlays += new/image(con,dir=get_dir(src, node1))
 				if(node2)
-					connected |= get_dir(src, node2)
+					overlays += new/image(con,dir=get_dir(src, node2))
 				if(node3)
-					connected |= get_dir(src, node3)
+					overlays += new/image(con,dir=get_dir(src, node3))
 
-				unconnected = (~connected)&(connect_directions)
-
-				icon_state = "manifold_[connected]_[unconnected]"
-
-				if(!connected)
-					del(src)
+//				if(!connected)
+//					del(src)
 
 			return
 
@@ -861,8 +906,24 @@ obj/machinery/atmospherics/pipe
 		process()
 			if(!parent)
 				..()
+				return
+//			else
+//				machines.Remove(src)
+
+			var/ldir = 15
+			if(node1)
+				ldir&=~get_dir(src,node1)
+			if(node2)
+				ldir&=~get_dir(src,node2)
+			if(node3)
+				ldir&=~get_dir(src,node3)
+			if(node4)
+				ldir&=~get_dir(src,node4)
+
+			if(ldir)
+				leak(ldir)
 			else
-				machines.Remove(src)
+				stopleak()
 /*
 			if(!node1)
 				parent.mingle_with_turf(loc, 70)
@@ -916,6 +977,7 @@ obj/machinery/atmospherics/pipe
 				node3 = null
 
 			update_icon()
+			leak()
 
 			..()
 
@@ -945,8 +1007,8 @@ obj/machinery/atmospherics/pipe
 				if(node4)
 					overlays += new/image(con,dir=8)
 
-				if(!node1 && !node2 && !node3 && !node4)
-					del(src)
+//				if(!node1 && !node2 && !node3 && !node4)
+//					del(src)
 			return
 
 		initialize()
@@ -1054,7 +1116,7 @@ obj/machinery/atmospherics/pipe/attackby(var/obj/item/weapon/W as obj, var/mob/u
 		user << "\red You paint the pipe yellow."
 		update_icon()
 		return 1
-    
+
 	if (!istype(W, /obj/item/weapon/wrench))
 		return ..()
 	var/turf/T = src.loc
@@ -1074,7 +1136,9 @@ obj/machinery/atmospherics/pipe/attackby(var/obj/item/weapon/W as obj, var/mob/u
 			"[user] unfastens \the [src].", \
 			"\blue You have unfastened \the [src].", \
 			"You hear ratchet.")
-		new /obj/item/pipe(loc, make_from=src)
+		var/obj/item/pipe/P = new /obj/item/pipe(loc, make_from=src)
+		src.transfer_fingerprints_to(P)
+		P.add_hiddenprint(user)
 		for (var/obj/machinery/meter/meter in T)
 			if (meter.target == src)
 				new /obj/item/pipe_meter(T)

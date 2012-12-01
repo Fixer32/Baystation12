@@ -365,11 +365,6 @@ datum
 
 				for(var/datum/reagent/R in reagent_list)
 					if (R.id == reagent)
-						R.volume += amount
-						update_total()
-						if(my_atom)
-							my_atom.on_reagent_change()
-
 						// mix dem viruses
 						if(R.id == "blood" && reagent == "blood")
 							if(R.data && data)
@@ -384,6 +379,13 @@ datum
 											if(d != D)
 												D.cure(0)
 									*/
+								if(R.data["blood_type"] != data["blood_type"])
+									continue
+
+						R.volume += amount
+						update_total()
+						if(my_atom)
+							my_atom.on_reagent_change()
 
 						handle_reactions()
 						return 0
@@ -446,9 +448,7 @@ datum
 						var/datum/compare = chemical_reagents_list[reagent]
 						if(istype(R,compare))
 							if(!amount) return R
-							else
-								if(R.volume >= amount) return R
-								else return 0
+							else if(R.volume >= amount) return R
 				else
 					for(var/datum/reagent/R in reagent_list)
 						if(R.id==reagent)

@@ -123,6 +123,7 @@ datum/preferences/proc/savefile_save(mob/user)
 	F["OOC_Notes"] << src.metadata
 
 	F["sound_adminhelp"] << src.sound_adminhelp
+	src.default_slot = user.client.activeslot
 	F["default_slot"] << src.default_slot
 	F["slotname"] << src.slot_name
 	F["lobby_music"] << src.lobby_music

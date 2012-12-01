@@ -229,9 +229,9 @@
 		see = range(view_range, pos)
 	else
 		see = view(view_range, pos)
-		for(var/atom/V in see)
-			if(!check_see(src,V,view_range))
-				see-=V
+//		for(var/atom/V in see)
+//			if(!check_see(src,V,view_range))
+//				see-=V
 	return see
 
 /atom/proc/auto_turn()

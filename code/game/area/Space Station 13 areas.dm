@@ -996,9 +996,13 @@ proc/process_ghost_teleport_locs()
 	name = "Cryogenics"
 	icon_state = "cryo"
 
-/area/medical/exam_room
-	name = "\improper Exam Room"
-	icon_state = "exam_room"
+/area/medical/storage
+	name = "\improper Storage"
+	icon_state = "medbay"
+
+/area/medical/rest
+	name = "\improper Break Room"
+	icon_state = "medbay"
 
 /area/medical/genetics
 	name = "Genetics"

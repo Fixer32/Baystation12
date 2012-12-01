@@ -179,6 +179,8 @@ datum/controller/game_controller/proc/process()
 				timer = world.timeofday
 				i = 1
 				while(i<=machines.len)
+					if(i%500==0)
+						sleep(-1)
 					var/obj/machinery/Machine = machines[i]
 					if(Machine)
 						last_thing_processed = Machine.type

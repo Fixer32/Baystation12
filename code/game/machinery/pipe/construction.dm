@@ -261,6 +261,8 @@ Buildable meters
 	switch(pipe_type)
 		if(PIPE_SIMPLE_STRAIGHT, PIPE_SIMPLE_BENT)
 			var/obj/machinery/atmospherics/pipe/simple/P = new( src.loc )
+			src.transfer_fingerprints_to(P)
+			P.add_hiddenprint(user)
 			P.dir = src.dir
 			P.initialize_directions = pipe_dir
 			var/turf/T = P.loc
@@ -279,6 +281,8 @@ Buildable meters
 
 		if(PIPE_HE_STRAIGHT, PIPE_HE_BENT)
 			var/obj/machinery/atmospherics/pipe/simple/heat_exchanging/P = new ( src.loc )
+			src.transfer_fingerprints_to(P)
+			P.add_hiddenprint(user)
 			P.dir = src.dir
 			P.initialize_directions = 0
 			P.initialize_directions_he = pipe_dir
@@ -298,6 +302,8 @@ Buildable meters
 
 		if(PIPE_CONNECTOR)		// connector
 			var/obj/machinery/atmospherics/portables_connector/C = new( src.loc )
+			src.transfer_fingerprints_to(C)
+			C.add_hiddenprint(user)
 			C.dir = dir
 			C.initialize_directions = pipe_dir
 			if (pipename)
@@ -313,6 +319,8 @@ Buildable meters
 
 		if(PIPE_MANIFOLD)		//manifold
 			var/obj/machinery/atmospherics/pipe/manifold/M = new( src.loc )
+			src.transfer_fingerprints_to(M)
+			M.add_hiddenprint(user)
 			M.dir = dir
 			M.initialize_directions = pipe_dir
 			//M.New()
@@ -335,6 +343,8 @@ Buildable meters
 
 		if(PIPE_MANIFOLD4W)		//manifold
 			var/obj/machinery/atmospherics/pipe/manifold4w/M = new( src.loc )
+			src.transfer_fingerprints_to(M)
+			M.add_hiddenprint(user)
 			//M.New()
 			var/turf/T = M.loc
 			M.level = T.intact ? 2 : 1
@@ -358,6 +368,8 @@ Buildable meters
 
 		if(PIPE_JUNCTION)
 			var/obj/machinery/atmospherics/pipe/simple/heat_exchanging/junction/P = new ( src.loc )
+			src.transfer_fingerprints_to(P)
+			P.add_hiddenprint(user)
 			P.dir = src.dir
 			P.initialize_directions = src.get_pdir()
 			P.initialize_directions_he = src.get_hdir()
@@ -377,6 +389,8 @@ Buildable meters
 
 		if(PIPE_UVENT)		//unary vent
 			var/obj/machinery/atmospherics/unary/vent_pump/V = new( src.loc )
+			src.transfer_fingerprints_to(V)
+			V.add_hiddenprint(user)
 			V.dir = dir
 			V.initialize_directions = pipe_dir
 			if (pipename)
@@ -392,6 +406,8 @@ Buildable meters
 
 		if(PIPE_MVALVE)		//manual valve
 			var/obj/machinery/atmospherics/valve/V = new( src.loc)
+			src.transfer_fingerprints_to(V)
+			V.add_hiddenprint(user)
 			V.dir = dir
 			V.initialize_directions = pipe_dir
 			if (pipename)
@@ -411,6 +427,8 @@ Buildable meters
 
 		if(PIPE_PUMP)		//gas pump
 			var/obj/machinery/atmospherics/binary/pump/P = new(src.loc)
+			src.transfer_fingerprints_to(P)
+			P.add_hiddenprint(user)
 			P.dir = dir
 			P.initialize_directions = pipe_dir
 			if (pipename)
@@ -428,6 +446,8 @@ Buildable meters
 
 		if(PIPE_GAS_FILTER)		//gas filter
 			var/obj/machinery/atmospherics/trinary/filter/P = new(src.loc)
+			src.transfer_fingerprints_to(P)
+			P.add_hiddenprint(user)
 			P.dir = dir
 			P.initialize_directions = pipe_dir
 			if (pipename)
@@ -448,6 +468,8 @@ Buildable meters
 
 		if(PIPE_GAS_MIXER)		//gas filter
 			var/obj/machinery/atmospherics/trinary/mixer/P = new(src.loc)
+			src.transfer_fingerprints_to(P)
+			P.add_hiddenprint(user)
 			P.dir = dir
 			P.initialize_directions = pipe_dir
 			if (pipename)
@@ -468,6 +490,8 @@ Buildable meters
 
 		if(PIPE_SCRUBBER)		//scrubber
 			var/obj/machinery/atmospherics/unary/vent_scrubber/S = new(src.loc)
+			src.transfer_fingerprints_to(S)
+			S.add_hiddenprint(user)
 			S.dir = dir
 			S.initialize_directions = pipe_dir
 			if (pipename)
@@ -482,6 +506,8 @@ Buildable meters
 
 		if(PIPE_INSULATED_STRAIGHT, PIPE_INSULATED_BENT)
 			var/obj/machinery/atmospherics/pipe/simple/insulated/P = new( src.loc )
+			src.transfer_fingerprints_to(P)
+			P.add_hiddenprint(user)
 			P.dir = src.dir
 			P.initialize_directions = pipe_dir
 			var/turf/T = P.loc
@@ -500,6 +526,8 @@ Buildable meters
 
 		if(PIPE_PASSIVE_GATE)		//passive gate
 			var/obj/machinery/atmospherics/binary/passive_gate/P = new(src.loc)
+			src.transfer_fingerprints_to(P)
+			P.add_hiddenprint(user)
 			P.dir = dir
 			P.initialize_directions = pipe_dir
 			if (pipename)
@@ -517,6 +545,8 @@ Buildable meters
 
 		if(PIPE_VOLUME_PUMP)		//volume pump
 			var/obj/machinery/atmospherics/binary/volume_pump/P = new(src.loc)
+			src.transfer_fingerprints_to(P)
+			P.add_hiddenprint(user)
 			P.dir = dir
 			P.initialize_directions = pipe_dir
 			if (pipename)
@@ -534,6 +564,8 @@ Buildable meters
 
 		if(PIPE_HEAT_EXCHANGE)		// heat exchanger
 			var/obj/machinery/atmospherics/unary/heat_exchanger/C = new( src.loc )
+			src.transfer_fingerprints_to(C)
+			C.add_hiddenprint(user)
 			C.dir = dir
 			C.initialize_directions = pipe_dir
 			if (pipename)

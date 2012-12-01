@@ -7,6 +7,7 @@ var/global/list/mob_list = list()					//List of all mobs, including clientless
 var/global/list/living_mob_list = list()			//List of all living mobs, including clientless
 var/global/list/dead_mob_list = list()				//List of all dead mobs, including clientless
 var/global/list/client_list = list()				//List of all clients, based on ckey
+var/global/list/off_client_list = list()				//List of all clients, based on ckey
 var/global/list/cable_list = list()					//Index for all cables, so that powernets don't have to look through the entire world all the time
 var/global/list/hair_styles_list = list()			//stores /datum/sprite_accessory/hair indexed by name
 var/global/list/facial_hair_styles_list = list()	//stores /datum/sprite_accessory/facial_hair indexed by name

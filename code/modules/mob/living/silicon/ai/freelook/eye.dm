@@ -17,10 +17,9 @@
 	return 0
 
 // Hide popout menu verbs
-// /mob/aiEye/examine()
-//	set popup_menu = 0
-//	set src = usr.contents
-//	return 0
+/mob/aiEye/examine()
+	set src in world
+	..()
 
 /mob/aiEye/pull()
 	set popup_menu = 0

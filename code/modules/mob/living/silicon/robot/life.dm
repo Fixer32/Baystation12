@@ -16,7 +16,7 @@
 		handle_regular_hud_updates()
 		update_items()
 	if (src.stat != DEAD) //still using power
-		use_power()
+		if(!resting) use_power()
 		process_killswitch()
 		process_locks()
 	update_canmove()

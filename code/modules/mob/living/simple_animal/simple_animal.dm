@@ -397,7 +397,7 @@
 	..()
 
 	statpanel("Status")
-	stat(null, "Health: [round((health / maxHealth) * 100)]%")
+	stat("Health:","[round((health / maxHealth) * 100)]%")
 
 /mob/living/simple_animal/proc/Die()
 	living_mob_list -= src

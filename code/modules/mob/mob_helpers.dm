@@ -178,8 +178,15 @@ proc/hasorgans(A)
 	n = length(n)
 	var/p = null
 	p = 1
+	var/skip = 0
 	while(p <= n)
-		if ((copytext(te, p, p + 1) == " " || prob(pr)))
+		if (copytext(te, p, p + 1) == "<")
+			skip ++
+			t = text("[][]", t, copytext(te, p, p + 1))
+		else if (skip && (copytext(te, p, p + 1) == ">"))
+			skip--
+			t = text("[][]", t, copytext(te, p, p + 1))
+		else if ((copytext(te, p, p + 1) == " " || prob(pr)) || skip)
 			t = text("[][]", t, copytext(te, p, p + 1))
 		else
 			t = text("[]*", t)

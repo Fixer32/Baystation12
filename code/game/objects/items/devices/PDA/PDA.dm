@@ -448,6 +448,8 @@ var/global/list/obj/item/device/pda/PDAs = list()
 					U << browse(null, "window=pda")
 					return
 				if("Refresh")//Refresh, goes to the end of the proc.
+					if(cartridge && ((mode >= 40 && mode <= 49) || mode==443))
+						cartridge.unlock()
 				if("Return")//Return
 					if(mode<=9)
 						mode = 0

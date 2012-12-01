@@ -372,7 +372,10 @@
 			if(2)
 				dat += {"<td align=center><A HREF='?src=\ref[src];traitor=\ref[M]'><font color=red><b>Traitor?</b></font></A></td>"}
 
-	dat += "</table></body></html>"
+	dat += "</table><br>Disconnected ckeys:"
+	for(var/datum/client_save/S in off_client_list)
+		dat += "[S.ckey]<br>"
+	dat += "</body></html>"
 
 	usr << browse(dat, "window=players;size=640x480")
 

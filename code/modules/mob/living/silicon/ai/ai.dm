@@ -84,7 +84,7 @@
 		verbs.Add(/mob/living/silicon/ai/proc/ai_call_shuttle,/mob/living/silicon/ai/proc/ai_camera_track, \
 		/mob/living/silicon/ai/proc/ai_camera_list, /mob/living/silicon/ai/proc/ai_network_change, \
 		/mob/living/silicon/ai/proc/toggle_camera_light)
-	verbs.Add(/mob/living/silicon/ai/proc/ai_statuschange, /mob/living/silicon/ai/proc/ai_hologram_change)
+	verbs.Add(/mob/living/silicon/ai/proc/ai_statuschange, /mob/living/silicon/ai/proc/ai_hologram_change, /mob/living/silicon/ai/proc/ai_cyborgslist)
 
 	if(!safety)//Only used by AIize() to successfully spawn an AI.
 		if (!B)//If there is no player/brain inside.
@@ -117,7 +117,7 @@
 		return
 
 		//if(icon_state == initial(icon_state))
-	var/icontype = "" 
+	var/icontype = ""
 	var/list/icons = list("Angry", "Bliss", "Blue", "Dorf", "Firewall", "Green", "Inverted", "Matrix", "Monochrome", "Rainbow", "Red", "Smiley", "Static", "Text")
 
 	if (src.name == "B.A.N.N.E.D." && src.ckey == "spaceman96")
@@ -181,7 +181,7 @@
 		if(emergency_shuttle.online && emergency_shuttle.location < 2)
 			var/timeleft = emergency_shuttle.timeleft()
 			if (timeleft)
-				stat(null, "ETA-[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
+				stat("ETA","[(timeleft / 60) % 60]:[add_zero(num2text(timeleft % 60), 2)]")
 
 		if(ticker.mode.name == "AI malfunction")
 			var/datum/game_mode/malfunction/malf = ticker.mode
@@ -191,9 +191,9 @@
 						stat(null, "Time until station control secured: [max(malf.AI_win_timeleft/(malf.apcs/3), 0)] seconds")
 
 		if(!stat)
-			stat(null, text("System integrity: [(health+100)/2]%"))
+			stat("System integrity:", "[(health+100)/2]%")
 		else
-			stat(null, text("Systems nonfunctional"))
+			stat("Systems nonfunctional","")
 
 /mob/living/silicon/ai/proc/ai_alerts()
 	set category = "AI Commands"
@@ -943,3 +943,20 @@
 			return
 	else
 		return ..()
+
+/mob/living/silicon/ai/proc/ai_cyborgslist()
+	set category = "AI Commands"
+	set name = "Connected Cyborgs"
+
+	if(usr.stat == 2)
+		usr <<"You cannot change your emotional status because you are dead!"
+		return
+	var/s = "Active Cyborgs:"
+	var/n = 0
+	for(var/mob/living/silicon/robot/R in connected_robots)
+		if(n == 0)
+			n = 1
+		else
+			s+=","
+		s += " [R.name]"
+	usr << s

@@ -83,7 +83,7 @@ datum/mind
 			new_character.ckey = lowertext(key)
 
 	proc/store_memory(new_text)
-		memory += "[new_text]<BR>"
+		memory = "[new_text]<BR>"+memory
 
 	proc/show_memory(mob/recipient)
 		var/output = "<B>[current.real_name]'s Memory</B><HR>"

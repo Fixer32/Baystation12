@@ -23,7 +23,7 @@ would spawn and follow the beaker, even if it is carried or thrown.
 
 /obj/effect/effect/smoke
 	name = "smoke"
-	icon = 'icons/effects/water.dmi'
+	icon = 'icons/effects/effects.dmi'
 	icon_state = "smoke"
 	opacity = 1
 	anchored = 0.0

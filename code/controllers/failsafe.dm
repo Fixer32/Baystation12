@@ -4,8 +4,10 @@ var/datum/controller/failsafe/Failsafe
 	var/processing = 0
 	var/processing_interval = 100	//poke the MC every 10 seconds
 
-	var/MC_iteration = 0
-	var/MC_defcon = 0			//alert level. For every poke that fails this is raised by 1. When it reaches 5 the MC is replaced with a new one. (effectively killing any master_controller.process() and starting a new one)
+	var/MC_iteration1 = 0
+	var/MC_iteration2 = 0
+	var/MC_defcon1 = 0			//alert level. For every poke that fails this is raised by 1. When it reaches 5 the MC is replaced with a new one. (effectively killing any master_controller.process() and starting a new one)
+	var/MC_defcon2 = 0			//alert level. For every poke that fails this is raised by 1. When it reaches 5 the MC is replaced with a new one. (effectively killing any master_controller.process() and starting a new one)
 
 	var/lighting_iteration = 0
 	var/lighting_defcon = 0		//alert level for lighting controller.
@@ -29,23 +31,42 @@ var/datum/controller/failsafe/Failsafe
 
 			if(processing)
 				if(master_controller.processing)	//only poke if these overrides aren't in effect
-					if(MC_iteration == controller_iteration)	//master_controller hasn't finished processing in the defined interval
-						switch(MC_defcon)
+					if(MC_iteration1 == controller_iteration1)	//master_controller hasn't finished processing in the defined interval
+						switch(MC_defcon1)
 							if(0 to 3)
-								MC_defcon++
+								MC_defcon1++
 							if(4)
 								for(var/client/C in admin_list)
-									C << "<font color='red' size='2'><b>Warning. The Master Controller has not fired in the last [MC_defcon*processing_interval] ticks. Automatic restart in [processing_interval] ticks.</b></font>"
-								MC_defcon = 5
+									C << "<font color='red' size='2'><b>Warning. The Master Controller has not fired in the last [MC_defcon1*processing_interval] ticks. Automatic restart in [processing_interval] ticks.</b></font>"
+								MC_defcon1 = 5
 							if(5)
 								for(var/client/C in admin_list)
-									C << "<font color='red' size='2'><b>Warning. The Master Controller has still not fired within the last [MC_defcon*processing_interval] ticks. Killing and restarting...</b></font>"
+									C << "<font color='red' size='2'><b>Warning. The Master Controller has still not fired within the last [MC_defcon1*processing_interval] ticks. Killing and restarting...</b></font>"
 								new /datum/controller/game_controller()	//replace the old master_controller (hence killing the old one's process)
 								master_controller.process()				//Start it rolling again
-								MC_defcon = 0
+								MC_defcon1 = 0
 					else
-						MC_defcon = 0
-						MC_iteration = controller_iteration
+						MC_defcon1 = 0
+						MC_iteration1 = controller_iteration1
+
+				if(master_controller.processing)	//only poke if these overrides aren't in effect
+					if(MC_iteration2 == controller_iteration2)	//master_controller hasn't finished processing in the defined interval
+						switch(MC_defcon2)
+							if(0 to 3)
+								MC_defcon2++
+							if(4)
+								for(var/client/C in admin_list)
+									C << "<font color='red' size='2'><b>Warning. The Master Controller has not fired in the last [MC_defcon2*processing_interval] ticks. Automatic restart in [processing_interval] ticks.</b></font>"
+								MC_defcon2 = 5
+							if(5)
+								for(var/client/C in admin_list)
+									C << "<font color='red' size='2'><b>Warning. The Master Controller has still not fired within the last [MC_defcon2*processing_interval] ticks. Killing and restarting...</b></font>"
+								new /datum/controller/game_controller()	//replace the old master_controller (hence killing the old one's process)
+								master_controller.process()				//Start it rolling again
+								MC_defcon2 = 0
+					else
+						MC_defcon2 = 0
+						MC_iteration2 = controller_iteration2
 
 				if(lighting_controller.processing)
 					if(lighting_iteration == lighting_controller.iteration)	//master_controller hasn't finished processing in the defined interval
@@ -66,7 +87,8 @@ var/datum/controller/failsafe/Failsafe
 						lighting_defcon = 0
 						lighting_iteration = lighting_controller.iteration
 			else
-				MC_defcon = 0
+				MC_defcon1 = 0
+				MC_defcon2 = 0
 				lighting_defcon = 0
 
 			sleep(processing_interval)

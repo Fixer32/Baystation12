@@ -43,14 +43,17 @@
 		heal_overall_damage(0, -amount)
 
 /mob/living/carbon/human/Stun(amount)
+	if(nodamage) return 0
 	if(HULK in mutations)	return
 	..()
 
 /mob/living/carbon/human/Weaken(amount)
+	if(nodamage) return 0
 	if(HULK in mutations)	return
 	..()
 
 /mob/living/carbon/human/Paralyse(amount)
+	if(nodamage) return 0
 	if(HULK in mutations)	return
 	..()
 
@@ -87,6 +90,7 @@
 //It automatically updates damage overlays if necesary
 //It automatically updates health status
 /mob/living/carbon/human/take_organ_damage(var/brute, var/burn, var/sharp = 0)
+	if(nodamage) return 0
 	var/list/datum/organ/external/parts = get_damageable_organs()
 	if(!parts.len)	return
 	var/datum/organ/external/picked = pick(parts)
@@ -155,6 +159,7 @@
 	return organs_by_name[zone]
 
 /mob/living/carbon/human/apply_damage(var/damage = 0,var/damagetype = BRUTE, var/def_zone = null, var/blocked = 0, var/sharp = 0, var/used_weapon = null)
+	if(nodamage) return 0
 	if((damagetype != BRUTE) && (damagetype != BURN))
 		..(damage, damagetype, def_zone, blocked)
 		return 1

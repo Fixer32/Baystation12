@@ -171,22 +171,22 @@
 
 	statpanel("Status")
 	if(istype(src, /mob/living/carbon/metroid/adult))
-		stat(null, "Health: [round((health / 200) * 100)]%")
+		stat("Health:","[round((health / 200) * 100)]%")
 	else
-		stat(null, "Health: [round((health / 150) * 100)]%")
+		stat("Health:","[round((health / 150) * 100)]%")
 
 
 	if (client.statpanel == "Status")
 		if(istype(src,/mob/living/carbon/metroid/adult))
-			stat(null, "Nutrition: [nutrition]/1200")
+			stat("Nutrition:","[nutrition]/1200")
 			if(amount_grown >= 10)
-				stat(null, "You can reproduce!")
+				stat("You can reproduce!","")
 		else
 			stat(null, "Nutrition: [nutrition]/1000")
 			if(amount_grown >= 10)
-				stat(null, "You can evolve!")
+				stat("You can evolve!","")
 
-		stat(null,"Power Level: [powerlevel]")
+		stat("Power Level:","[powerlevel]")
 
 
 /mob/living/carbon/metroid/bullet_act(var/obj/item/projectile/Proj)
