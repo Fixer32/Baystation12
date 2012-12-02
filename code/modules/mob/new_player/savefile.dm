@@ -40,15 +40,52 @@ datum/preferences/proc/savefile_createslot(mob/user, var/slot_num = 0)
 		else
 			user << "\red You have reached the max number of character slots ([MAX_SAVE_SLOTS])"
 
+datum/preferences/proc/savefile_cfg_save(mob/user)
+	var/cfgpath = savefile_path_main(user)
+	var/savefile/SS = new /savefile(cfgpath)
+	default_slot = user.client.activeslot
+	SS["default_slot"] << default_slot
+	SS["UI_style"] << UI_style
+	SS["midis"] << src.midis
+	SS["ghost_ears"] << src.ghost_ears
+	SS["ghost_sight"] << src.ghost_sight
+	SS["pregame_music"] << src.pregame_music
+	SS["ooccolor"] << src.ooccolor
+	SS["lastchangelog"] << src.lastchangelog
+	SS["sound_adminhelp"] << src.sound_adminhelp
+	SS["lobby_music"] << src.lobby_music
+
+datum/preferences/proc/savefile_cfg_load(mob/user)
+	var/cfgpath = savefile_path_main(user)
+	if(fexists(cfgpath))
+		var/savefile/SS = new /savefile(cfgpath)
+		SS["default_slot"] >> src.default_slot
+		SS["UI_style"] >> UI_style
+		SS["midis"] >> src.midis
+		SS["ghost_ears"] >> src.ghost_ears
+		SS["ghost_sight"] >> src.ghost_sight
+		SS["pregame_music"] >> src.pregame_music
+		SS["ooccolor"] >> src.ooccolor
+		SS["lastchangelog"] >> src.lastchangelog
+		SS["sound_adminhelp"] >> src.sound_adminhelp
+		SS["lobby_music"] >> src.lobby_music
+	if(isnull(UI_style)) UI_style = "Midnight"
+	if(isnull(ghost_ears)) ghost_ears = 1 //Hotfix
+	if(isnull(ghost_sight)) ghost_sight = 1 //Hotfix
+	if(isnull(default_slot)) default_slot = 1
+	user.client.activeslot = src.default_slot
+	if(isnull(lobby_music)) lobby_music = 1
+
 datum/preferences/proc/savefile_save(mob/user)
 	if (IsGuestKey(user.key))
 		return 0
 
-	var/cfgpath = savefile_path_main(user)
-	var/savefile/SS = new /savefile(cfgpath)
-	SS["default_slot"] << user.client.activeslot
-
 	var/savefile/F = new /savefile(src.savefile_path(user))
+
+	if(user.client)
+		default_slot = user.client.activeslot
+	savefile_cfg_save(user)
+
 //	var/version
 //	F["version"] >> version
 
@@ -103,15 +140,6 @@ datum/preferences/proc/savefile_save(mob/user)
 
 	F["be_special"] << src.be_special
 	//F["UI"] << src.UI
-	if(isnull(UI_style))
-		UI_style = "Midnight"
-	F["UI_style"] << UI_style
-	F["midis"] << src.midis
-	F["ghost_ears"] << src.ghost_ears
-	F["ghost_sight"] << src.ghost_sight
-	F["pregame_music"] << src.pregame_music
-	F["ooccolor"] << src.ooccolor
-	F["lastchangelog"] << src.lastchangelog
 	F["disabilities"] << src.disabilities
 
 	F["used_skillpoints"] << src.used_skillpoints
@@ -122,22 +150,9 @@ datum/preferences/proc/savefile_save(mob/user)
 
 	F["OOC_Notes"] << src.metadata
 
-	F["sound_adminhelp"] << src.sound_adminhelp
 	F["slotname"] << src.slot_name
-	F["lobby_music"] << src.lobby_music
-
-	F["organ_data"] << src.organ_data
 
 	return 1
-
-datum/preferences/proc/savefile_cfg_load(mob/user)
-	var/cfgpath = savefile_path_main(user)
-	if(fexists(cfgpath))
-		var/savefile/SS = new /savefile(cfgpath)
-		SS["default_slot"] >> src.default_slot
-	if(isnull(default_slot))
-		default_slot = 1
-	user.client.activeslot = src.default_slot
 
 // loads the savefile corresponding to the mob's ckey
 // if silent=true, report incompatible savefiles
@@ -148,7 +163,7 @@ datum/preferences/proc/savefile_load(mob/user)
 	if(user.client == null) return 0
 	if(IsGuestKey(user.key))	return 0
 
-	var/path = savefile_path_main(user)
+	var/path = savefile_path(user)
 
 	if(!fexists(path))
 		//Is there a preference file before this was committed?
@@ -166,6 +181,7 @@ datum/preferences/proc/savefile_load(mob/user)
 			if(!fexists(path))
 				return 0
 
+	savefile_cfg_save(user)
 	var/savefile/F = new /savefile(path)
 
 	var/version = null
@@ -207,18 +223,6 @@ datum/preferences/proc/savefile_load(mob/user)
 	F["species"] >> src.species
 	if(isnull(species)) species = "Human"
 	F["name_is_always_random"] >> src.be_random_name
-	F["midis"] >> src.midis
-	F["ghost_ears"] >> src.ghost_ears
-	if(isnull(ghost_ears)) ghost_ears = 1 //Hotfix
-	F["pregame_music"] >> src.pregame_music
-	F["ghost_sight"] >> src.ghost_sight
-	if(isnull(ghost_sight)) ghost_sight = 1 //Hotfix
-	F["ooccolor"] >> src.ooccolor
-	F["lastchangelog"] >> src.lastchangelog
-	//F["UI"] >> src.UI
-	F["UI_style"] >> src.UI_style
-	if(isnull(UI_style))
-		UI_style = "Midnight"
 	F["be_special"] >> src.be_special
 
 	F["job_civilian_high"] >> src.job_civilian_high
@@ -255,17 +259,12 @@ datum/preferences/proc/savefile_load(mob/user)
 		job_alt_titles = new()
 
 	F["OOC_Notes"] >> src.metadata
+	if(isnull(metadata))
+		metadata = ""
 
-	F["sound_adminhelp"] >> src.sound_adminhelp
 	F["slotname"] >> src.slot_name
 	if(!src.slot_name)
 		src.slot_name = "Slot [user.client.activeslot]"
-	F["lobby_music"] >> src.lobby_music
-	if(isnull(lobby_music))
-		lobby_music = 1
-
-	if(isnull(metadata))
-		metadata = ""
 
 	F["organ_data"] >> src.organ_data
 	if(!src.organ_data) src.organ_data = list()

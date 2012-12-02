@@ -164,7 +164,7 @@ datum/controller/game_controller/proc/process()
 					pipe_networks.Cut(i,i+1)
 				networks_cost = (world.timeofday - start_time) / 10
 
-				total_cost1 = sun_cost + mobs_cost + diseases_cost + objects_cost + ticker_cost
+				total_cost1 = air_cost + machines_cost + powernets_cost + networks_cost
 
 				sleep( minimum_ticks1 - max(world.timeofday-start_time_real,0) )	//to prevent long delays happening at midnight
 			else

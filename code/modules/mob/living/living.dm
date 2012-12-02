@@ -275,13 +275,15 @@
 	eye_blurry = 0
 	ear_deaf = 0
 	ear_damage = 0
-	heal_overall_damage(1000, 1000)
+	heal_overall_damage(1000, 1000, 1, 1)
 	buckled = initial(src.buckled)
 	handcuffed = initial(src.handcuffed)
 	if(stat == 2)
 		dead_mob_list -= src
 		living_mob_list += src
 	stat = CONSCIOUS
+	if(HUSK in mutations)
+		mutations.Remove(HUSK)
 	regenerate_icons()
 	..()
 	return
