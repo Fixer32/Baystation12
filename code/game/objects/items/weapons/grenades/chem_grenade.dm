@@ -280,10 +280,10 @@
 		if(active) return
 	
 		if(detonator)
-			if(!isigniter(detonator.a_left))
+			if(!isigniter(detonator.a_left) && !issignaler(detonator.a_left))
 				detonator.a_left.activate()
 				active = 1
-			if(!isigniter(detonator.a_right))
+			if(!isigniter(detonator.a_right) && !issignaler(detonator.a_right))
 				detonator.a_right.activate()
 				active = 1
 		if(active)

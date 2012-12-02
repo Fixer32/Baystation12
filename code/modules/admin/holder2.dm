@@ -717,7 +717,7 @@ var/list/admin_datums = list()
 				del(M.client)
 
 
-	if (href_list["removejobban"])
+/*	if (href_list["removejobban"])
 		if ((src.rank in list("Game Admin", "Game Master"  )))
 			var/t = href_list["removejobban"]
 			if(t)
@@ -730,7 +730,7 @@ var/list/admin_datums = list()
 					var/key = t_split[1]
 					var/job = t_split[2]
 					DB_ban_unban(ckey(key), BANTYPE_JOB_PERMA, job)
-
+*/
 	if (href_list["newban"])
 		if ((src.rank in list( "Temporary Admin", "Admin Candidate", "Trial Admin", "Badmin", "Game Admin", "Game Master"  )))
 			var/mob/M = locate(href_list["newban"])
@@ -789,6 +789,7 @@ var/list/admin_datums = list()
 					//del(M)
 				if("Cancel")
 					return
+/*
 	if(href_list["unjobbanf"])
 		var/banfolder = href_list["unjobbanf"]
 		Banlist.cd = "/base/[banfolder]"
@@ -799,7 +800,7 @@ var/list/admin_datums = list()
 			else
 				alert(usr,"This ban has already been lifted / does not exist.","Error","Ok")
 				unjobbanpanel()
-
+*/
 	if(href_list["unjobbane"])
 		return
 /*
@@ -1447,7 +1448,7 @@ var/list/admin_datums = list()
 			else
 				T:break_tile()
 
-		if(M.health == 1)
+		if(M.health <= 1)
 			M.gib()
 		else
 			M.adjustBruteLoss( min( 99 , (M.health - 1) )    )
@@ -2712,6 +2713,13 @@ var/list/admin_datums = list()
 		var/datum/player_info/item = infos[index]
 		infos.Remove(item)
 		info << infos
+
+		var/savefile/note_list = new("data/player_notes.sav")
+		var/list/note_keys
+		note_list >> note_keys
+		if(note_keys && !infos.len) note_keys.Remove(key)
+		note_list << note_keys
+		del note_list
 
 		message_admins("\blue [key_name_admin(usr)] deleted one of [key]'s notes.")
 		log_admin("[key_name(usr)] deleted one of [key]'s notes.")

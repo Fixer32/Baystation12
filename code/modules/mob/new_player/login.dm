@@ -37,6 +37,7 @@
 
 	spawn(30)
 		if(client)
+			preferences.savefile_cfg_load(src)
 			if(!preferences.savefile_load(src, 0))
 				preferences.ShowChoices(src)
 				if(!client.changes)

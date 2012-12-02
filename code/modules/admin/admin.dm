@@ -437,17 +437,15 @@ var/global/floorIsLava = 0
 	usr << browse(dat, "window=admincaster_main;size=400x600")
 	onclose(usr, "admincaster_main")
 
-
-
 /datum/admins/proc/Jobbans()
 
 	if ((src.rank in list( "Game Admin", "Game Master"  )))
 		var/dat = "<B>Job Bans!</B><HR><table>"
-		for(var/t in jobban_keylist)
-			var/r = t
-			if( findtext(r,"##") )
-				r = copytext( r, 1, findtext(r,"##") )//removes the description
-			dat += text("<tr><td>[t] (<A href='?src=\ref[src];removejobban=[r]'>unban</A>)</td></tr>")
+		for(var/CK in jobban_keylist)
+			var/mob/M = get_mob_by_key(CK)
+			if(istype(M))
+				dat += text("<tr><td><A href='?src=\ref[src];jobban2=\ref[M]'>[CK]</A></td><td><table>")
+			dat += text("</table></td></tr>")
 		dat += "</table>"
 		usr << browse(dat, "window=ban;size=400x400")
 
@@ -1001,6 +999,7 @@ var/global/floorIsLava = 0
 	message_admins("\blue [key_name_admin(usr)] toggled guests game entering [guests_allowed?"":"dis"]allowed.", 1)
 	feedback_add_details("admin_verb","TGU") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 
+/*
 /client/proc/unjobban_panel()
 	set name = "Unjobban Panel"
 	set category = "Admin"
@@ -1008,6 +1007,7 @@ var/global/floorIsLava = 0
 		src.holder.unjobbanpanel()
 	feedback_add_details("admin_verb","UJBP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
 	return
+*/
 
 /datum/admins/proc/output_ai_laws()
 	var/ai_number = 0

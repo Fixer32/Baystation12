@@ -177,7 +177,7 @@
 			verbs += /client/proc/player_panel_new
 			verbs += /client/proc/unban_panel
 			verbs += /client/proc/jobbans
-			verbs += /client/proc/unjobban_panel
+//			verbs += /client/proc/unjobban_panel
 			verbs += /client/proc/hide_verbs
 			verbs += /client/proc/general_report
 			verbs += /client/proc/air_report
@@ -187,8 +187,6 @@
 			verbs += /client/proc/player_panel_new
 			verbs += /client/proc/cmd_admin_change_custom_event
 			verbs += /client/proc/game_panel
-			verbs += /client/proc/unjobban_panel
-			verbs += /client/proc/jobbans
 			verbs += /client/proc/unban_panel
 			verbs += /datum/admins/proc/toggleooc
 			verbs += /datum/admins/proc/toggleoocdead
@@ -400,7 +398,7 @@
 		/client/proc/player_panel,
 		/client/proc/unban_panel,
 		/client/proc/jobbans,
-		/client/proc/unjobban_panel,
+//		/client/proc/unjobban_panel,
 		/client/proc/hide_verbs,
 		/client/proc/general_report,
 		/client/proc/air_report,

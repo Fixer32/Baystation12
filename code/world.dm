@@ -25,7 +25,7 @@
 		load_whitelist()
 	if (config.usealienwhitelist)
 		load_alienwhitelist()
-	LoadBansjob()
+//	LoadBansjob()
 	Get_Holiday()	//~Carn, needs to be here when the station is named so :P
 	src.update_status()
 	makepowernets()
@@ -79,7 +79,7 @@ Starting up. [time2text(world.timeofday, "hh:mm.ss")]
 	href_logfile = file("data/logs/[time2text(world.realtime, "YYYY/MM-Month/DD-Day")] hrefs.html")
 
 	jobban_loadbanfile()
-	jobban_updatelegacybans()
+//	jobban_updatelegacybans()
 	LoadBans()
 	make_datum_references_lists()	//initialises global lists for referencing frequently used datums (so that we only ever do it once)
 	process_teleport_locs()			//Sets up the wizard teleport locations

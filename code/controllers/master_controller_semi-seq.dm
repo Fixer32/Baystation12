@@ -102,7 +102,7 @@ datum/controller/game_controller/proc/process()
 	set background = 1
 
 	processing = 1
-	spawn(0)
+	spawn(10)
 		while(1)	//far more efficient than recursively calling ourself
 			if(!Failsafe)	new /datum/controller/failsafe()
 			if(processing)
@@ -170,7 +170,7 @@ datum/controller/game_controller/proc/process()
 			else
 				sleep(10)
 
-	spawn(5)
+	spawn(0)
 		while(1)	//far more efficient than recursively calling ourself
 			if(!Failsafe)	new /datum/controller/failsafe()
 			if(processing)

@@ -133,7 +133,6 @@
 		return result
 
 
-
 	proc/heal_damage(brute, burn, internal = 0, robo_repair = 0)
 		if(status & ORGAN_ROBOT && !robo_repair)
 			return
@@ -145,9 +144,9 @@
 
 			// heal brute damage
 			if(W.damage_type == CUT || W.damage_type == BRUISE)
-				brute = W.heal_damage(brute)
+				brute = W.heal_damage(brute, internal)
 			else if(W.damage_type == BURN)
-				burn = W.heal_damage(burn)
+				burn = W.heal_damage(burn, internal)
 
 		// sync organ damage with wound damages
 		update_damages()

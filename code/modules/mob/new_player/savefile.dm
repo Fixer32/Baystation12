@@ -1,6 +1,12 @@
 #define SAVEFILE_VERSION_MIN	7
 #define SAVEFILE_VERSION_MAX	7
 
+datum/preferences/proc/savefile_path_main(mob/user)
+	if(!user.client)
+		return null
+	else
+		return "data/player_saves/[copytext(user.ckey, 1, 2)]/[user.ckey]/cfg.sav"
+
 datum/preferences/proc/savefile_path(mob/user, var/slot = 0)
 	if(!user.client)
 		return null
@@ -8,16 +14,6 @@ datum/preferences/proc/savefile_path(mob/user, var/slot = 0)
 		if(!slot)
 			slot = user.client.activeslot
 		return "data/player_saves/[copytext(user.ckey, 1, 2)]/[user.ckey]/preferences[slot].sav"
-
-//??
-datum/preferences/proc/savefile_saveslot(mob/user,var/slot)//Mirrors default slot across each save
-	if(!user.client)
-		return null
-	else
-		for(var/i = 1; i <= MAX_SAVE_SLOTS; i += 1)
-			var/savefile/F = new /savefile("data/player_saves/[copytext(user.ckey, 1, 2)]/[user.ckey]/preferences[i].sav")
-			F["default_slot"] << slot
-	return 1
 
 datum/preferences/proc/savefile_createslot(mob/user, var/slot_num = 0)
 	if(IsGuestKey(user.key))
@@ -47,6 +43,10 @@ datum/preferences/proc/savefile_createslot(mob/user, var/slot_num = 0)
 datum/preferences/proc/savefile_save(mob/user)
 	if (IsGuestKey(user.key))
 		return 0
+
+	var/cfgpath = savefile_path_main(user)
+	var/savefile/SS = new /savefile(cfgpath)
+	SS["default_slot"] << user.client.activeslot
 
 	var/savefile/F = new /savefile(src.savefile_path(user))
 //	var/version
@@ -123,14 +123,21 @@ datum/preferences/proc/savefile_save(mob/user)
 	F["OOC_Notes"] << src.metadata
 
 	F["sound_adminhelp"] << src.sound_adminhelp
-	src.default_slot = user.client.activeslot
-	F["default_slot"] << src.default_slot
 	F["slotname"] << src.slot_name
 	F["lobby_music"] << src.lobby_music
 
 	F["organ_data"] << src.organ_data
 
 	return 1
+
+datum/preferences/proc/savefile_cfg_load(mob/user)
+	var/cfgpath = savefile_path_main(user)
+	if(fexists(cfgpath))
+		var/savefile/SS = new /savefile(cfgpath)
+		SS["default_slot"] >> src.default_slot
+	if(isnull(default_slot))
+		default_slot = 1
+	user.client.activeslot = src.default_slot
 
 // loads the savefile corresponding to the mob's ckey
 // if silent=true, report incompatible savefiles
@@ -141,7 +148,7 @@ datum/preferences/proc/savefile_load(mob/user)
 	if(user.client == null) return 0
 	if(IsGuestKey(user.key))	return 0
 
-	var/path = savefile_path(user)
+	var/path = savefile_path_main(user)
 
 	if(!fexists(path))
 		//Is there a preference file before this was committed?
@@ -250,9 +257,6 @@ datum/preferences/proc/savefile_load(mob/user)
 	F["OOC_Notes"] >> src.metadata
 
 	F["sound_adminhelp"] >> src.sound_adminhelp
-	F["default_slot"] >> src.default_slot
-	if(isnull(default_slot))
-		default_slot = 1
 	F["slotname"] >> src.slot_name
 	if(!src.slot_name)
 		src.slot_name = "Slot [user.client.activeslot]"

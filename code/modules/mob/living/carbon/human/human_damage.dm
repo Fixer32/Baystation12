@@ -100,7 +100,7 @@
 
 
 //Heal MANY external organs, in random order
-/mob/living/carbon/human/heal_overall_damage(var/brute, var/burn)
+/mob/living/carbon/human/heal_overall_damage(var/brute, var/burn, var/internal=0, var/robot=0)
 	var/list/datum/organ/external/parts = get_damaged_organs(brute,burn)
 
 	var/update = 0
@@ -110,7 +110,7 @@
 		var/brute_was = picked.brute_dam
 		var/burn_was = picked.burn_dam
 
-		update |= picked.heal_damage(brute,burn)
+		update |= picked.heal_damage(brute,burn,internal,robot)
 
 		brute -= (brute_was-picked.brute_dam)
 		burn -= (burn_was-picked.burn_dam)

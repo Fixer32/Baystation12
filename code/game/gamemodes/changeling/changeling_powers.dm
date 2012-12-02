@@ -382,7 +382,9 @@
 			C.SetStunned(0)
 			C.SetWeakened(0)
 			C.radiation = 0
-			C.heal_overall_damage(C.getBruteLoss(), C.getFireLoss())
+			C.traumatic_shock = 0
+			C.shock_stage = 0
+			C.heal_overall_damage(C.getBruteLoss(), C.getFireLoss(), 1)
 			C.reagents.clear_reagents()
 			C << "<span class='notice'>We have regenerated.</span>"
 			C.visible_message("<span class='warning'>[usr] appears to wake from the dead, having healed all wounds.</span>")
