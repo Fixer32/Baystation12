@@ -4,14 +4,18 @@
 
 var/global/datum/controller/game_controller/master_controller //Set in world.New()
 
-var/global/controller_iteration = 0
-var/global/last_tick_timeofday = world.timeofday
-var/global/last_tick_duration = 0
+var/global/controller_iteration1 = 0
+var/global/controller_iteration2 = 0
+var/global/last_tick_timeofday1 = world.timeofday
+var/global/last_tick_timeofday2 = world.timeofday
+var/global/last_tick_duration1 = 0
+var/global/last_tick_duration2 = 0
 
 datum/controller/game_controller
 	var/processing = 0
-	var/breather_ticks = 2		//a somewhat crude attempt to iron over the 'bumps' caused by high-cpu use by letting the MC have a breather for this many ticks after every loop
-	var/minimum_ticks = 10		//The minimum length of time between MC ticks
+	var/breather_ticks = 1		//a somewhat crude attempt to iron over the 'bumps' caused by high-cpu use by letting the MC have a breather for this many ticks after every loop
+	var/minimum_ticks1 = 20		//The minimum length of time between MC ticks
+	var/minimum_ticks2 = 20	//The minimum length of time between MC ticks
 
 	var/air_cost 		= 0
 	var/sun_cost		= 0
@@ -22,7 +26,8 @@ datum/controller/game_controller
 	var/networks_cost	= 0
 	var/powernets_cost	= 0
 	var/ticker_cost		= 0
-	var/total_cost		= 0
+	var/total_cost1		= 0
+	var/total_cost2		= 0
 
 	var/last_thing_processed
 
@@ -99,13 +104,14 @@ datum/controller/game_controller/proc/process()
 			if(!Failsafe)	new /datum/controller/failsafe()
 
 			var/currenttime = world.timeofday
-			last_tick_duration = (currenttime - last_tick_timeofday) / 10
-			last_tick_timeofday = currenttime
+			last_tick_duration1 = (currenttime - last_tick_timeofday1) / 10
+			last_tick_timeofday1 = currenttime
 
 			if(processing)
 				var/timer
 				var/start_time = world.timeofday
-				controller_iteration++
+				controller_iteration1++
+				controller_iteration2 = controller_iteration1
 
 				vote.process()
 
@@ -119,6 +125,7 @@ datum/controller/game_controller/proc/process()
 				//  1. atmos won't process if the game is generally lagged out(no deadlocks)
 				//  2. if the server frequently crashes during atmos processing we will know
 				if(!kill_air)
+					timer = world.timeofday
 					//src.set_debug_state("Air Master")
 
 					air_master.current_cycle++
@@ -132,8 +139,8 @@ datum/controller/game_controller/proc/process()
 							air_master.failed_ticks = 0
 					/*else if (air_master.failed_ticks > 10)
 						air_master.failed_ticks = 0*/
+					air_cost = (world.timeofday - timer) / 10
 				//air_master_ready = 1
-
 
 				sleep(breather_ticks)
 
@@ -179,7 +186,7 @@ datum/controller/game_controller/proc/process()
 				timer = world.timeofday
 				i = 1
 				while(i<=machines.len)
-					if(i%500==0)
+					if(i%250==0)
 						sleep(-1)
 					var/obj/machinery/Machine = machines[i]
 					if(Machine)
@@ -247,12 +254,12 @@ datum/controller/game_controller/proc/process()
 				ticker_cost = (world.timeofday - timer) / 10
 
 				//TIMING
-				total_cost = air_cost + sun_cost + mobs_cost + diseases_cost + machines_cost + objects_cost + networks_cost + powernets_cost + ticker_cost
+				total_cost1 = air_cost + sun_cost + mobs_cost + diseases_cost + machines_cost + objects_cost + networks_cost + powernets_cost + ticker_cost
 
 				var/end_time = world.timeofday
 				if(end_time < start_time)
 					start_time -= 864000    //deciseconds in a day
-				sleep( round(minimum_ticks - (end_time - start_time),1) )
+				sleep( round(minimum_ticks1 - (end_time - start_time),1) )
 			else
 				sleep(10)
 

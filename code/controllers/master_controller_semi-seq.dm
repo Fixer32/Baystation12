@@ -32,8 +32,6 @@ datum/controller/game_controller
 	var/total_cost1		= 0
 	var/total_cost2		= 0
 
-	var/even = 1
-
 datum/controller/game_controller/New()
 	//There can be only one master_controller. Out with the old and in with the new.
 	if(master_controller != src)

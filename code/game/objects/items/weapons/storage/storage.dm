@@ -24,10 +24,8 @@
 
 	for(var/obj/item/weapon/storage/S in src)
 		L += S.return_inv()
-	for(var/obj/item/weapon/gift/G in src)
-		L += G.gift
-		if (istype(G.gift, /obj/item/weapon/storage))
-			L += G.gift:return_inv()
+	for(var/obj/item/smallDelivery/G in src)
+		L += G.wrapped
 	return L
 
 /obj/item/weapon/storage/proc/show_to(mob/user as mob)

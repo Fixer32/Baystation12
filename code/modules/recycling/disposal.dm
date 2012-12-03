@@ -1033,9 +1033,8 @@
 	var/sortdir = 0
 
 	New()
-		..()
 		posdir = dir
-		if(icon_state == "pipe-j1s")
+		if(icon_state == "pipe-j1s" || icon_state == "pipe-j1sf")
 			sortdir = turn(posdir, -90)
 			negdir = turn(posdir, 180)
 		else
@@ -1044,21 +1043,7 @@
 			negdir = turn(posdir, 180)
 		dpdir = sortdir | posdir | negdir
 
-		update()
-		return
-
-	New()
 		..()
-		posdir = dir
-		if(icon_state == "pipe-j1s")
-			sortdir = turn(posdir, -90)
-			negdir = turn(posdir, 180)
-		else
-			icon_state = "pipe-j2s"
-			sortdir = turn(posdir, 90)
-			negdir = turn(posdir, 180)
-		dpdir = sortdir | posdir | negdir
-
 		update()
 		return
 

@@ -186,7 +186,7 @@
 			else
 				Stopmusic()
 			// only save this 1 pref, so current slot doesn't get saved w/o user's knowledge
-			var/savefile/F = new(preferences.savefile_path(src))
+			var/savefile/F = new(preferences.savefile_path_main(src))
 			F["pregame_music"] << preferences.pregame_music
 
 		if(href_list["privacy_poll"])

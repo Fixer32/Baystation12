@@ -95,7 +95,8 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 			S.HasEntered(src)
 
 		return
-	loc = get_turf(src) //Get out of closets and such as a ghost
+	if(!istype(loc,/turf))
+		loc = get_turf_loc(src) //Get out of closets and such as a ghost
 	if((direct & NORTH) && y < world.maxy)
 		y++
 	else if((direct & SOUTH) && y > 1)
@@ -220,7 +221,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 				A.loc = T
 			else
 				A << "This mob is not located in the game world."
-/*
+
 /mob/dead/observer/verb/boo()
 	set category = "Ghost"
 	set name = "Boo!"
@@ -234,7 +235,7 @@ This is the proc mobs get to turn into a ghost. Forked from ghostize due to comp
 		return
 	//Maybe in the future we can add more <i>spooky</i> code here!
 	return
-*/
+
 /mob/dead/observer/verb/toggle_alien_candidate()
 	set name = "Toggle Be Alien Candidate"
 	set category = "Ghost"

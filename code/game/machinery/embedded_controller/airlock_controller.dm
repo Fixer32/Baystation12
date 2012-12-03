@@ -18,6 +18,7 @@ datum/computer/file/embedded_program/airlock_controller
 	var/sensor_tag_int
 	var/sensor_tag_ext
 	var/sanitize_external
+	var/chosen_pump_dir
 
 	state = AIRLOCK_STATE_CLOSED
 	var/target_state = AIRLOCK_STATE_CLOSED
@@ -126,13 +127,27 @@ datum/computer/file/embedded_program/airlock_controller
 		else
 			needed_pressure = ext_sensor_pressure
 
-		if(int_ext == INTERNAL && abs(needed_pressure-sensor_pressure)<5) return 1
-		if(int_ext == EXTERNAL && abs(needed_pressure-sensor_pressure)<(sanitize_external?1:5)) return 1
+		if(int_ext == INTERNAL && abs(needed_pressure-sensor_pressure)<5)
+			chosen_pump_dir = 0
+			return 1
+		if(int_ext == EXTERNAL && abs(needed_pressure-sensor_pressure)<(sanitize_external?1:5))
+			chosen_pump_dir = 0
+			return 1
 
-		if(needed_pressure>=max(ext_sensor_pressure,int_sensor_pressure) && sensor_pressure>=max(ext_sensor_pressure,int_sensor_pressure)) return 1
-		if(needed_pressure<=min(ext_sensor_pressure,int_sensor_pressure) && sensor_pressure<=min(ext_sensor_pressure,int_sensor_pressure)) return 1
+		if(needed_pressure>=max(ext_sensor_pressure,int_sensor_pressure) && sensor_pressure>=max(ext_sensor_pressure,int_sensor_pressure))
+			chosen_pump_dir = 0
+			return 1
+		if(needed_pressure<=min(ext_sensor_pressure,int_sensor_pressure) && sensor_pressure<=min(ext_sensor_pressure,int_sensor_pressure))
+			chosen_pump_dir = 0
+			return 1
 
-		if(needed_pressure>sensor_pressure)
+		if(!chosen_pump_dir)
+			if(needed_pressure>sensor_pressure)
+				chosen_pump_dir = INTERNAL
+			else if(needed_pressure<sensor_pressure)
+				chosen_pump_dir = EXTERNAL
+
+		if(chosen_pump_dir==INTERNAL && needed_pressure>sensor_pressure)
 			var/datum/signal/signal = new
 			signal.transmission_method = 1 //radio signal
 			signal.data = list(
@@ -140,14 +155,15 @@ datum/computer/file/embedded_program/airlock_controller
 				"sigtype"="command"
 			)
 			if(memory["pump_status"] == "siphon")
-				signal.data["set_external_pressure"] = 1.1*max(int_sensor_pressure,ext_sensor_pressure)
-				signal.data["set_internal_pressure"] = 0.1*max(int_sensor_pressure,ext_sensor_pressure)
+				signal.data["set_external_pressure"] = 1.01*max(int_sensor_pressure,ext_sensor_pressure)
+//				signal.data["set_internal_pressure"] = 0.1*max(int_sensor_pressure,ext_sensor_pressure)
 				signal.data["stabalize"] = 1
+				signal.data["checks"] = 1
 			else if(memory["pump_status"] != "release")
 				signal.data["power"] = 1
 			post_signal(signal)
 			return 0
-		else if(needed_pressure<sensor_pressure)
+		else if(chosen_pump_dir==EXTERNAL && needed_pressure<sensor_pressure)
 			var/datum/signal/signal = new
 			signal.data = list(
 				"tag" = airpump_tag,
@@ -155,12 +171,14 @@ datum/computer/file/embedded_program/airlock_controller
 			)
 			if(memory["pump_status"] == "release")
 				signal.data["purge"] = 1
-				signal.data["set_internal_pressure"] = 250
-				signal.data["checks"]=2
+				signal.data["set_external_pressure"] = 0.9*min(int_sensor_pressure,ext_sensor_pressure)
+				signal.data["checks"] = 1
 			else if(memory["pump_status"] != "siphon")
 				signal.data["power"] = 1
 			post_signal(signal)
 			return 0
+
+		chosen_pump_dir = 0
 		return 1
 
 	proc/ping(var/t)

@@ -51,6 +51,7 @@
 					changes()
 					preferences.lastchangelog = lastchangelog
 					preferences.savefile_save(src)
+			preferences.savefile_cfg_save(src)
 			handle_privacy_poll()
 			new_player_panel()
 			if(preferences.lobby_music)

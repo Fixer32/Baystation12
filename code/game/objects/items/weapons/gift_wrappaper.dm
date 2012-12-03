@@ -7,27 +7,32 @@
 /*
  * Gifts
  */
-/obj/item/weapon/gift/attack_self(mob/user as mob)
-	user.drop_item()
-	if(src.gift)
-		user.put_in_active_hand(gift)
-		src.gift.add_fingerprint(user)
-	else
-		user << "\blue The gift was empty!"
-	del(src)
-	return
+/obj/item/smallDelivery/gift
+	name = "gift"
+	desc = "A wrapped item."
+	icon = 'icons/obj/items.dmi'
+	icon_state = "gift3"
+	var/size = 3.0
+	item_state = "gift"
+	w_class = 4.0
 
-/obj/item/weapon/a_gift/ex_act()
-	del(src)
-	return
-
-
-/obj/effect/spresent/relaymove(mob/user as mob)
+/obj/structure/bigDelivery/spresent/relaymove(mob/user as mob)
 	if (user.stat)
 		return
 	user << "\blue You cant move."
 
-/obj/effect/spresent/attackby(obj/item/weapon/W as obj, mob/user as mob)
+/obj/structure/bigDelivery/spresent
+	name = "strange present"
+	desc = "It's a ... present?"
+	icon = 'icons/obj/items.dmi'
+	icon_state = "strangepresent"
+	density = 1
+	anchored = 0
+
+/obj/structure/bigDelivery/spresent/attack_hand(mob/user as mob)
+	return
+
+/obj/structure/bigDelivery/spresent/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	..()
 
 	if (!istype(W, /obj/item/weapon/wirecutters))
@@ -44,6 +49,10 @@
 
 	del(src)
 
+
+/obj/item/weapon/a_gift/ex_act()
+	del(src)
+	return
 
 /obj/item/weapon/a_gift/attack_self(mob/M as mob)
 	switch(pick("flash", "t_gun", "l_gun", "shield", "sword", "axe"))
@@ -88,32 +97,30 @@
 	if (!( locate(/obj/structure/table, src.loc) ))
 		user << "\blue You MUST put the paper on a table!"
 	if (W.w_class < 4)
-		if ((istype(user.l_hand, /obj/item/weapon/wirecutters) || istype(user.r_hand, /obj/item/weapon/wirecutters)))
-			var/a_used = 2 ** (src.w_class - 1)
-			if (src.amount < a_used)
-				user << "\blue You need more paper!"
-				return
-			else
-				if(istype(W, /obj/item/smallDelivery) || istype(W, /obj/item/weapon/gift)) //No gift wrapping gifts!
-					return
-
-				src.amount -= a_used
-				user.drop_item()
-				var/obj/item/weapon/gift/G = new /obj/item/weapon/gift( src.loc )
-				G.size = W.w_class
-				G.w_class = G.size + 1
-				G.icon_state = text("gift[]", G.size)
-				G.gift = W
-				W.loc = G
-				G.add_fingerprint(user)
-				W.add_fingerprint(user)
-				src.add_fingerprint(user)
-			if (src.amount <= 0)
-				new /obj/item/weapon/c_tube( src.loc )
-				del(src)
-				return
+		var/a_used = 2 ** (src.w_class - 1)
+		if (src.amount < a_used)
+			user << "\blue You need more paper!"
+			return
 		else
-			user << "\blue You need scissors!"
+			if(istype(W, /obj/item/smallDelivery)) //No gift wrapping gifts!
+				return
+
+			src.amount -= a_used
+			user.drop_item()
+			var/obj/item/smallDelivery/gift/G = new /obj/item/smallDelivery/gift( src.loc )
+			G.size = W.w_class
+			G.w_class = G.size + 1
+			G.icon_state = text("gift[]", G.size)
+			G.wrapped = W
+			W.loc = G
+			G.add_fingerprint(user)
+			W.add_fingerprint(user)
+			src.add_fingerprint(user)
+		if (src.amount <= 0)
+			var/obj/item/weapon/c_tube/T = new /obj/item/weapon/c_tube( src.loc )
+			src.transfer_fingerprints_to(T)
+			del(src)
+			return
 	else
 		user << "\blue The object is FAR too large!"
 	return
@@ -132,7 +139,7 @@
 
 	if (istype(H.wear_suit, /obj/item/clothing/suit/straight_jacket) || H.stat)
 		if (src.amount > 2)
-			var/obj/effect/spresent/present = new /obj/effect/spresent (H.loc)
+			var/obj/structure/bigDelivery/spresent/present = new /obj/structure/bigDelivery/spresent(H.loc)
 			src.amount -= 2
 
 			if (H.client)
@@ -140,6 +147,8 @@
 				H.client.eye = present
 
 			H.loc = present
+			present.wrapped = H
+
 			H.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been wrapped with [src.name]  by [user.name] ([user.ckey])</font>")
 			user.attack_log += text("\[[time_stamp()]\] <font color='red'>Used the [src.name] to wrap [H.name] ([H.ckey])</font>")
 

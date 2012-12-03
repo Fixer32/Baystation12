@@ -150,9 +150,12 @@ Please contact me on #coderbus IRC. ~Carn x
 				stealth = 1
 				break
 	if(stealth)
-		var/icon/Ic = new('icons/mob/human.dmi',"body_cloaked")
+		var/icon/Ic
 		if(lying)
-			Ic.BecomeLying()
+			Ic = lying_icon
+		else
+			Ic = stand_icon
+		Ic.MapColors(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,0.02, 0,0,0,0)
 		icon = Ic
 
 		var/image/I

@@ -86,7 +86,7 @@
 		var/turf/T = M.loc
 		if(isliving(M))
 			var/mob/living/L = M
-			if(L.stat == DEAD)
+			if(L.stat == DEAD || prob(10))
 				var/suff = min(L.getOxyLoss(), 25)
 				L.adjustOxyLoss(-suff)
 				L.updatehealth()

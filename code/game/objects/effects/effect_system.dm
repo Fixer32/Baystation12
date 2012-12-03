@@ -815,9 +815,9 @@ steam.start() -- spawns the effect
 	playsound(src, 'sound/effects/bubbles2.ogg', 80, 1, -3)
 	spawn(3 + metal*3)
 		process()
-	spawn(120)
+	spawn(100)
 		processing_objects.Remove(src)
-		sleep(30)
+		sleep(20)
 
 		if(metal)
 			var/obj/structure/foamedmetal/M = new(src.loc)

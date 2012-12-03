@@ -609,6 +609,7 @@
 /datum/organ/external/head/process()
 	..()
 	if(brain_explode && !destspawn && !(status&ORGAN_DESTROYED))
+		playsound(get_turf_loc(owner), 'sound/effects/fuckmoimozg.wav', 50, 0, 0)
 		status |= ORGAN_DESTROYED
 		destspawn = 1
 		brain_explode = 0

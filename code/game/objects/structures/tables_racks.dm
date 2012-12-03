@@ -316,23 +316,6 @@
 		return 0
 
 
-/obj/structure/table/MouseDrop_T(obj/O as obj, mob/user as mob)
-	if(O == user)
-		user.loc = src.loc
-		user.Weaken(5)
-		visible_message("\red [user] lies down on the table.")
-		return
-
-	if ((!( istype(O, /obj/item/weapon) ) || user.get_active_hand() != O))
-		return
-	if(isrobot(user))
-		return
-	user.drop_item()
-	if (O.loc != src.loc)
-		step(O, get_dir(O, src))
-	return
-
-
 /obj/structure/table/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/grab) && get_dist(src,user)<2)
 		var/obj/item/weapon/grab/G = W

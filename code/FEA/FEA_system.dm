@@ -331,7 +331,7 @@ datum
 					AG.process_group()
 					i++
 					if(i==100)
-						sleep(-1)
+						sleep(0)
 						i=0
 
 			process_singletons()
@@ -340,7 +340,7 @@ datum
 					item:process_cell()
 					i++
 					if(i==100)
-						sleep(-1)
+						sleep(0)
 						i=0
 
 			process_super_conductivity()

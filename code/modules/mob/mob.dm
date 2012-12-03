@@ -731,8 +731,9 @@ note dizziness decrements automatically in the mob's Life() proc.
 
 			if(master_controller)
 				stat("MasterController-[last_tick_duration1]/[last_tick_duration2]","([master_controller.processing?"On":"Off"]-[controller_iteration1]/[controller_iteration2])")
-				stat("Air-[master_controller.air_cost]","#G[air_master.air_groups.len]")
-				stat("#S[air_master.active_singletons.len]","Sun-[master_controller.sun_cost]")
+				if(air_master && air_master.air_groups)
+					stat("Air-[master_controller.air_cost]","#G[air_master.air_groups.len]")
+					stat("#S[air_master.active_singletons.len]","Sun-[master_controller.sun_cost]")
 				stat("Mob-[master_controller.mobs_cost]","#[mob_list.len]")
 				stat("Dis-[master_controller.diseases_cost]","#[active_diseases.len]")
 				stat("Mch-[master_controller.machines_cost]","#[machines.len]")

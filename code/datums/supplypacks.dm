@@ -169,6 +169,16 @@
 	containertype = /obj/structure/closet/crate
 	containername = "Janitorial supplies"
 
+
+/datum/supply_packs/lightbulbs
+	name = "Package wraps"
+	contains = list(/obj/item/weapon/packageWrap,
+			/obj/item/weapon/packageWrap,
+			/obj/item/weapon/packageWrap)
+	cost = 10
+	containertype = /obj/structure/closet/crate
+	containername = "Package Wraps"
+
 /datum/supply_packs/lightbulbs
 	name = "Replacement lights"
 	contains = list(/obj/item/weapon/storage/lightbox/mixed,

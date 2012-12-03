@@ -41,22 +41,28 @@ datum/preferences/proc/savefile_createslot(mob/user, var/slot_num = 0)
 			user << "\red You have reached the max number of character slots ([MAX_SAVE_SLOTS])"
 
 datum/preferences/proc/savefile_cfg_save(mob/user)
+	if(!user.client) return
 	var/cfgpath = savefile_path_main(user)
 	var/savefile/SS = new /savefile(cfgpath)
 	default_slot = user.client.activeslot
+	log_access("[usr] Saving to [cfgpath]")
 	SS["default_slot"] << default_slot
 	SS["UI_style"] << UI_style
 	SS["midis"] << src.midis
 	SS["ghost_ears"] << src.ghost_ears
 	SS["ghost_sight"] << src.ghost_sight
 	SS["pregame_music"] << src.pregame_music
+	log_access("[usr] pregame music [src.pregame_music]")
 	SS["ooccolor"] << src.ooccolor
 	SS["lastchangelog"] << src.lastchangelog
+	log_access("[usr] Lobby music [src.lastchangelog]")
 	SS["sound_adminhelp"] << src.sound_adminhelp
 	SS["lobby_music"] << src.lobby_music
+	log_access("[usr] Lobby music [src.lobby_music]")
 
 datum/preferences/proc/savefile_cfg_load(mob/user)
 	var/cfgpath = savefile_path_main(user)
+	log_access("[usr] Loading from [cfgpath]")
 	if(fexists(cfgpath))
 		var/savefile/SS = new /savefile(cfgpath)
 		SS["default_slot"] >> src.default_slot
@@ -65,10 +71,13 @@ datum/preferences/proc/savefile_cfg_load(mob/user)
 		SS["ghost_ears"] >> src.ghost_ears
 		SS["ghost_sight"] >> src.ghost_sight
 		SS["pregame_music"] >> src.pregame_music
+		log_access("[usr] pregame music [src.pregame_music]")
 		SS["ooccolor"] >> src.ooccolor
 		SS["lastchangelog"] >> src.lastchangelog
+		log_access("[usr] Lobby music [src.lastchangelog]")
 		SS["sound_adminhelp"] >> src.sound_adminhelp
 		SS["lobby_music"] >> src.lobby_music
+		log_access("[usr] Lobby music [src.lobby_music]")
 	if(isnull(UI_style)) UI_style = "Midnight"
 	if(isnull(ghost_ears)) ghost_ears = 1 //Hotfix
 	if(isnull(ghost_sight)) ghost_sight = 1 //Hotfix

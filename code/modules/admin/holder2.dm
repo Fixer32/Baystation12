@@ -1392,6 +1392,7 @@ var/list/admin_datums = list()
 			log_admin("[key_name(H)] got their cookie, spawned by [key_name(src.owner)]")
 			message_admins("[key_name(H)] got their cookie, spawned by [key_name(src.owner)]")
 			feedback_inc("admin_cookies_spawned",1)
+			H << 'sound/effects/Pechenki.wav'
 			H << "\blue Your prayers have been answered!! You received the <b>best cookie</b>!"
 		else
 			src << "\blue The person who prayed is not a human. Cookies cannot be spawned."

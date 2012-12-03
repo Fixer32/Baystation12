@@ -81,7 +81,7 @@
 	//Parrots are kleptomaniacs. These vars a used for just that.. holding items and storing a list of items the parrot wants to steal.
 	var/obj/item/held_item = null
 	var/list/desired_items = list(/obj/item/weapon/reagent_containers/food/snacks/cracker/, \
-									/obj/item/smallDelivery, 	/obj/item/weapon/gift, \
+									/obj/item/smallDelivery, \
 									/obj/item/weapon/soap, 		/obj/item/toy, \
 									/obj/item/weapon/coin,		/obj/item/weapon/stamp, \
 									/obj/item/weapon/grenade,	/obj/item/device/radio/headset, \
