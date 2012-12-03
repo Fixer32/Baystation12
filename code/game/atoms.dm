@@ -221,7 +221,7 @@ its easier to just keep the beam vertical.
 /atom/verb/examine()
 	set name = "Examine"
 	set category = "IC"
-	set src in oview(12)	//make it work from farther away
+	set src in oview(12)|active_ais()	//make it work from farther away
 
 	if (!( usr ))
 		return
@@ -1361,6 +1361,8 @@ var/using_new_click_proc = 0 //TODO ERRORAGE (This is temporary, while the DblCl
 		else
 			var/nhref = "src=\ref[src];aiDisable=7"
 			src.Topic(nhref, params2list(nhref), src, 1)
+	else
+		examine()
 
 	return
 
