@@ -220,6 +220,7 @@
 
 	proc/bandage()
 		var/rval = 0
+		src.status &= ~ORGAN_BLEEDING
 		for(var/datum/wound/W in wounds)
 			if(W.internal) continue
 			rval |= !W.bandaged
