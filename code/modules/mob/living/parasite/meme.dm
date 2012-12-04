@@ -170,6 +170,14 @@ mob/living/parasite/meme/proc/use_points(amount)
 	src.meme_points -= round(amount)
 	return 1
 
+mob/living/parasite/meme/proc/visible_attuned()
+	var/list/visible = oview(host)
+	var/list/ret = list()
+	for(var/V in visible)
+		if(V in indoctrinated)
+			ret += V
+	return ret
+			
 // Let the meme choose one of his indoctrinated mobs as target
 mob/living/parasite/meme/proc/select_indoctrinated(var/title, var/message)
 	var/list/candidates
@@ -446,7 +454,7 @@ mob/living/parasite/meme/verb/ObviousJump(mob/living/carbon/human/target as mob 
 	message_admins("[src.key] has jumped to [target]")
 
 // Jump to an attuned mob for free
-mob/living/parasite/meme/verb/AttunedJump(mob/living/carbon/human/target as mob in oview(host))
+mob/living/parasite/meme/verb/AttunedJump(mob/living/carbon/human/target as mob in visible_attuned())
 	set category = "Meme"
 	set name	 = "Attuned Jump(0)"
 	set desc     = "Move to a mob in sight that you have already attuned."

@@ -178,16 +178,16 @@
 			return
 
 		if(href_list["pregame_music"])
-			preferences.pregame_music = !preferences.pregame_music
+			preferences.lobby_music = !preferences.lobby_music
 
 
-			if(preferences.pregame_music)
+			if(preferences.lobby_music)
 				Playmusic()
 			else
 				Stopmusic()
 			// only save this 1 pref, so current slot doesn't get saved w/o user's knowledge
 			var/savefile/F = new(preferences.savefile_path_main(src))
-			F["pregame_music"] << preferences.pregame_music
+			F["pregame_music"] << preferences.lobby_music
 
 		if(href_list["privacy_poll"])
 			usr << "\red DB usage has been disabled and that option should not have been available."

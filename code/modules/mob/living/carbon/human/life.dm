@@ -558,7 +558,7 @@
 
 				if(!lung_ruptured && breath)
 					if(breath.total_moles() < BREATH_MOLES / 8 || breath.total_moles() > BREATH_MOLES * 5)
-						if(prob(5))
+						if(prob(5) && !nodamage)
 							rupture_lung()
 			else //Still give containing object the chance to interact
 				if(istype(loc, /obj/))

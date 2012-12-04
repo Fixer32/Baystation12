@@ -50,8 +50,6 @@ datum/preferences
 		//Toggle ghost ears
 	var/ghost_ears = 1
 	var/ghost_sight = 1
-		//Play pregame music
-	var/pregame_music = 1
 		//Saved changlog filesize to detect if there was a change
 	var/lastchangelog = 0
 
