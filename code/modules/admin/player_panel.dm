@@ -494,12 +494,12 @@
 
 					// need this check because the meme may be possessing someone right now
 					if(istype(M))
-						dat += "\t<td>Attuned: "
+						dat += "\t<td>Attuned:<br>"
 						for(var/mob/attuned in M.indoctrinated)
 							if(attuned.key)
-								dat += "[attuned.real_name]([attuned.key]) "
+								dat += "[attuned.real_name]([attuned.key])<br>"
 							else
-								dat += "[attuned.real_name] "
+								dat += "[attuned.real_name]<br>"
 				else
 					dat += "<tr><td><i>Meme not found!</i></td></tr>"
 			dat += "</table>"
