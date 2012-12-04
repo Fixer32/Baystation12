@@ -182,11 +182,10 @@
 /datum/game_mode/proc/auto_declare_completion_meme()
 	for(var/datum/mind/meme in memes)
 		var/memewin = 1
-		var/attuned = 0
 		if((meme.current) && istype(meme.current,/mob/living/parasite/meme))
 			world << "<B>The meme was [meme.current.key].</B>"
 			world << "<B>The last host was [meme.current:host.key].</B>"
-			world << "<B>Hosts attuned: [attuned]</B>"
+			world << "<B>Hosts attuned: [meme.current:indoctrinated.len]</B>"
 
 			var/count = 1
 			for(var/datum/objective/objective in meme.objectives)

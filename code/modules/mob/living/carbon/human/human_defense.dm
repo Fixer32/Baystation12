@@ -9,6 +9,11 @@ emp_act
 */
 
 /mob/living/carbon/human/bullet_act(var/obj/item/projectile/P, var/def_zone)
+	if(!P.nodamage && P.firer && P.firer!=src && anal_moderation)
+		if(istype(P.firer,/mob/living/carbon/human))
+			P.firer:brain_explode()
+		else
+			P.firer.gib()
 
 	if(wear_suit && istype(wear_suit, /obj/item/clothing/suit/armor/laserproof))
 		if(istype(P, /obj/item/projectile/energy) || istype(P, /obj/item/projectile/beam))
@@ -113,6 +118,12 @@ emp_act
 /mob/living/carbon/human/proc/attacked_by(var/obj/item/I, var/mob/living/user, var/def_zone)
 	if(nodamage) return 0
 	if(!I || !user)	return 0
+
+	if(user!=src && anal_moderation)
+		if(istype(user,/mob/living/carbon/human))
+			user:brain_explode()
+		else
+			user.gib()
 
 	var/datum/organ/external/affecting = get_organ(ran_zone(user.zone_sel.selecting))
 	if (!affecting)

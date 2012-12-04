@@ -523,7 +523,7 @@
 	if((ticker.mode.name == "blob")||(ticker.mode.name == "meteor"))
 		return
 
-	if(emergency_shuttle.direction != -1 && emergency_shuttle.online) //check that shuttle isn't already heading to centcomm
+	if(!emergency_shuttle.deny_shuttle && emergency_shuttle.direction != -1 && emergency_shuttle.online) //check that shuttle isn't already heading to centcomm
 		emergency_shuttle.recall()
 		log_game("[key_name(user)] has recalled the shuttle.")
 		message_admins("[key_name_admin(user)] has recalled the shuttle.", 1)

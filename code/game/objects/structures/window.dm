@@ -16,12 +16,14 @@
 	flags = ON_BORDER
 
 /obj/structure/window/bullet_act(var/obj/item/projectile/Proj)
+	src.add_hiddenprint(Proj.firer)
 	health -= Proj.damage
 	..()
 	if(health <=0)
 		var/obj/O = new /obj/item/weapon/shard( src.loc )
 		src.transfer_fingerprints_to(O)
-		new /obj/item/stack/rods( src.loc )
+		O = new /obj/item/stack/rods( src.loc )
+		src.transfer_fingerprints_to(O)
 		src.density = 0
 		del(src)
 	return

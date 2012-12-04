@@ -1000,11 +1000,13 @@
 		O.status &= ~ORGAN_ATTACHABLE
 		if (!O.amputated)
 			O.status &= ~ORGAN_DESTROYED
+			O.destspawn = 0
 		O.wounds.Cut()
 		if(istype(O,/datum/organ/external/chest))
 			O:ruptured_lungs = 0
 		if(istype(O,/datum/organ/external/head))
 			O:disfigured = 0
+			O:brain_explode = 0
 
 	vessel.add_reagent("blood",560-vessel.total_volume)
 	fixblood()
@@ -1031,3 +1033,6 @@
 
 	E.ruptured_lungs = 1
 
+/mob/living/carbon/human/proc/brain_explode()
+	var/datum/organ/external/head/H = get_organ("head")
+	H.brain_explode = 1

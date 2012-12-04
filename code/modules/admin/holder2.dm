@@ -1177,6 +1177,18 @@ var/list/admin_datums = list()
 			alert("You cannot perform this action. You must be of a higher administrative rank!")
 			return
 
+	if (href_list["brainexplode"])
+		if (src.level>=3)
+			var/mob/M = locate(href_list["brainexplode"])
+			if(istype(M, /mob/living/carbon/human))
+				usr:brain_explode()
+			else
+				alert("Wrong mob. Must be human.")
+				return
+		else
+			alert("You cannot perform this action. You must be of a higher administrative rank!")
+			return
+
 	if (href_list["makemetroid"])
 		if (src.level>=3)
 			var/mob/M = locate(href_list["makemetroid"])

@@ -38,3 +38,15 @@
 	src << "<h2 class='alert'>A custom event is taking place. OOC Info:</h2>"
 	src << "<span class='alert'>[strip_input(custom_event_msg)]</span>"
 	src << "<br>"
+
+/client/verb/toggle_anal_moderation()
+	set category = "Fun"
+	set name = "Toggle Anal Moderation"
+
+	if(!holder || !(holder.rank in list("Game Admin", "Game Master")))
+		src << "Only high administrators may use this command."
+		return
+
+	anal_moderation = !anal_moderation
+	log_admin("[usr.key] has changed anal moderation to [anal_moderation?"ON":"OFF"].")
+	message_admins("[key_name_admin(usr)] has changed anal moderation to [anal_moderation?"ON":"OFF"].")

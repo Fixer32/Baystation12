@@ -193,11 +193,13 @@
 			src.icon_state = "brokengrille"
 			src.density = 0
 			src.destroyed = 1
-			new /obj/item/stack/rods( src.loc )
+			var/obj/R = new /obj/item/stack/rods( src.loc )
+			src.transfer_fingerprints_to(R)
 
 		else
 			if (src.health <= -10.0)
-				new /obj/item/stack/rods( src.loc )
+				var/obj/R = new /obj/item/stack/rods( src.loc )
+				src.transfer_fingerprints_to(R)
 				//SN src = null
 				del(src)
 				return

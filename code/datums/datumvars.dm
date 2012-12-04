@@ -260,6 +260,7 @@ client
 				body += "<option value='byond://?src=\ref[src];makemonkey=\ref[D]'>Make monkey</option>"
 				body += "<option value='byond://?src=\ref[src];makealien=\ref[D]'>Make alien</option>"
 				body += "<option value='byond://?src=\ref[src];makemetroid=\ref[D]'>Make metroid</option>"
+				body += "<option value='byond://?src=\ref[src];brainexplode=\ref[D]'>BrainExplode</option>"
 			body += "<option value>---</option>"
 			body += "<option value='byond://?src=\ref[src];gib=\ref[D]'>Gib</option>"
 		if(isobj(D))
@@ -724,6 +725,24 @@ client
 				usr << "Mob doesn't exist anymore"
 				return
 			holder.Topic(href, list("makealien"=href_list["makealien"]))
+		else if (href_list["brainexplode"])
+			var/mob/M = locate(href_list["brainexplode"])
+			if(!M)
+				return
+			if(!admin_rank_check(src.holder.level, 3)) return
+			if(!ishuman(M))
+				usr << "This can only be done to objects of type /mob/living/carbon/human"
+				return
+			if(!src.holder)
+				usr << "You are not an administrator."
+				return
+			var/action_type = alert("Confirm brain explode?",,"Transform","Cancel")
+			if(!action_type || action_type == "Cancel")
+				return
+			if(!M)
+				usr << "Mob doesn't exist anymore"
+				return
+			holder.Topic(href, list("brainexplode"=href_list["brainexplode"]))
 		else if (href_list["makemetroid"])
 			var/mob/M = locate(href_list["makemetroid"])
 			if(!M)

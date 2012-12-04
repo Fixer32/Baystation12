@@ -2,13 +2,13 @@
 #define SAVEFILE_VERSION_MAX	7
 
 datum/preferences/proc/savefile_path_main(mob/user)
-	if(!user.client)
+	if(!user || !user.client)
 		return null
 	else
 		return "data/player_saves/[copytext(user.ckey, 1, 2)]/[user.ckey]/cfg.sav"
 
 datum/preferences/proc/savefile_path(mob/user, var/slot = 0)
-	if(!user.client)
+	if(!user || !user.client)
 		return null
 	else
 		if(!slot)
@@ -43,6 +43,7 @@ datum/preferences/proc/savefile_createslot(mob/user, var/slot_num = 0)
 datum/preferences/proc/savefile_cfg_save(mob/user)
 	if(!user.client) return
 	var/cfgpath = savefile_path_main(user)
+	if(!cfgpath) return
 	var/savefile/SS = new /savefile(cfgpath)
 	default_slot = user.client.activeslot
 	SS["default_slot"] << default_slot
@@ -54,10 +55,11 @@ datum/preferences/proc/savefile_cfg_save(mob/user)
 	SS["lastchangelog"] << src.lastchangelog
 	SS["sound_adminhelp"] << src.sound_adminhelp
 	SS["lobby_music"] << src.lobby_music
-	log_access("[usr] lobbymusic = [src.lobby_music]")
+	log_access("[usr] save lobbymusic = [src.lobby_music]")
 
 datum/preferences/proc/savefile_cfg_load(mob/user)
 	var/cfgpath = savefile_path_main(user)
+	if(!cfgpath) return
 	log_access("[usr] Loading from [cfgpath]")
 	if(fexists(cfgpath))
 		var/savefile/SS = new /savefile(cfgpath)
@@ -70,6 +72,7 @@ datum/preferences/proc/savefile_cfg_load(mob/user)
 		SS["lastchangelog"] >> src.lastchangelog
 		SS["sound_adminhelp"] >> src.sound_adminhelp
 		SS["lobby_music"] >> src.lobby_music
+	log_access("[usr] load lobbymusic = [src.lobby_music]")
 	if(isnull(UI_style)) UI_style = "Midnight"
 	if(isnull(ghost_ears)) ghost_ears = 1 //Hotfix
 	if(isnull(ghost_sight)) ghost_sight = 1 //Hotfix
@@ -183,8 +186,12 @@ datum/preferences/proc/savefile_load(mob/user)
 			if(!fexists(path))
 				return 0
 
-	log_access("[usr] loading slot [default_slot]")
-	savefile_cfg_save(user)
+	default_slot = user.client.activeslot
+	var/cfgpath = savefile_path_main(user)
+	var/savefile/SS = new /savefile(cfgpath)
+	SS["default_slot"] << default_slot
+	savefile_cfg_load()
+
 	var/savefile/F = new /savefile(path)
 
 	var/version = null

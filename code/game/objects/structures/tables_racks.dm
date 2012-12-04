@@ -227,7 +227,8 @@
 /obj/structure/table/blob_act()
 	if(prob(75))
 		if(istype(src, /obj/structure/table/woodentable))
-			new /obj/item/weapon/table_parts/wood( src.loc )
+			var/obj/item/weapon/table_parts/wood/T = new /obj/item/weapon/table_parts/wood( src.loc )
+			src.transfer_fingerprints_to(T)
 			del(src)
 			return
 		new /obj/item/weapon/table_parts( src.loc )
@@ -244,12 +245,14 @@
 	if (((HULK in usr.mutations) || (SUPRSTR in usr.augmentations)) && user:a_intent=="hurt")
 		usr << "\blue You destroy the table."
 		visible_message("\red [user] smashes the table apart!")
+		var/obj/T
 		if(istype(src, /obj/structure/table/reinforced))
-			new /obj/item/weapon/table_parts/reinforced( src.loc )
+			T = new /obj/item/weapon/table_parts/reinforced( src.loc )
 		else if(istype(src, /obj/structure/table/woodentable))
-			new/obj/item/weapon/table_parts/wood( src.loc )
+			T = new/obj/item/weapon/table_parts/wood( src.loc )
 		else
-			new /obj/item/weapon/table_parts( src.loc )
+			T = new /obj/item/weapon/table_parts( src.loc )
+		src.transfer_fingerprints_to(T)
 		src.density = 0
 		del(src)
 	if (!( locate(/obj/structure/table, user.loc) ))
@@ -264,12 +267,14 @@
 /obj/structure/table/attack_alien(mob/user as mob) //Removed code for larva since it doesn't work. Previous code is now a larva ability. /N
 	usr << "\green You destroy the table."
 	visible_message("\red [user] slices the table apart!")
+	var/obj/T
 	if(istype(src, /obj/structure/table/reinforced))
-		new /obj/item/weapon/table_parts/reinforced( src.loc )
+		T = new /obj/item/weapon/table_parts/reinforced( src.loc )
 	else if(istype(src, /obj/structure/table/woodentable))
-		new/obj/item/weapon/table_parts/wood( src.loc )
+		T = new/obj/item/weapon/table_parts/wood( src.loc )
 	else
-		new /obj/item/weapon/table_parts( src.loc )
+		T = new /obj/item/weapon/table_parts( src.loc )
+	src.transfer_fingerprints_to(T)
 	src.density = 0
 	del(src)
 	return
@@ -279,12 +284,14 @@
 	if(user.wall_smash)
 		usr << "\red You destroy the table."
 		visible_message("\red [user] smahes the table apart!")
+		var/obj/T
 		if(istype(src, /obj/structure/table/reinforced))
-			new /obj/item/weapon/table_parts/reinforced( src.loc )
+			T = new /obj/item/weapon/table_parts/reinforced( src.loc )
 		else if(istype(src, /obj/structure/table/woodentable))
-			new/obj/item/weapon/table_parts/wood( src.loc )
+			T = new/obj/item/weapon/table_parts/wood( src.loc )
 		else
-			new /obj/item/weapon/table_parts( src.loc )
+			T = new /obj/item/weapon/table_parts( src.loc )
+		src.transfer_fingerprints_to(T)
 		src.density = 0
 		del(src)
 	return
@@ -296,12 +303,14 @@
 	if (((HULK in usr.mutations) || (SUPRSTR in usr.augmentations)) && usr:a_intent=="hurt")
 		usr << "\blue You destroy the table."
 		visible_message("\red [user] smahes the table apart!")
+		var/obj/T
 		if(istype(src, /obj/structure/table/reinforced))
-			new /obj/item/weapon/table_parts/reinforced( src.loc )
+			T = new /obj/item/weapon/table_parts/reinforced( src.loc )
 		else if(istype(src, /obj/structure/table/woodentable))
-			new/obj/item/weapon/table_parts/wood( src.loc )
+			T = new/obj/item/weapon/table_parts/wood( src.loc )
 		else
-			new /obj/item/weapon/table_parts( src.loc )
+			T = new /obj/item/weapon/table_parts( src.loc )
+		src.transfer_fingerprints_to(T)
 		src.density = 0
 		del(src)
 	return
@@ -332,7 +341,8 @@
 		user << "\blue Now disassembling table"
 		playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
 		if(do_after(user,50))
-			new /obj/item/weapon/table_parts( src.loc )
+			var/obj/T = new /obj/item/weapon/table_parts( src.loc )
+			src.transfer_fingerprints_to(T)
 			playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
 			//SN src = null
 			del(src)
@@ -349,7 +359,8 @@
 		playsound(src.loc, "sparks", 50, 1)
 		for(var/mob/O in viewers(user, 4))
 			O.show_message("\blue The table was sliced apart by [user]!", 1, "\red You hear metal coming apart.", 2)
-		new /obj/item/weapon/table_parts( src.loc )
+		var/obj/T = new /obj/item/weapon/table_parts( src.loc )
+		src.transfer_fingerprints_to(T)
 		del(src)
 		return
 
@@ -383,7 +394,8 @@
 		user << "\blue Now disassembling the wooden table"
 		playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
 		sleep(50)
-		new /obj/item/weapon/table_parts/wood( src.loc )
+		var/obj/T = new /obj/item/weapon/table_parts/wood( src.loc )
+		src.transfer_fingerprints_to(T)
 		playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
 		del(src)
 		return
@@ -397,7 +409,8 @@
 		playsound(src.loc, "sparks", 50, 1)
 		for(var/mob/O in viewers(user, 4))
 			O.show_message("\blue The wooden table was sliced apart by [user]!", 1, "\red You hear wood coming apart.", 2)
-		new /obj/item/weapon/table_parts/wood( src.loc )
+		var/obj/T = new /obj/item/weapon/table_parts/wood( src.loc )
+		src.transfer_fingerprints_to(T)
 		del(src)
 		return
 
@@ -458,7 +471,8 @@
 			user << "\blue Now disassembling the reinforced table"
 			playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
 			if (do_after(user, 50))
-				new /obj/item/weapon/table_parts/reinforced( src.loc )
+				var/obj/T = new /obj/item/weapon/table_parts/reinforced( src.loc )
+				src.transfer_fingerprints_to(T)
 				playsound(src.loc, 'sound/items/Deconstruct.ogg', 50, 1)
 				del(src)
 			return
@@ -473,7 +487,8 @@
 		playsound(src.loc, "sparks", 50, 1)
 		for(var/mob/O in viewers(user, 4))
 			O.show_message("\blue The reinforced table was sliced apart by [user]!", 1, "\red You hear metal coming apart.", 2)
-		new /obj/item/weapon/table_parts/reinforced( src.loc )
+		var/obj/T = new /obj/item/weapon/table_parts/reinforced( src.loc )
+		src.transfer_fingerprints_to(T)
 		del(src)
 		return
 
@@ -538,7 +553,8 @@
 
 /obj/structure/rack/attackby(obj/item/weapon/W as obj, mob/user as mob)
 	if (istype(W, /obj/item/weapon/wrench))
-		new /obj/item/weapon/rack_parts( src.loc )
+		var/obj/T = new /obj/item/weapon/rack_parts( src.loc )
+		src.transfer_fingerprints_to(T)
 		playsound(src.loc, 'sound/items/Ratchet.ogg', 50, 1)
 		//SN src = null
 		del(src)

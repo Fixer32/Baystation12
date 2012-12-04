@@ -1,5 +1,6 @@
 /mob/var/suiciding = 0
 
+/*
 /mob/living/carbon/human/verb/suicide()
 	set category = "Special Verbs"
 	set desc = "Kill yourself and become a ghost (You will receive a confirmation prompt)"
@@ -28,6 +29,7 @@
 		viewers(src) << "\red <b>[src] is attempting to bite \his tongue. It looks like \he's trying to commit suicide.</b>"
 		adjustOxyLoss(max(175 - getToxLoss() - getFireLoss() - getBruteLoss() - getOxyLoss(), 0))
 		updatehealth()
+*/
 
 /mob/living/carbon/brain/verb/suicide()
 	set category = "Special Verbs"

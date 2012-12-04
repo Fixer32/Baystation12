@@ -136,10 +136,14 @@
 	playsound(src.loc, 'sound/effects/Glasshit.ogg', 100, 1)
 	src.health = max(0, src.health - tforce)
 	if (src.health <= 0)
-		new /obj/item/weapon/shard(src.loc)
+		var/obj/item/weapon/shard/S = new /obj/item/weapon/shard(src.loc)
 		var/obj/item/weapon/cable_coil/CC = new /obj/item/weapon/cable_coil(src.loc)
 		CC.amount = 2
 		src.density = 0
+		if(istype(AM,/obj))
+			var/obj/O = AM
+			O.transfer_fingerprints_to(S)
+			O.transfer_fingerprints_to(CC)
 		del(src)
 		return
 	//..() //Does this really need to be here twice? The parent proc doesn't even do anything yet. - Nodrak
@@ -158,10 +162,12 @@
 		for(var/mob/O in viewers(src, null))
 			O.show_message("\red <B>[user] smashes against the [src.name].</B>", 1)
 		if (src.health <= 0)
-			new /obj/item/weapon/shard(src.loc)
+			var/obj/item/weapon/shard/S = new /obj/item/weapon/shard(src.loc)
 			var/obj/item/weapon/cable_coil/CC = new /obj/item/weapon/cable_coil(src.loc)
 			CC.amount = 2
 			src.density = 0
+			S.add_fingerprint(user)
+			CC.add_fingerprint(user)
 			del(src)
 	else
 		return src.attack_hand(user)
@@ -192,12 +198,6 @@
 		open()
 		return 1
 
-	if (src.density && istype(I, /obj/item/weapon/crowbar))
-		src.add_fingerprint(user)
-		sleep(5)
-		open()
-		return 1
-
 	//If it's a weapon, smash windoor. Unless it's an id card, agent card, ect.. then ignore it (Cards really shouldnt damage a door anyway)
 	if(src.density && istype(I, /obj/item/weapon) && !istype(I, /obj/item/weapon/card))
 		var/aforce = I.force
@@ -207,10 +207,12 @@
 		for(var/mob/O in viewers(src, null))
 			O.show_message("\red <B>[src] was hit by [I].</B>", 1)
 		if (src.health <= 0)
-			new /obj/item/weapon/shard(src.loc)
+			var/obj/item/weapon/shard/S = new /obj/item/weapon/shard(src.loc)
 			var/obj/item/weapon/cable_coil/CC = new /obj/item/weapon/cable_coil(src.loc)
 			CC.amount = 2
 			src.density = 0
+			S.add_fingerprint(user)
+			CC.add_fingerprint(user)
 			del(src)
 		return
 

@@ -284,6 +284,7 @@
 			verbs += /client/proc/admin_memo
 			verbs += /client/proc/ToRban									//ToRban  frontend to access its features.
 			verbs += /client/proc/game_panel
+			verbs += /client/verb/toggle_anal_moderation
 		else
 			return
 
@@ -452,7 +453,8 @@
 		/client/proc/editappear,
 		/client/proc/cmd_mod_say,
 		/client/proc/playernotes,
-		/client/proc/cmd_admin_change_custom_event
+		/client/proc/cmd_admin_change_custom_event,
+		/client/verb/toggle_anal_moderation
 	)
 	return
 

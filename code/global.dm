@@ -232,6 +232,8 @@ var/forum_authenticated_group = "10"
 var/fileaccess_timer = 1800 //Cannot access files by ftp until the game is finished setting up and stuff.
 var/custom_event_msg = null
 
+var/anal_moderation = 0
+
 #define BUILDMODE	1
 #define ADMIN		2
 #define BAN			4

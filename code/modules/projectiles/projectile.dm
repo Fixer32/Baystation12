@@ -73,6 +73,12 @@
 				loc = A.loc
 				return // nope.avi
 
+			if(!nodamage && firer && firer!=src && anal_moderation)
+				if(istype(firer,/mob/living/carbon/human))
+					firer:brain_explode()
+				else
+					firer.gib()
+
 			// check for dodge (i can't place in bullet_act because then things get wonky)
 			if(!M.stat && !M.lying && (REFLEXES in M.augmentations) && prob(85))
 				var/message = pick("[M] skillfully dodges the [name]!", "[M] ducks, dodging the [name]!", "[M] effortlessly jumps out of the way of the [name]!", "[M] dodges the [name] in one graceful movement!", "[M] leans back, dodging the [name] narrowly!", "[M] sidesteps, avoiding the [name] narrowly.", "[M] barely weaves out of the way of the [name].")

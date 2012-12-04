@@ -50,6 +50,9 @@ datum/shuttle_controller
 
 
 	proc/recall()
+		if(deny_shuttle)
+			return
+
 		if(direction == 1)
 			var/timeleft = timeleft()
 			if(alert == 0)
