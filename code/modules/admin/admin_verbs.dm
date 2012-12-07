@@ -190,6 +190,7 @@
 			verbs += /client/proc/unban_panel
 			verbs += /datum/admins/proc/toggleooc
 			verbs += /datum/admins/proc/toggleoocdead
+			verbs += /client/proc/toggle_show_hiddenprints
 		else
 			return
 
@@ -454,7 +455,8 @@
 		/client/proc/cmd_mod_say,
 		/client/proc/playernotes,
 		/client/proc/cmd_admin_change_custom_event,
-		/client/proc/toggle_anal_moderation
+		/client/proc/toggle_anal_moderation,
+		/client/proc/toggle_show_hiddenprints
 	)
 	return
 
@@ -971,3 +973,12 @@
 	STFU_atklog = !STFU_atklog
 	usr << "You will now [STFU_atklog ? "not hear" : "hear"] attack logs"
 	feedback_add_details("admin_verb","THALOGS") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
+
+/client/proc/toggle_show_hiddenprints()
+	set name = "Toggle Show Hidden Fingerprints"
+	set category = "Admin"
+
+	if(!holder) return
+	holder.show_fingerprints = !holder.show_fingerprints
+	usr << "You will now [holder.show_fingerprints ? "not see" : "see"] fingerprints"
+	feedback_add_details("admin_verb","TSHFP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!

@@ -28,6 +28,8 @@ var/list/admin_datums = list()
 	var/datum/feed_channel/admincaster_feed_channel = new /datum/feed_channel
 	var/admincaster_signature	//What you'll sign the newsfeeds as
 
+	var/show_fingerprints = 0
+
 /datum/admins/New(initial_rank)
 	admincaster_signature = "Nanotrasen Officer #[rand(0,9)][rand(0,9)][rand(0,9)]"
 	rank = initial_rank
@@ -555,6 +557,12 @@ var/list/admin_datums = list()
 			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=cultist;jobban4=\ref[M]'><font color=red>[dd_replacetext("Cultist", " ", "&nbsp")]</font></a></td>"
 		else
 			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=cultist;jobban4=\ref[M]'>[dd_replacetext("Cultist", " ", "&nbsp")]</a></td>"
+
+		//Meme
+		if(jobban_isbanned(M, "meme") || isbanned_dept)
+			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=meme;jobban4=\ref[M]'><font color=red>[dd_replacetext("Meme", " ", "&nbsp")]</font></a></td>"
+		else
+			jobs += "<td width='20%'><a href='?src=\ref[src];jobban3=meme;jobban4=\ref[M]'>[dd_replacetext("Meme", " ", "&nbsp")]</a></td>"
 
 		//Wizard
 		if(jobban_isbanned(M, "wizard") || isbanned_dept)
