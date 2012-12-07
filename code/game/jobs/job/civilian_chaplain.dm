@@ -68,7 +68,7 @@
 			var/new_book_style = "Bible"
 
 			while(!accepted)
-				if(!B) break // prevents possible runtime errors
+				if(!B || !H.client) break // prevents possible runtime errors
 				new_book_style = input(H,"Which bible style would you like?") in list("Bible", "Koran", "Scrapbook", "Creeper", "White Bible", "Holy Light", "Athiest", "Tome", "The King in Yellow", "Ithaqua", "Scientology", "the bible melts", "Necronomicon")
 				switch(new_book_style)
 					if("Koran")

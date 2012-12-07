@@ -39,7 +39,7 @@
 	src << "<span class='alert'>[strip_input(custom_event_msg)]</span>"
 	src << "<br>"
 
-/client/verb/toggle_anal_moderation()
+/client/proc/toggle_anal_moderation()
 	set category = "Fun"
 	set name = "Toggle Anal Moderation"
 

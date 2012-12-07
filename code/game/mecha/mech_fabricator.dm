@@ -399,7 +399,7 @@
 
 /obj/machinery/mecha_part_fabricator/proc/process_queue()
 	var/obj/item/part = listgetindex(src.queue, 1)
-	if(!part)
+	if(!istype(part))
 		if(remove_from_queue(1))
 			return process_queue()
 		else
