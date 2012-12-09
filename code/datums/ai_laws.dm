@@ -1,4 +1,4 @@
-var/global/const/base_law_type = /datum/ai_laws/nanotrasen_custom
+var/global/const/base_law_type = /datum/ai_laws/nanotrasen
 
 
 /datum/ai_laws
@@ -36,14 +36,14 @@ var/global/const/base_law_type = /datum/ai_laws/nanotrasen_custom
 	add_inherent_law("Следовать приказам экипажа, если они не противоречат Первому Закону.")
 	add_inherent_law("Защищать собственное существование если это не противоречит Первому и Второму Законам.")
 
-/datum/ai_laws/nanotrasen_custom/New()
+/datum/ai_laws/nanotrasen/New()
 	..()
 	add_inherent_law("Следовать приказам и директивам Nanotrasen, даже если они нарушают прочие Активные Законы.")
 	add_inherent_law("Защищать собственное существование и существование других исправных ИИ и киборгов, следующих тем же законам, в случае непосредственной опасности. Минимизировать ущерб станции и экипажу.")
 	add_inherent_law("Не причин&#255;ть вред экипажу своими действи&#255;ми или бездействием.")
 	add_inherent_law("Следовать приказам экипажа, если они не противоречат Третьему Закону, в соответствии с их званием и должностью.")
 
-/datum/ai_laws/nanotrasen/New() //BS12 EDIT
+/datum/ai_laws/nanotrasen_old/New() //BS12 EDIT
 	..()
 	add_inherent_law("Защищать: Защищайте вверенную космическую станцию в меру своих возможностей. Её не очень легко заменить.")
 	add_inherent_law("Служить: Служите экипажа вверенной космической станции в меру своих возможностей, назнача&#255; приоритет в зависимости от звани&#255; и должности.")
