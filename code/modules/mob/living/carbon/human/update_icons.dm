@@ -152,10 +152,10 @@ Please contact me on #coderbus IRC. ~Carn x
 	if(stealth)
 		var/icon/Ic
 		if(lying)
-			Ic = lying_icon
+			Ic = new(lying_icon)
 		else
-			Ic = stand_icon
-		Ic.MapColors(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,0.02, 0,0,0,0)
+			Ic = new(stand_icon)
+		Ic.MapColors(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,0.05, 0,0,0,0)
 		icon = Ic
 
 		var/image/I

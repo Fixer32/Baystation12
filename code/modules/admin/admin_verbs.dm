@@ -980,5 +980,5 @@
 
 	if(!holder) return
 	holder.show_fingerprints = !holder.show_fingerprints
-	usr << "You will now [holder.show_fingerprints ? "not see" : "see"] fingerprints"
+	usr << "You will now [holder.show_fingerprints ? "see" : "not see"] fingerprints"
 	feedback_add_details("admin_verb","TSHFP") //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
