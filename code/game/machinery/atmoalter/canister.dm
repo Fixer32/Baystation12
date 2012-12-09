@@ -17,6 +17,8 @@
 	volume = 1000
 	use_power = 0
 	var/release_log = ""
+	var/was_closed = 1
+	var/mob/last_user = null
 
 /obj/machinery/portable_atmospherics/canister/sleeping_agent
 	name = "Canister: \[N2O\]"
@@ -108,6 +110,25 @@
 	..()
 
 	if(valve_open)
+		if(was_closed && (air_contents.toxins>0 || air_contents.carbon_dioxide>0))
+			was_closed = 0
+			var/turf/T = get_turf(src)
+			var/area/A = get_area(T)
+			var/what = ""
+			if(air_contents.toxins>0)
+				what += "toxins"
+				if(air_contents.carbon_dioxide>0)
+					what += " and "
+			if(air_contents.carbon_dioxide>0)
+				what += "CO2"
+			var/log_str = "Tank with [what] opened in <A HREF='?src=%holder_ref%;adminplayerobservecoodjump=1;X=[T.x];Y=[T.y];Z=[T.z]'>[A.name]</a>"
+
+			if(last_user)
+				log_str += " last used by (<A HREF='?src=%holder_ref%;adminmoreinfo=\ref[last_user]'>[last_user.real_name]([last_user.ckey])</A>)"
+			message_admins(log_str, 0, 1)
+			log_game(log_str)
+
+
 		var/datum/gas_mixture/environment
 		if(holding)
 			environment = holding.air_contents
@@ -234,11 +255,13 @@ Release Pressure: <A href='?src=\ref[src];pressure_adj=-1000'>-</A> <A href='?sr
 
 		if(href_list["toggle"])
 			if (valve_open)
+				was_closed = 1
 				if (holding)
 					release_log += "Valve was <b>closed</b> by [usr], stopping the transfer into the [holding]<br>"
 				else
 					release_log += "Valve was <b>closed</b> by [usr], stopping the transfer into the <font color='red'><b>air</b></font><br>"
 			else
+				last_user = usr
 				if (holding)
 					release_log += "Valve was <b>opened</b> by [usr], starting the transfer into the [holding]<br>"
 				else
@@ -249,6 +272,7 @@ Release Pressure: <A href='?src=\ref[src];pressure_adj=-1000'>-</A> <A href='?sr
 			if(holding)
 				holding.loc = loc
 				holding = null
+				last_user = usr
 
 		if (href_list["pressure_adj"])
 			var/diff = text2num(href_list["pressure_adj"])
