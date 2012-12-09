@@ -439,7 +439,7 @@ var/global/floorIsLava = 0
 
 /datum/admins/proc/Jobbans()
 
-	if ((src.rank in list( "Game Admin", "Game Master"  )))
+	if ((src.rank in list( "Admin Candidate", "Temporary Admin", "Trial Admin", "Badmin", "Game Admin", "Game Master"  )))
 		var/dat = "<B>Job Bans!</B><HR><table>"
 		for(var/CK in jobban_keylist)
 			var/mob/M = get_mob_by_key(CK)
