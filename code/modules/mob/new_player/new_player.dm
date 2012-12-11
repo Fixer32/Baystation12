@@ -385,6 +385,10 @@
 			if(is_alien_whitelisted(src, "Tajaran") || !config.usealienwhitelist)
 				new_character.dna.mutantrace = "tajaran"
 				new_character.tajaran_talk_understand = 1
+		if(preferences.species == "Dragon") //This is like the worst, but it works, so meh. - Erthilo
+			if(is_alien_whitelisted(src, "Dragon") || !config.usealienwhitelist)
+				new_character.dna.mutantrace = "dragon"
+				new_character.dragon_talk_understand = 1
 		if(preferences.species == "Soghun")
 			if(is_alien_whitelisted(src, "Soghun") || !config.usealienwhitelist)
 				new_character.dna.mutantrace = "lizard"

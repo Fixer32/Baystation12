@@ -129,6 +129,8 @@
 						attack_verb = "scratch"
 					if("tajaran")
 						attack_verb = "scratch"
+					if("dragon")
+						attack_verb = "slash"
 					if("plant")
 						attack_verb = "slash"
 					else
@@ -158,6 +160,14 @@
 
 			var/datum/organ/external/affecting = get_organ(ran_zone(M.zone_sel.selecting))
 			var/armor_block = run_armor_check(affecting, "melee")
+
+			switch(M.dna.mutantrace)
+				if("lizard")
+					damage += 1
+				if("tajaran")
+					attack_verb += 2
+				if("dragon")
+					attack_verb += 4
 
 			if(HULK in M.mutations)			damage += 5
 			if(SUPRSTR in M.augmentations) 	damage += 5

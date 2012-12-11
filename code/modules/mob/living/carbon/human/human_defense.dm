@@ -39,6 +39,9 @@ emp_act
 
 				return -1 // complete projectile permutation
 
+	if(get_species() == "Dragon")
+		P.damage *= 0.5
+
 	if(check_shields(P.damage, "the [P.name]"))
 		P.on_hit(src, 2)
 		return 2
@@ -145,10 +148,14 @@ emp_act
 	if(armor >= 2)	return 0
 	if(!I.force)	return 0
 
-	apply_damage(I.force, I.damtype, affecting, armor , I.sharp, I.name)
+	var/force = I.force
+	if(get_species() == "Dragon")
+		force *= 0.5
+
+	apply_damage(force, I.damtype, affecting, armor , I.sharp, I.name)
 
 	var/bloody = 0
-	if(((I.damtype == BRUTE) || (I.damtype == HALLOSS)) && prob(25 + (I.force * 2)))
+	if(((I.damtype == BRUTE) || (I.damtype == HALLOSS)) && prob(25 + (force * 2)))
 		I.add_blood(src)	//Make the weapon bloody, not the person.
 //		if(user.hand)	user.update_inv_l_hand()	//updates the attacker's overlay for the (now bloodied) weapon
 //		else			user.update_inv_r_hand()	//removed because weapons don't have on-mob blood overlays
@@ -178,7 +185,7 @@ emp_act
 
 		switch(hit_area)
 			if("head")//Harder to score a stun but if you do it lasts a bit longer
-				if(prob(I.force))
+				if(prob(force))
 					apply_effect(20, PARALYZE, armor)
 					visible_message("\red <B>[src] has been knocked unconscious!</B>")
 					if(src != user && I.damtype == BRUTE)
@@ -196,7 +203,7 @@ emp_act
 						update_inv_glasses(0)
 
 			if("chest")//Easier to score a stun but lasts less time
-				if(prob((I.force + 10)))
+				if(prob((force + 10)))
 					apply_effect(5, WEAKEN, armor)
 					visible_message("\red <B>[src] has been knocked down!</B>")
 

@@ -461,7 +461,21 @@
 				m_type = 2
 
 		if ("vomit")
-			vomit()
+			if(lastpuke) return
+			lastpuke = 1
+			Stun(5)
+
+			src.visible_message("<spawn class='warning'>[src] throws up!","<spawn class='warning'>You throw up!")
+			playsound(loc, 'sound/effects/splat.ogg', 50, 1)
+
+			var/turf/location = loc
+			if (istype(location, /turf/simulated))
+				location.add_vomit_floor(src, 1)
+
+			nutrition -= 40
+			adjustToxLoss(-1)
+			spawn(200)
+				lastpuke = 0
 
 		if ("help")
 			src << "blink, blink_r, blush, bow-(none)/mob, burp, choke, chuckle, clap, collapse, cough,\ncry, custom, deathgasp, drool, eyebrow, frown, gasp, giggle, groan, grumble, handshake, hug-(none)/mob, glare-(none)/mob,\ngrin, laugh, look-(none)/mob, moan, mumble, nod, pale, point-atom, raise, salute, shake, shiver, shrug,\nsigh, signal-#1-10, smile, sneeze, sniff, snore, stare-(none)/mob, tremble, twitch, twitch_s, whimper,\nwink, yawn"

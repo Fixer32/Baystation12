@@ -4,6 +4,7 @@
 	var/icon/blood_overlay = null //this saves our blood splatter overlay, which will be processed not to go over the edges of the sprite
 	var/abstract = 0
 	var/force = 0
+	var/item_icon = null
 	var/item_state = null
 	var/damtype = "brute"
 	var/r_speed = 1.0
@@ -411,7 +412,7 @@
 					return 0
 				return 1
 			if(slot_wear_suit)
-				if(H.wear_suit)
+				if(H.wear_suit || H.get_species()=="Dragon")
 					return 0
 				if( !(slot_flags & SLOT_OCLOTHING) )
 					return 0
@@ -446,6 +447,8 @@
 				return 1
 			if(slot_head)
 				if(H.head)
+					return 0
+				if(istype(src,/obj/item/clothing/head/helmet) && H.get_species()=="Dragon")
 					return 0
 				if( !(slot_flags & SLOT_HEAD) )
 					return 0

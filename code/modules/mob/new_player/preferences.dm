@@ -800,6 +800,9 @@ datum/preferences
 							if(is_alien_whitelisted(user, "Tajaran")) //Check for Tajaran and admins
 								new_species += "Tajaran"
 								whitelisted = 1
+							if(is_alien_whitelisted(user, "Dragon")) //Check for Tajaran and admins
+								new_species += "Dragon"
+								whitelisted = 1
 							if(is_alien_whitelisted(user, "Skrell")) //Check for Skrell and admins
 								new_species += "Skrell"
 								whitelisted = 1
@@ -852,8 +855,20 @@ datum/preferences
 							r_hair = 0//hex2num(copytext(new_hair, 2, 4))
 							g_hair = 0//hex2num(copytext(new_hair, 4, 6))
 							b_hair = 0//hex2num(copytext(new_hair, 6, 8))
+							if(species == "Tajaran")
+								r_hair = 255
+								g_hair = 140
+								b_hair = 0
+								r_facial = 178
+								g_facial = 178
+								b_facial = 178
+							if(species == "Dragon")
+								r_hair = 64
+								g_hair = 64
+								b_hair = 64
 
 							s_tone = 0
+							underwear = (species=="Human"?rand(1,12):12)
 
 
 					if("metadata")
@@ -867,7 +882,7 @@ datum/preferences
 							b_type = new_b_type
 
 					if("hair")
-						if(species == "Human" || species == "Soghun")
+						if(species == "Human" || species == "Soghun" || species == "Tajaran" || species == "Dragon")
 							var/new_hair = input(user, "Choose your character's hair colour:", "Character Preference") as color|null
 							if(new_hair)
 								r_hair = hex2num(copytext(new_hair, 2, 4))
@@ -912,6 +927,7 @@ datum/preferences
 							f_style = new_f_style
 
 					if("underwear")
+						if(species != "Human") return
 						var/list/underwear_options
 						if(gender == MALE)
 							underwear_options = underwear_m
@@ -930,7 +946,7 @@ datum/preferences
 							b_eyes = hex2num(copytext(new_eyes, 6, 8))
 
 					if("s_tone")
-						if(species != "Human")
+						if(species != "Human" && species != "Dragon")
 							return
 						var/new_s_tone = input(user, "Choose your character's skin-tone:\n(Light 1 - 220 Dark)", "Character Preference")  as num|null
 						if(new_s_tone)

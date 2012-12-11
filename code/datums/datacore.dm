@@ -1,4 +1,4 @@
-
+//
 /obj/effect/datacore/proc/manifest(var/nosleep = 0)
 	spawn()
 		if(!nosleep)
@@ -115,13 +115,16 @@ proc/get_id_photo(var/mob/living/carbon/human/H)
 		g = "f"
 
 	var/icon/icobase
-	switch(H.get_species())
+	var/species = H.get_species()
+	switch(species)
 		if("Tajaran")
 			icobase = 'icons/mob/human_races/r_tajaran.dmi'
 		if( "Soghun")
 			icobase = 'icons/mob/human_races/r_lizard.dmi'
 		if("Skrell")
 			icobase = 'icons/mob/human_races/r_skrell.dmi'
+		if("Dragon")
+			icobase = 'icons/mob/human_races/r_dragon.dmi'
 		else
 			icobase = 'icons/mob/human_races/r_human.dmi'
 
@@ -132,19 +135,37 @@ proc/get_id_photo(var/mob/living/carbon/human/H)
 	temp = new /icon(icobase, "head_[g]")
 	preview_icon.Blend(temp, ICON_OVERLAY)
 
+	if( species == "Tajaran")
+		var/icon/I = icon('icons/mob/human_races/r_tajaran.dmi', "tajtail_s")
+		preview_icon.Blend(I,ICON_UNDERLAY)
+	else if( species == "Soghun")
+		var/icon/I = icon('icons/effects/species.dmi', "sogtail_s")
+		preview_icon.Blend(I,ICON_UNDERLAY)
+	else if( species == "Dragon")
+		var/icon/I = icon('icons/mob/human_races/r_dragon.dmi', "wings")
+		preview_icon.Blend(I,ICON_UNDERLAY)
+
 	for(var/datum/organ/external/E in H.organs)
-		if(E.status & ORGAN_CUT_AWAY || E.status & ORGAN_DESTROYED) continue
+		if(E.status & ORGAN_CUT_AWAY || E.status & ORGAN_DESTROYED || E.status & ORGAN_ROBOT) continue
 		temp = new /icon(icobase, "[E.name]")
-		if(E.status & ORGAN_ROBOT)
-			temp.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(0,0,0))
 		preview_icon.Blend(temp, ICON_OVERLAY)
 
 	// Skin tone
-	if(H.get_species() == "Human")
+	if(species == "Human")
 		if (H.s_tone >= 0)
 			preview_icon.Blend(rgb(H.s_tone, H.s_tone, H.s_tone), ICON_ADD)
 		else
 			preview_icon.Blend(rgb(-H.s_tone,  -H.s_tone,  -H.s_tone), ICON_SUBTRACT)
+	else if(species=="Dragon")
+		preview_icon.MapColors(rgb(255,0,0),rgb(H.r_hair,H.g_hair,H.b_hair),rgb(0,0,255))
+	else if(species=="Tajaran")
+		preview_icon.MapColors(rgb(255,0,0),rgb(H.r_facial,H.g_facial,H.b_facial),rgb(H.r_hair,H.g_hair,H.b_hair))
+
+	for(var/datum/organ/external/E in H.organs)
+		if(E.status & ORGAN_DESTROYED || !(E.status & ORGAN_ROBOT)) continue
+		temp = new /icon(icobase, "[E.name]")
+		temp.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(0,0,0))
+		preview_icon.Blend(temp, ICON_OVERLAY)
 
 	var/icon/eyes_s = new/icon("icon" = 'icons/mob/human_face.dmi', "icon_state" = "eyes_s")
 	eyes_s.Blend(rgb(H.r_eyes, H.g_eyes, H.b_eyes), ICON_ADD)
@@ -152,7 +173,12 @@ proc/get_id_photo(var/mob/living/carbon/human/H)
 	var/datum/sprite_accessory/hair_style = hair_styles_list[H.h_style]
 	if(hair_style)
 		var/icon/hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_s")
-		hair_s.Blend(rgb(H.r_hair, H.g_hair, H.b_hair), ICON_ADD)
+		if( species == "Dragon")
+			hair_s.MapColors(rgb(220+H.s_tone,0,0),rgb(0,220+H.s_tone,0),rgb(0,0,220+H.s_tone))
+		else if( species == "Tajaran")
+			hair_s.MapColors(rgb(255,0,0),rgb(H.r_facial,H.g_facial,H.b_facial),rgb(H.r_hair,H.g_hair,H.b_hair))
+		else
+			hair_s.Blend(rgb(H.r_hair, H.g_hair, H.b_hair), ICON_ADD)
 		eyes_s.Blend(hair_s, ICON_OVERLAY)
 
 	var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[H.f_style]

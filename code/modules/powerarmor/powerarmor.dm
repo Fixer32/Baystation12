@@ -1,3 +1,4 @@
+//
 /obj/item/clothing/suit/powered
 	name = "Powered armor"
 	desc = "Not for rookies."
@@ -274,10 +275,11 @@
 
 /obj/item/clothing/head/powered/ironman
 	name = "Ironman head"
-//	item_state = "ironman"
-	icon_state = "ironman"
-	var/closed_iconstate = "ironman"
-	var/opened_iconstate = "ironman-open"
+	item_icon = 'icons/obj/ironman_suit.dmi'
+	icon = 'icons/obj/ironman_suit.dmi'
+	icon_state = "head"
+	var/closed_iconstate = "head"
+	var/opened_iconstate = "head-open"
 	flags = FPRINT | TABLEPASS | HEADCOVERSEYES | HEADCOVERSMOUTH | BLOCKHAIR
 
 	atmotoggle()
@@ -308,12 +310,17 @@
 
 /obj/item/clothing/gloves/powered/ironman
 	name = "Ironman gloves"
-	item_state = "ironman"
-//	icon_state = "ironman"
+	item_icon = 'icons/obj/ironman_suit.dmi'
+	item_state = "gloves"
+	icon = 'icons/obj/ironman_suit.dmi'
+	icon_state = "gloves"
+
 /obj/item/clothing/shoes/powered/ironman
 	name = "Ironman shoes"
-//	item_state = "ironman"
-	icon_state = "ironman"
+	item_icon = 'icons/obj/ironman_suit.dmi'
+	item_state = "shoes"
+	icon = 'icons/obj/ironman_suit.dmi'
+	icon_state = "shoes"
 
 /obj/item/clothing/suit/powered/spawnable/badmin
 	New()
@@ -350,8 +357,10 @@
 /obj/item/clothing/suit/powered/spawnable/ironman
 	name = "Ironman armor"
 	desc = "Red and shiny."
-	icon_state = "ironman"
-//	item_state = "ironman"
+	icon = 'icons/obj/ironman_suit.dmi'
+	icon_state = "suit"
+	item_icon = 'icons/obj/ironman_suit.dmi'
+	item_state = "suit"
 
 	verb/toggle_jetpack_stabile()
 		set name = "Toggle Suit Jetpack Stabilization"

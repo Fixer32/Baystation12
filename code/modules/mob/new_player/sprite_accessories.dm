@@ -216,7 +216,7 @@
 		name = "Shaved"
 		icon_state = "bald"
 		choose_female = 1 // shaved is the only facial hair on women because why would chicks have beards???
-		species_allowed = list("Human","Soghun","Tajaran","Skrell")
+		species_allowed = list("Human","Soghun","Tajaran","Skrell","Dragon")
 
 	watson
 		name = "Watson Mustache"
@@ -329,5 +329,48 @@
 
 	taj_ears
 		name = "Tajaran Ears"
+		icon = 'icons/mob/human_races/r_tajaran.dmi'
 		icon_state = "tajears"
 		species_allowed = list("Tajaran")
+
+	drag_horns1
+		name = "Dragon Horns 1"
+		icon = 'icons/mob/human_races/r_dragon.dmi'
+		icon_state = "horns1"
+		species_allowed = list("Dragon")
+
+	drag_horns2
+		name = "Dragon Horns 2"
+		icon = 'icons/mob/human_races/r_dragon.dmi'
+		icon_state = "horns2"
+		species_allowed = list("Dragon")
+
+	drag_horns3
+		name = "Dragon Horns 3"
+		icon = 'icons/mob/human_races/r_dragon.dmi'
+		icon_state = "horns3"
+		species_allowed = list("Dragon")
+
+	drag_horns4
+		name = "Dragon Horns 4"
+		icon = 'icons/mob/human_races/r_dragon.dmi'
+		icon_state = "horns4"
+		species_allowed = list("Dragon")
+
+	drag_horns5
+		name = "Dragon Horns 5"
+		icon = 'icons/mob/human_races/r_dragon.dmi'
+		icon_state = "horns5"
+		species_allowed = list("Dragon")
+
+	drag_horns6
+		name = "Dragon Horns 6"
+		icon = 'icons/mob/human_races/r_dragon.dmi'
+		icon_state = "horns6"
+		species_allowed = list("Dragon")
+
+	drag_horns7
+		name = "Dragon Horns C-shape"
+		icon = 'icons/mob/human_races/r_dragon.dmi'
+		icon_state = "horns7"
+		species_allowed = list("Dragon")
