@@ -1,3 +1,4 @@
+//
 datum/preferences
 	//The mob should have a gender you want before running this proc.
 	proc/randomize_appearance_for(var/mob/living/carbon/human/H)
@@ -206,38 +207,40 @@ datum/preferences
 		if (gender == FEMALE)
 			g = "f"
 
-		if(species == "Tajaran")
-			preview_icon = new /icon('icons/effects/species.dmi', "tajaran_[g]_s")
-			preview_icon.Blend(new /icon('icons/effects/species.dmi', "tajtail_s"), ICON_OVERLAY)
-		else if(species == "Soghun")
-			preview_icon = new /icon('icons/effects/species.dmi', "lizard_[g]_s")
-			preview_icon.Blend(new /icon('icons/effects/species.dmi', "sogtail_s"), ICON_OVERLAY)
-		else if(species == "Skrell")
-			preview_icon = new /icon('icons/effects/species.dmi', "skrell_[g]_s")
-		else
-			preview_icon = new /icon('human.dmi', "torso_[g]_s")
+		var/icon/icobase
+		switch(species)
+			if("Tajaran")
+				icobase = 'icons/mob/human_races/r_tajaran.dmi'
+			if( "Soghun")
+				icobase = 'icons/mob/human_races/r_lizard.dmi'
+			if("Skrell")
+				icobase = 'icons/mob/human_races/r_skrell.dmi'
+			if("Dragon")
+				icobase = 'icons/mob/human_races/r_dragon.dmi'
+			else
+				icobase = 'icons/mob/human_races/r_human.dmi'
 
-			preview_icon.Blend(new /icon('human.dmi', "chest_[g]_s"), ICON_OVERLAY)
+		preview_icon = new /icon(icobase, "torso_[g]")
+		var/icon/temp
+		temp = new /icon(icobase, "groin_[g]")
+		preview_icon.Blend(temp, ICON_OVERLAY)
+		temp = new /icon(icobase, "head_[g]")
+		preview_icon.Blend(temp, ICON_OVERLAY)
 
-			if(organ_data["head"] != "amputated")
-				preview_icon.Blend(new /icon('human.dmi', "head_[g]_s"), ICON_OVERLAY)
+		if( species == "Tajaran")
+			var/icon/I = icon('icons/mob/human_races/r_tajaran.dmi', "tajtail_s")
+			preview_icon.Blend(I,ICON_UNDERLAY)
+		else if( species == "Soghun")
+			var/icon/I = icon('icons/effects/species.dmi', "sogtail_s")
+			preview_icon.Blend(I,ICON_UNDERLAY)
+		else if( species == "Dragon")
+			var/icon/I = icon('icons/mob/human_races/r_dragon.dmi', "wings")
+			preview_icon.Blend(I,ICON_UNDERLAY)
 
-			for(var/name in list("l_arm","r_arm","l_leg","r_leg","l_foot","r_foot","l_hand","r_hand"))
-				// make sure the organ is added to the list so it's drawn
-				if(organ_data[name] == null)
-					organ_data[name] = null
-
-			for(var/name in organ_data)
-				if(organ_data[name] == "amputated") continue
-
-				var/icon/temp = new /icon('human.dmi', "[name]_s")
-				if(organ_data[name] == "cyborg")
-					temp.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(0,0,0))
-
-				preview_icon.Blend(temp, ICON_OVERLAY)
-
-			preview_icon.Blend(new /icon('human.dmi', "groin_[g]_s"), ICON_OVERLAY)
-
+		for(var/E in list("l_arm","r_arm","l_leg","r_leg","l_hand","r_hand","l_foot","r_foot"))
+			if(organ_data[E] == "amputated" || organ_data[E] == "cyborg") continue
+			temp = new /icon(icobase, "[E]")
+			preview_icon.Blend(temp, ICON_OVERLAY)
 
 		// Skin tone
 		if(species == "Human")
@@ -245,6 +248,16 @@ datum/preferences
 				preview_icon.Blend(rgb(s_tone, s_tone, s_tone), ICON_ADD)
 			else
 				preview_icon.Blend(rgb(-s_tone,  -s_tone,  -s_tone), ICON_SUBTRACT)
+		else if(species=="Dragon")
+			preview_icon.MapColors(rgb(255,0,0),rgb(r_hair,g_hair,b_hair),rgb(0,0,255))
+		else if(species=="Tajaran")
+			preview_icon.MapColors(rgb(255,0,0),rgb(r_facial,g_facial,b_facial),rgb(r_hair,g_hair,b_hair))
+
+		for(var/E in list("l_arm","r_arm","l_leg","r_leg","l_hand","r_hand","l_foot","r_foot"))
+			if(organ_data[E]!="cyborg") continue
+			temp = new /icon(icobase, "[E]")
+			temp.MapColors(rgb(77,77,77), rgb(150,150,150), rgb(28,28,28), rgb(0,0,0))
+			preview_icon.Blend(temp, ICON_OVERLAY)
 
 		var/icon/eyes_s = new/icon("icon" = 'icons/mob/human_face.dmi', "icon_state" = "eyes_s")
 		eyes_s.Blend(rgb(r_eyes, g_eyes, b_eyes), ICON_ADD)
@@ -252,7 +265,12 @@ datum/preferences
 		var/datum/sprite_accessory/hair_style = hair_styles_list[h_style]
 		if(hair_style)
 			var/icon/hair_s = new/icon("icon" = hair_style.icon, "icon_state" = "[hair_style.icon_state]_s")
-			hair_s.Blend(rgb(r_hair, g_hair, b_hair), ICON_ADD)
+			if( species == "Dragon")
+				hair_s.MapColors(rgb(220+s_tone,0,0),rgb(0,220+s_tone,0),rgb(0,0,220+s_tone))
+			else if( species == "Tajaran")
+				hair_s.MapColors(rgb(255,0,0),rgb(r_facial,g_facial,b_facial),rgb(r_hair,g_hair,b_hair))
+			else
+				hair_s.Blend(rgb(r_hair, g_hair, b_hair), ICON_ADD)
 			eyes_s.Blend(hair_s, ICON_OVERLAY)
 
 		var/datum/sprite_accessory/facial_hair_style = facial_hair_styles_list[f_style]

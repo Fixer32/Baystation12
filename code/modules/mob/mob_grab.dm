@@ -1,3 +1,4 @@
+//
 /obj/item/weapon/grab
 	name = "grab"
 	icon = 'icons/mob/screen1.dmi'
@@ -274,7 +275,7 @@
 			s_click(hud1)
 		return
 	if(M == assailant && state >= 2)
-		if( ( ishuman(user) && (FAT in user.mutations) && ismonkey(affecting) || isanimal(affecting)) || ( isalien(user) && (iscarbon(affecting) || isanimal(affecting)) ) )
+		if( ( ishuman(user) && (FAT in user.mutations && (ismonkey(affecting) || isanimal(affecting)) || istype(affecting,/mob/living/simple_animal/mouse))) || ( isalien(user) && (iscarbon(affecting) || isanimal(affecting)) ) )
 			var/mob/living/carbon/attacker = user
 			for(var/mob/N in viewers(user, null))
 				if(N.client)

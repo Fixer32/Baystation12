@@ -369,14 +369,17 @@
 				pass_flags &= ~PASSTABLE
 
 		// Make nanoregen heal youu, -3 all damage types
-		if((NANOREGEN in augmentations) || (mRegen in mutations))
+		if((NANOREGEN in augmentations) || (mRegen in mutations) || (get_species() == "Dragon"))
 			var/healed = 0
 			var/hptoreg = 0
 			if(NANOREGEN in augmentations)
 				hptoreg += 3
 			if(mRegen in mutations)
 				hptoreg += 2
-			if(stat==UNCONSCIOUS) hptoreg/=2
+			if(get_species() == "Dragon")
+				hptoreg += 1
+			if(stat==UNCONSCIOUS) 
+				if(hptoreg>=2 || prob(50)) hptoreg/=2
 			if(stat==DEAD) hptoreg=0
 
 			for(var/i=0, i<hptoreg, i++)
@@ -743,6 +746,12 @@
 		else
 			loc_temp = environment.temperature
 
+		if(dna)
+			switch(dna.mutantrace)
+				if("lizard")
+					loc_temp -= 15
+				if("tajaran")
+					loc_temp += 15
 		//world << "Loc temp: [loc_temp] - Body temp: [bodytemperature] - Fireloss: [getFireLoss()] - Thermal protection: [get_thermal_protection()] - Fire protection: [thermal_protection + add_fire_protection(loc_temp)] - Heat capacity: [environment_heat_capacity] - Location: [loc] - src: [src]"
 
 		//Body temperature is adjusted in two steps. Firstly your body tries to stabilize itself a bit.
@@ -1312,6 +1321,8 @@
 						see_in_dark = 3
 					if("tajaran")
 						see_in_dark = 8
+					if("dragon")
+						see_in_dark = 5
 					else
 						see_in_dark = 2
 

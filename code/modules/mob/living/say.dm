@@ -51,7 +51,24 @@ var/list/department_radio_keys = list(
 	  ":å" = "Syndicate",
 	  ":â" = "Mining",
 	  ":é" = "Cargo",
-	  ":ï" = "changeling"
+	  ":ï" = "changeling",
+
+	  ":Ê" = "right hand",
+	  ":Ä" = "left hand",
+	  ":Ø" = "intercom",
+	  ":Ğ" = "department",
+	  ":Ñ" = "Command",
+	  ":Ò" = "Science",
+	  ":Ü" = "Medical",
+	  ":Ó" = "Engineering",
+	  ":Û" = "Security",
+	  ":Ö" = "whisper",
+	  ":È" = "binary",
+	  ":Ô" = "alientalk",
+	  ":Å" = "Syndicate",
+	  ":Â" = "Mining",
+	  ":É" = "Cargo",
+	  ":Ï" = "changeling"
 )
 
 /mob/living/proc/binarycheck()
@@ -166,6 +183,13 @@ var/list/department_radio_keys = list(
 		message = copytext(message, 3)
 		if(tajaran_talk_understand || universal_speak)
 			is_speaking_taj = 1
+
+	//work out if we're speaking dragon or not
+	var/is_speaking_drgn = 0
+	if(copytext(message, 1, 3) == ":a" || copytext(message, 1, 3) == ":A" || copytext(message, 1, 3) == ":ô" || copytext(message, 1, 3) == ":Ô")
+		message = copytext(message, 3)
+		if(dragon_talk_understand || universal_speak)
+			is_speaking_drgn = 1
 
 	// :downs:
 	if (getBrainLoss() >= 60)
@@ -356,7 +380,7 @@ var/list/department_radio_keys = list(
 
 	for (var/M in listening)
 		if(hascall(M,"say_understands"))
-			if (M:say_understands(src) && !is_speaking_skrell && !is_speaking_soghun && !is_speaking_taj)
+			if (M:say_understands(src) && !is_speaking_skrell && !is_speaking_soghun && !is_speaking_taj && !is_speaking_drgn)
 				heard_a += M
 			else if(ismob(M))
 				if(is_speaking_skrell && (M:skrell_talk_understand || M:universal_speak))
@@ -364,6 +388,8 @@ var/list/department_radio_keys = list(
 				else if(is_speaking_soghun && (M:soghun_talk_understand || M:universal_speak))
 					heard_a += M
 				else if(is_speaking_taj && (M:tajaran_talk_understand || M:universal_speak))
+					heard_a += M
+				else if(is_speaking_drgn && (M:dragon_talk_understand || M:universal_speak))
 					heard_a += M
 				else
 					heard_b += M
@@ -376,7 +402,7 @@ var/list/department_radio_keys = list(
 
 	var/rendered = null
 	if (length(heard_a))
-		var/message_a = say_quote(message,is_speaking_soghun,is_speaking_skrell,is_speaking_taj)
+		var/message_a = say_quote(message,is_speaking_soghun,is_speaking_skrell,is_speaking_taj,is_speaking_drgn)
 
 		if (italics)
 			message_a = "<i>[message_a]</i>"

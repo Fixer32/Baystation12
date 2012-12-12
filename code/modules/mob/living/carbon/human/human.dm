@@ -790,6 +790,8 @@
 				return "Tajaran"
 			if("skrell")
 				return "Skrell"
+			if("dragon")
+				return "Dragon"
 			if("plant")
 				return "Mobile vegetation"
 			if("golem")
@@ -805,6 +807,8 @@
 			return "Skrell"
 		else if(src.dna.mutantrace == "tajaran")
 			return "Tajaran"
+		else if(src.dna.mutantrace == "dragon")
+			return "Dragon"
 
 /mob/living/carbon/human/proc/play_xylophone()
 	if(!src.xylophone)

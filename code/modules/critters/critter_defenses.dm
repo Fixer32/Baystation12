@@ -23,7 +23,7 @@ Contains the procs that control attacking critters
 			TakeDamage(rand(1,2) * brutevuln)
 
 			if(istype(user, /mob/living/carbon/human))
-				if(user.get_species() == "Tajaran")
+				if(user.get_species() == "Tajaran" || user.get_species() == "Dragon")
 					for(var/mob/O in viewers(src, null))
 						O.show_message("\red <B>[user] has slashed at [src]!</B>", 1)
 					playsound(src.loc, 'sound/weapons/slice.ogg', 25, 1, -1)

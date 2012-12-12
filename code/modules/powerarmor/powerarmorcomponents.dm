@@ -1,3 +1,4 @@
+//
 /obj/item/powerarmor
 	name = "Generic power armor component"
 	desc = "This is the base object, you should never see one."

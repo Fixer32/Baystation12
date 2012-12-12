@@ -430,6 +430,8 @@
 							I = new('icons/mob/human_races/r_lizard.dmi')
 						if("skrell")
 							I = new('icons/mob/human_races/r_skrell.dmi')
+						if("dragon")
+							I = new('icons/mob/human_races/r_dragon.dmi')
 						else
 							I = new('icons/mob/human_races/r_human.dmi')
 					if(I)
