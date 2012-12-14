@@ -813,6 +813,7 @@ datum/preferences
 							new_species += "Tajaran"
 							new_species += "Soghun"
 							new_species += "Skrell"
+							new_species += "Dragon"
 						species = input("Please select a species", "Character Generation", null) in new_species
 						if(prev_species != species)
 							//grab one of the valid hair styles for the newly chosen species
