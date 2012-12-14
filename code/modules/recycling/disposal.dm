@@ -486,18 +486,18 @@
 
 		//Check for any living mobs trigger hasmob.
 		//hasmob effects whether the package goes to cargo or its tagged destination.
-		for(var/mob/living/M in D)
-			if(M && M.stat != 2)
-				hasmob = 1
+//		for(var/mob/living/M in D)
+//			if(M && M.stat != 2)
+//				hasmob = 1
 
 		//Checks 1 contents level deep. This means that players can be sent through disposals...
 		//...but it should require a second person to open the package. (i.e. person inside a wrapped locker)
-		for(var/obj/O in D)
-			if(O.contents)
-				for(var/mob/living/M in O.contents)
-					if(M && M.stat != 2)
-						hasmob = 1
-
+//		for(var/obj/O in D)
+//			if(O.contents)
+//				for(var/mob/living/M in O.contents)
+//					if(M && M.stat != 2)
+//						hasmob = 1
+//
 		// now everything inside the disposal gets put into the holder
 		// note AM since can contain mobs or objs
 		for(var/atom/movable/AM in D)
@@ -506,10 +506,10 @@
 				var/mob/living/carbon/human/H = AM
 				if(FAT in H.mutations)		// is a human and fat?
 					has_fat_guy = 1			// set flag on holder
-			if(istype(AM, /obj/structure/bigDelivery) && !hasmob)
+			if(istype(AM, /obj/structure/bigDelivery))
 				var/obj/structure/bigDelivery/T = AM
 				src.destinationTag = T.sortTag
-			if(istype(AM, /obj/item/smallDelivery) && !hasmob)
+			if(istype(AM, /obj/item/smallDelivery))
 				var/obj/item/smallDelivery/T = AM
 				src.destinationTag = T.sortTag
 

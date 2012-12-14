@@ -29,6 +29,7 @@
 
 /obj/item/device/radio/beacon/bacon //Probably a better way of doing this, I'm lazy.
 	proc/digest_delay()
+		name = "Tracking Beacon in [loc.name]"
 		spawn(600)
 			del(src)
 

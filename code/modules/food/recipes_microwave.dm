@@ -2,7 +2,7 @@
 // see code/datums/recipe.dm
 
 
-/* No telebacon. just no...
+// No telebacon. just no...
 /datum/recipe/telebacon
 	items = list(
 		/obj/item/weapon/reagent_containers/food/snacks/meat,
@@ -10,14 +10,13 @@
 	)
 	result = /obj/item/weapon/reagent_containers/food/snacks/telebacon
 
-I said no!
+//I said no!
 /datum/recipe/syntitelebacon
 	items = list(
 		/obj/item/weapon/syntiflesh,
 		/obj/item/device/assembly/signaler
 	)
 	result = /obj/item/weapon/reagent_containers/food/snacks/telebacon
-*/
 
 /datum/recipe/friedegg
 	reagents = list("sodiumchloride" = 1, "blackpepper" = 1)
@@ -69,20 +68,18 @@ I said no!
 	//invalid recipe
 	make_food(var/obj/container as obj)
 		var/human_name
-		var/human_job
+		var/list/names = list()
 		for (var/obj/item/weapon/reagent_containers/food/snacks/meat/human/HM in container)
 			if (!HM.subjectname)
 				continue
 			human_name = HM.subjectname
-			human_job = HM.subjectjob
-			break
-		var/lastname_index = findtext(human_name, " ")
-		if (lastname_index)
-			human_name = copytext(human_name,lastname_index+1)
+			var/lastname_index = findtext(human_name, " ")
+			if (lastname_index)
+				human_name = copytext(human_name,lastname_index+1)
+			names|=human_name
 
 		var/obj/item/weapon/reagent_containers/food/snacks/human/HB = ..(container)
-		HB.name = human_name+HB.name
-		HB.job = human_job
+		HB.name = tg_list2text(names,"-")+HB.name
 		return HB
 
 /datum/recipe/human/burger
@@ -92,14 +89,12 @@ I said no!
 	)
 	result = /obj/item/weapon/reagent_containers/food/snacks/human/burger
 
-/*
 /datum/recipe/monkeyburger
+	reagents = list("flour" = 5)
 	items = list(
-		/obj/item/weapon/reagent_containers/food/snacks/flour,
 		/obj/item/weapon/reagent_containers/food/snacks/meat/monkey
 	)
 	result = /obj/item/weapon/reagent_containers/food/snacks/monkeyburger
-*/
 
 /datum/recipe/plainburger
 	reagents = list("flour" = 5)
