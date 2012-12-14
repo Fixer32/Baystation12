@@ -736,7 +736,7 @@ client
 			if(!src.holder)
 				usr << "You are not an administrator."
 				return
-			var/action_type = alert("Confirm brain explode?",,"Transform","Cancel")
+			var/action_type = alert("Confirm brain explode?",,"Explode","Cancel")
 			if(!action_type || action_type == "Cancel")
 				return
 			if(!M)

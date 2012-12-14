@@ -14,9 +14,9 @@
 			var/obj/item/clothing/under/V = new U
 			src.clothing_choices += V
 
-		for(var/U in typesof(/obj/item/clothing/under/rank)-(/obj/item/clothing/under/rank))
-			var/obj/item/clothing/under/V = new U
-			src.clothing_choices += V
+//		for(var/U in typesof(/obj/item/clothing/under/rank)-(/obj/item/clothing/under/rank))
+//			var/obj/item/clothing/under/V = new U
+//			src.clothing_choices += V
 		return
 
 

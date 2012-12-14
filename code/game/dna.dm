@@ -976,6 +976,7 @@
 /obj/machinery/computer/scan_consolenew/Topic(href, href_list)
 	if(..())
 		return
+	if(!usr) return
 	if(!istype(usr.loc, /turf))
 		return
 	if(!src || !src.connected)

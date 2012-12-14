@@ -278,9 +278,6 @@ proc/get_damage_icon_part(damage_state, body_part)
 	if( cur_species == "Dragon")
 		var/icon/I = icon('icons/mob/human_races/r_dragon.dmi', "wings")
 		stand_icon.Blend(I,ICON_UNDERLAY)
-		var/icon/Iover = new('icons/mob/human.dmi',"blank")
-		Iover.Insert(new/icon(I,dir=NORTH),dir=NORTH)
-		stand_icon.Blend(Iover,ICON_OVERLAY)
 
 	var/datum/organ/external/head = get_organ("head")
 	var/has_head = 0
@@ -579,9 +576,10 @@ proc/get_damage_icon_part(damage_state, body_part)
 	if(gloves)
 		var/t_state = gloves.item_state
 		if(!t_state)	t_state = gloves.icon_state
-		if(!gloves.item_icon) gloves.item_icon = 'icons/mob/hands.dmi'
+		var/icofile = 'icons/mob/hands.dmi'
+		if(gloves.item_icon) icofile = gloves.item_icon
 		t_state = dd_replacetext(t_state,"%h","")
-		var/icon/standing = new(gloves.item_icon, "[t_state]")
+		var/icon/standing = new(icofile, "[t_state]")
 		if(gloves.blood_DNA)
 			standing.Blend(icon('icons/effects/blood.dmi', "bloodyhands"),ICON_OVERLAY)
 		gloves.screen_loc = ui_gloves
@@ -600,8 +598,9 @@ proc/get_damage_icon_part(damage_state, body_part)
 
 /mob/living/carbon/human/update_inv_glasses(var/update_icons=1)
 	if(glasses)
-		if(!glasses.item_icon) glasses.item_icon = 'icons/mob/eyes.dmi'
-		var/icon/I = new(glasses.item_icon, "[glasses.icon_state]")
+		var/icofile = 'icons/mob/eyes.dmi'
+		if(glasses.item_icon) icofile = glasses.item_icon
+		var/icon/I = new(icofile, "[glasses.icon_state]")
 		overlays_standing[GLASSES_LAYER]	= image(I)
 		overlays_lying[GLASSES_LAYER]		= image(I.MakeLying())
 	else
@@ -611,8 +610,9 @@ proc/get_damage_icon_part(damage_state, body_part)
 
 /mob/living/carbon/human/update_inv_ears(var/update_icons=1)
 	if(ears)
-		if(!ears.item_icon) ears.item_icon = 'icons/mob/ears.dmi'
-		var/icon/I = new(ears.item_icon, "[ears.icon_state]")
+		var/icofile = 'icons/mob/ears.dmi'
+		if(ears.item_icon) icofile = ears.item_icon
+		var/icon/I = new(icofile, "[ears.icon_state]")
 		overlays_standing[EARS_LAYER] = image(I)
 		overlays_lying[EARS_LAYER] = image(I.MakeLying())
 	else
@@ -622,9 +622,10 @@ proc/get_damage_icon_part(damage_state, body_part)
 
 /mob/living/carbon/human/update_inv_shoes(var/update_icons=1)
 	if(shoes)
-		if(!shoes.item_icon) shoes.item_icon = 'icons/mob/feet.dmi'
+		var/icofile = 'icons/mob/feet.dmi'
+		if(shoes.item_icon) icofile = shoes.item_icon
 		var/t_state = dd_replacetext(shoes.icon_state,"%h","")
-		var/icon/standing = new(shoes.item_icon, "[t_state]")
+		var/icon/standing = new(icofile, "[t_state]")
 		if(shoes.blood_DNA)
 			standing.Blend(icon('icons/effects/blood.dmi', "shoeblood"),ICON_OVERLAY)
 		overlays_standing[SHOES_LAYER]	= image(standing)
@@ -655,9 +656,10 @@ proc/get_damage_icon_part(damage_state, body_part)
 		if(istype(head,/obj/item/clothing/head/kitty))
 			standing = new("icon" = head:mob)
 		else
-			if(!head.item_icon) head.item_icon = 'icons/mob/head.dmi'
+			var/icofile = 'icons/mob/head.dmi'
+			if(head.item_icon) icofile = head.item_icon
 			var/t_state = dd_replacetext(head.icon_state,"%h","")
-			standing = icon(head.item_icon, "[t_state]")
+			standing = icon(icofile, "[t_state]")
 		if(head.blood_DNA)
 			standing.Blend(icon('icons/effects/blood.dmi', "helmetblood"),ICON_OVERLAY)
 		overlays_standing[HEAD_LAYER]	= image(standing)
@@ -684,9 +686,10 @@ proc/get_damage_icon_part(damage_state, body_part)
 /mob/living/carbon/human/update_inv_wear_suit(var/update_icons=1)
 	if( wear_suit && istype(wear_suit, /obj/item/clothing/suit) )	//TODO check this
 		wear_suit.screen_loc = ui_oclothing	//TODO
-		if(!wear_suit.item_icon) wear_suit.item_icon = 'icons/mob/suit.dmi'
+		var/icofile = 'icons/mob/suit.dmi'
+		if(wear_suit.item_icon) icofile = wear_suit.item_icon
 		var/t_state = dd_replacetext(wear_suit.icon_state,"%h","")
-		var/icon/standing = new(wear_suit.item_icon, "[t_state]")
+		var/icon/standing = new(icofile, "[t_state]")
 
 		if( istype(wear_suit, /obj/item/clothing/suit/straight_jacket) )
 			drop_from_inventory(handcuffed)
@@ -724,8 +727,9 @@ proc/get_damage_icon_part(damage_state, body_part)
 /mob/living/carbon/human/update_inv_wear_mask(var/update_icons=1)
 	if( wear_mask && istype(wear_mask, /obj/item/clothing/mask) )
 		wear_mask.screen_loc = ui_mask	//TODO
-		if(!wear_mask.item_icon) wear_mask.item_icon = 'icons/mob/mask.dmi'
-		var/icon/standing = icon(wear_mask.item_icon, "[wear_mask.icon_state]")
+		var/icofile = 'icons/mob/mask.dmi'
+		if(wear_mask.item_icon) icofile = wear_mask.item_icon
+		var/icon/standing = icon(icofile, "[wear_mask.icon_state]")
 		if( !istype(wear_mask, /obj/item/clothing/mask/cigarette) && wear_mask.blood_DNA )
 			standing.Blend(icon('icons/effects/blood.dmi', "maskblood"),ICON_OVERLAY)
 		overlays_standing[FACEMASK_LAYER]	= image(standing)
@@ -739,8 +743,9 @@ proc/get_damage_icon_part(damage_state, body_part)
 /mob/living/carbon/human/update_inv_back(var/update_icons=1)
 	if(back)
 		back.screen_loc = ui_back	//TODO
-		if(!back.item_icon) back.item_icon = 'icons/mob/back.dmi'
-		var/icon/I = new(back.item_icon, "[back.icon_state]")
+		var/icofile = 'icons/mob/back.dmi'
+		if(back.item_icon) icofile = back.item_icon
+		var/icon/I = new(icofile, "[back.icon_state]")
 		overlays_standing[BACK_LAYER]	= image(I)
 		overlays_lying[BACK_LAYER]	= image(I.MakeLying())
 	else
@@ -832,6 +837,11 @@ proc/get_damage_icon_part(damage_state, body_part)
 	else if( cur_species == "Soghun")
 		if(!wear_suit || !(wear_suit.flags_inv & HIDEJUMPSUIT) && !istype(wear_suit, /obj/item/clothing/suit/space))
 			I = icon('icons/effects/species.dmi', "sogtail_s")
+	else if( cur_species == "Dragon")
+		var/icon/Iwings = icon('icons/mob/human_races/r_dragon.dmi', "wings")
+		Iwings.MapColors(rgb(255,0,0),rgb(r_hair,g_hair,b_hair),rgb(0,0,255))
+		I = new('icons/mob/human.dmi',"blank")
+		I.Insert(new/icon(Iwings,dir=NORTH),dir=NORTH)
 
 	if(I)
 		overlays_standing[TAIL_LAYER] = image(I)

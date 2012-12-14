@@ -15,6 +15,7 @@
 	var/obj/item/weapon/disk/nuclear/auth = null
 	flags = FPRINT
 	use_power = 0
+	var/last_time = 0
 
 /obj/machinery/nuclearbomb/New()
 	..()
@@ -23,12 +24,13 @@
 /obj/machinery/nuclearbomb/process()
 	if (src.timing)
 		bomb_set = 1 //So long as there is one nuke timing, it means one nuke is armed.
-		src.timeleft--
+		src.timeleft-=(world.timeofday-last_time)/10
 		if (src.timeleft <= 0)
 			explode()
 		for(var/mob/M in viewers(1, src))
 			if ((M.client && M.machine == src))
 				src.attack_hand(M)
+	last_time=world.timeofday
 	return
 
 /obj/machinery/nuclearbomb/attackby(obj/item/weapon/I as obj, mob/user as mob)

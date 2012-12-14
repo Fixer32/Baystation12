@@ -149,6 +149,7 @@ But you can call procs that are of type /mob/living/carbon/human/proc/ for that 
 	var/datum/gas_mixture/env = T.return_air()
 
 	var/t = ""
+	t+= "Temperature : [env.temperature]\n"
 	t+= "Nitrogen : [env.nitrogen]\n"
 	t+= "Oxygen : [env.oxygen]\n"
 	t+= "Plasma : [env.toxins]\n"

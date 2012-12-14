@@ -46,6 +46,9 @@
 	src.add_fingerprint(user)
 	return
 
+/obj/item/weapon/card/id/proc/update()
+	name = text("[src.registered_name]'s ID Card ([src.assignment])")
+
 /obj/item/weapon/card/id/attack_hand(mob/user as mob)
 	var/obj/item/weapon/storage/wallet/WL
 	if( istype(loc, /obj/item/weapon/storage/wallet) )
@@ -98,6 +101,11 @@
 	src.assignment = scanned_ids[selected]
 	src.name = "[src.registered_name]'s ID Card ([src.assignment])"
 	usr << "You resetted ID card to record '[src.registered_name] - [src.assignment]'"
+
+/obj/item/weapon/card/id/syndicate/update()
+	if(registered_name in scanned_ids)
+		scanned_ids[registered_name] = assignment
+	..()
 
 /obj/item/weapon/card/id/syndicate/attackby(O as obj, user as mob)
 	if(istype(O, /obj/item/weapon/card/id))

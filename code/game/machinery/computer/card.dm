@@ -262,7 +262,7 @@
 				P.name = "paper- 'Crew Manifest'"
 				printing = null
 	if (modify)
-		modify.name = text("[modify.registered_name]'s ID Card ([modify.assignment])")
+		modify.update()
 	updateUsrDialog()
 	return
 

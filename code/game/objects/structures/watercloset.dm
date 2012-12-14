@@ -206,6 +206,9 @@
 
 	if(iscarbon(O))
 		var/mob/living/carbon/M = O
+
+		if(prob(10)) M.UpdateDamageIcon()
+
 		if(M.r_hand)
 			M.r_hand.clean_blood()
 		if(M.l_hand)
