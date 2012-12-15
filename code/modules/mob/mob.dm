@@ -384,8 +384,8 @@ var/list/slot_equipment_priority = list( \
 			pluralcheck = " [deathtimeminutes] minutes and"
 		var/deathtimeseconds = round((deathtime - deathtimeminutes * 600) / 10,1)
 		usr << "You have been dead for[pluralcheck] [deathtimeseconds] seconds."
-		if (deathtime < 18000)
-			usr << "You must wait 30 minutes to respawn!"
+		if (deathtime < 6000)
+			usr << "You must wait 10 minutes to respawn!"
 			return
 		else
 			usr << "You can respawn now, enjoy your new life!"
